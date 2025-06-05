@@ -9,17 +9,57 @@ It uses LineRenderer for visualization hitboxes of most forms
 
 Supports «Collider», «Collider2D» and «NavMeshObstacle» classes, by word «hitbox» I mean anything of them
 
-HitboxViewer provides 6 different modes for displaying hitboxes (2 for colliders, 2 for navmeshes, 2 combined for both)
-| Mode | For Collider? | For Collider2D? | For NavmeshObstacle? | Description |
-| -----|:-------------:| :-------------: | :------------------: | ----------: |
-| Hide | Yes ✅        | Yes ✅         | Yes ✅               | All colliders/navmeshes are hidden |   
-| All  | Yes ✅        | Yes ✅         | Yes ✅               | All colliders/navmeshes are visible |   
-| Trigger  | Yes ✅        | Yes ✅         | No ❌               | All colliders where propery «isTrigger» is true are visible |  
-| Collider  | Yes ✅        | Yes ✅         | No ❌               | All colliders where propery «isTrigger» is false are visible |   
-| Box  | No ❌       | No ❌        | Yes ✅               | All navmeshes that have box shape are visible |   
-| Sphere  | No ❌       | No ❌        | Yes ✅               | All navmeshes that have capsule shape are visible |   
+## 🎯 Supported Components
 
-The display mode for navmeshes and colliders can be selected independently of each other
+HitboxViewer supports the following Unity components:
+- `Collider` (3D)
+- `Collider2D`
+- `NavMeshObstacle`
+
+The term **"hitbox"** refers to **any of these components**
+
+---
+
+## ⚙️ Hitbox Display Modes
+
+HitboxViewer provides **separate display settings** for:
+- **Colliders** (`Collider` and `Collider2D`)
+- **NavMesh Obstacles** (`NavMeshObstacle`)
+
+Each category has its own set of **4 display modes**:
+
+---
+
+### 🔷 Collider Display Modes (`Collider` + `Collider2D`)
+
+| Mode       | Description                                                                 |
+|------------|-----------------------------------------------------------------------------|
+| `Hide`     | Hides all colliders                                                         |
+| `All`      | Shows all colliders (`isTrigger = true` and `false`)                        |
+| `Trigger`  | Shows only colliders where `isTrigger == true`                              |
+| `Collider` | Shows only colliders where `isTrigger == false`                             |
+
+✅ Applies to both `Collider` and `Collider2D`.
+
+---
+
+### 🟩 NavMeshObstacle Display Modes
+
+| Mode     | Description                                                                   |
+|----------|-------------------------------------------------------------------------------|
+| `Hide`   | Hides all `NavMeshObstacle` components                                        |
+| `All`    | Shows all `NavMeshObstacle` components                                        |
+| `Box`    | Shows only obstacles with a **box** shape                                     |
+| `Sphere` | Shows only obstacles with a **capsule** shape (used for spherical obstacles)  |
+
+❗ These modes apply **only to `NavMeshObstacle`**, not to colliders
+
+---
+
+- There are **two separate dropdowns** in the UI: one for colliders and one for NavMesh obstacles.
+- Modes are **independent** — for example, `Trigger` affects only colliders, and `Box` affects only NavMesh obstacles.
+- This separation allows clear and flexible control over hitbox visualization.
+
 Press F1 for changing colliders displaying mode or F2 for navmeshes displaying mode
 
 Supported hitbox types:
@@ -39,11 +79,11 @@ There are few screenshots of testing this tools
 ![Testing in Baldi's Basics Plus](https://github.com/Rostmoment/HitboxViewer/blob/master/Showcasing/baldiplus3.png?Raw=true)
 ![Testing in Deltatraveler](https://github.com/Rostmoment/HitboxViewer/blob/master/Showcasing/deltatraveler.png?Raw=true)
 ![Testing in Deltatraveler](https://github.com/Rostmoment/HitboxViewer/blob/master/Showcasing/deltatraveler1.png?Raw=true)
-![Testing in Deltatraveler](https://github.com/Rostmoment/HitboxViewer/blob/master/Showcasing/deltatraveler2.png?Raw=true)
-As you can see, hitboxes are displaying with LineRenderer
+![Testing in Deltatraveler](https://github.com/Rostmoment/HitboxViewer/blob/master/Showcasing/deltatraveler2.png?Raw=true)✅
+✅ As you can see, hitboxes are displaying with LineRenderer
 
 # Configs
-You can find and edit the configs of HitboxViewer at the following path:  
+⚙️ You can find and edit the configs of HitboxViewer at the following path:  
 `Your/Game/Folder/BepInEx/config/rost.moment.unity.hitboxviewer.cfg`  
 Open it as a text file using any text editor.
 
@@ -69,7 +109,7 @@ Open it as a text file using any text editor.
 | Hitbox Line Width                     | Visualization | `float`   | `0.1`     | Line width for hitbox outlines |
 | Shader Name                           | Visualization | `string`  | `Unlit/Color` | Shader name used to color hitbox outlines |
 
-Configs can be easily changed using any text editor—just make sure to use the correct data types.
+Configs can be easily changed using any text editor—just make sure to use the correct data types
 
 
 # How to install
