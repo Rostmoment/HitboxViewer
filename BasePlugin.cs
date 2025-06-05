@@ -1,0 +1,93 @@
+﻿using BepInEx;
+using BepInEx.Bootstrap;
+using BepInEx.Logging;
+using HarmonyLib;
+using HitboxViewer.Displayers;
+using HitboxViewer.Helpers;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.AI;
+
+namespace HitboxViewer
+{
+    // WTH, Why I can not delete MyPluginInfo
+    class PluginInfo
+    {
+        public const string GUID = "rost.moment.unity.hitboxviewer";
+        public const string VERSION = "0.0.2";
+        public const string NAME = "Hitbox View";
+        public const string TAS_GUID = "rost.moment.unity.tas";
+    }
+    public enum CollidersVisualizationMode
+    {
+        Hide = 0,
+        Trigger = 1,
+        Collider = 2,
+        All = 3
+    }
+    public enum NavMeshObstacleVisualizationMode
+    {
+        Hide = 0,
+        Box = 1,
+        Sphrere = 2,
+        All = 3
+    }
+    [BepInPlugin(PluginInfo.GUID, PluginInfo.NAME, PluginInfo.VERSION)]
+    public class BasePlugin : BaseUnityPlugin
+    {
+        public static Vector3 VectorNaN => new Vector3(float.NaN, float.NaN, float.NaN);
+
+        public static int FrameCounter { private set; get; }
+        public static CollidersVisualizationMode ColliderVisualize { set; get; }
+        public static NavMeshObstacleVisualizationMode NavMeshObstacleVisualize { set; get; }
+        public static string HitboxMode { private set; get; }
+        public static Harmony HarmonyInstance { private set; get; }
+        public static BasePlugin Instance { private set; get; }
+        public static new ManualLogSource Logger { private set; get; }
+
+        private void Awake()
+        {
+            Logger = base.Logger;
+            Instance = this;
+            HarmonyInstance = new Harmony(PluginInfo.GUID);
+            HarmonyInstance.TryPatchAll();
+            HitboxViewConfig.Initialize();
+        }
+        private void OnGUI()
+        {
+            GUIStyle style = new GUIStyle();
+            style.normal.textColor = Color.white;
+            style.fontSize = 24;
+            HitboxMode = $"Collders: {ColliderVisualize}\nNavMeshObstacle: {NavMeshObstacleVisualize}";
+            if (!Chainloader.PluginInfos.ContainsKey(PluginInfo.TAS_GUID))
+                GUI.Label(new Rect(10f, 70f, 100f, 50f), HitboxMode, style);
+        }
+
+
+        private void Update()
+        {
+            ColliderDisplayer.UpdatePre();
+            NavMeshObstacleDisplayer.UpdatePre();
+            if (HitboxViewConfig.UpdateRate <= 0)
+                return;
+            FrameCounter -= 1;
+            if (FrameCounter <= 0)
+            {
+                List<Component> hitboxes = new List<Component>();
+                hitboxes.AddRange(GameObject.FindObjectsOfType<Collider>());
+                hitboxes.AddRange(GameObject.FindObjectsOfType<Collider2D>());
+
+                for (int i = 0; i < hitboxes.Count; i++)
+                    hitboxes[i].gameObject.GetOrAddComponent<ColliderDisplayer>().Visualize();
+                hitboxes.Clear();
+
+                hitboxes.AddRange(GameObject.FindObjectsOfType<NavMeshObstacle>());
+                for (int i = 0; i < hitboxes.Count; i++)
+                    hitboxes[i].gameObject.GetOrAddComponent<NavMeshObstacleDisplayer>().Visualize();
+                FrameCounter = HitboxViewConfig.UpdateRate;
+            }
+        }
+    }
+}

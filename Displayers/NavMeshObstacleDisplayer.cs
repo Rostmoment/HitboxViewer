@@ -1,0 +1,168 @@
+﻿using HarmonyLib;
+using HitboxViewer.Helpers;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using UnityEngine;
+using UnityEngine.AI;
+
+namespace HitboxViewer.Displayers
+{
+    class NavMeshObstacleDisplayer : BaseDisplayer
+    {
+        private static List<NavMeshObstacleDisplayer> all = new List<NavMeshObstacleDisplayer>();
+        private static Dictionary<NavMeshObstacle, LineRenderer> renderers = new Dictionary<NavMeshObstacle, LineRenderer>();
+
+        private void Start()
+        {
+            all.Add(this);
+        }
+        private void OnDestroy()
+        {
+            all.Remove(this);
+        }
+        public static void HideAll()
+        {
+            renderers = renderers.Where(x => x.Value != null && x.Key != null).ToDictionary(x => x.Key, x => x.Value);
+            LineRenderer[] lines = renderers.Values.ToArray();
+            for (int i = 0; i < lines.Length; i++)
+                lines[i].gameObject.SetActive(false);
+        }
+        protected override LineRenderer CreateLineRendered<T>(T collider, Dictionary<T, LineRenderer> renderers)
+        {
+            if (collider.GetType() != typeof(NavMeshObstacle))
+            {
+                BasePlugin.Logger.LogWarning($"{collider.GetType()} is not NavMeshObstacle");
+                return null;
+            }
+            return base.CreateLineRendered(collider, renderers);
+        }
+        public static void Show()
+        {
+            bool box = BasePlugin.NavMeshObstacleVisualize == NavMeshObstacleVisualizationMode.Box;
+            bool capsule = BasePlugin.NavMeshObstacleVisualize == NavMeshObstacleVisualizationMode.Sphrere;
+            if (BasePlugin.NavMeshObstacleVisualize == NavMeshObstacleVisualizationMode.All)
+            {
+                box = true;
+                capsule = true;
+            }
+            renderers = renderers.Where(x => x.Value != null && x.Key != null).ToDictionary(x => x.Key, x => x.Value);
+            for (int i = 0; i < renderers.Count; i++)
+            {
+                var data = renderers.ElementAt(i);
+                try
+                {
+                    if (box && data.Key.shape == NavMeshObstacleShape.Box)
+                        data.Value.gameObject.SetActive(true);
+                    if (capsule && data.Key.shape == NavMeshObstacleShape.Capsule)
+                        data.Value.gameObject.SetActive(true);
+                }
+                catch (NullReferenceException) { }
+            }
+        }
+        public override void Visualize()
+        {
+            base.Visualize();
+            gameObject.GetComponents<NavMeshObstacle>().Do(x => InitializeGlobal(x));
+        }
+        public override void InitializeGlobal<T>(T collider)
+        {
+            NavMeshObstacle obstacle = collider as NavMeshObstacle;
+            if (obstacle == null)
+                return;
+            lineRenderer = CreateLineRendered<NavMeshObstacle>(obstacle, renderers);
+            if (lineRenderer == null || !lineRenderer.enabled)
+                return;
+            positions.Clear();
+            ShowBox(obstacle);
+            ShowCapsule(obstacle);
+
+        }
+        private void ShowBox(NavMeshObstacle obstacle)
+        {
+            if (obstacle.shape != NavMeshObstacleShape.Box)
+                return;
+            Vector3[] vertices = obstacle.GetVertices();
+            SetPositions(lineRenderer, vertices[0], vertices[1], vertices[5], vertices[4], vertices[0], vertices[2], vertices[3], vertices[7],
+                vertices[5], vertices[4], vertices[6], vertices[7], vertices[6], vertices[2], vertices[3], vertices[1]);
+        }
+        private void ShowCapsule(NavMeshObstacle obstacle)
+        {
+            if (obstacle.shape != NavMeshObstacleShape.Capsule)
+                return;
+
+            Vector3 worldScale = obstacle.transform.lossyScale;
+            Vector3 center = obstacle.transform.TransformPoint(obstacle.center);
+            float localRadius = obstacle.radius;
+            float radius = localRadius * Mathf.Max(Mathf.Abs(worldScale.x), Mathf.Abs(worldScale.y), Mathf.Abs(worldScale.z));
+            float localHeight = obstacle.radius;
+            float height = localHeight * Mathf.Max(Mathf.Abs(worldScale.x), Mathf.Abs(worldScale.y), Mathf.Abs(worldScale.z));
+            int pointsCount = Mathf.RoundToInt(localRadius * HitboxViewConfig.PointsPerRadius);
+            int pointsPerSegment = pointsCount / 8;
+            float centerOffset = Mathf.Abs((height - 2 * radius) / 2);
+
+            // upper half-circle
+            float newY = center.y + centerOffset;
+            float step = Mathf.PI * 2 / (pointsPerSegment * 2);
+            for (float i = 0; i <= Mathf.PI * 2; i += step)
+                positions.Add(new Vector3(center.x + radius * Mathf.Cos(i), newY, center.z + radius * Mathf.Sin(i)));
+
+            // Ellipse by Z
+            step = Mathf.PI / (pointsPerSegment * 2);
+            for (float i = 0; i <= Mathf.PI; i += step)
+                positions.Add(new Vector3(center.x + radius * Mathf.Cos(i), newY + radius * Mathf.Sin(i), center.z));
+
+            newY = center.y - centerOffset;
+            for (float i = Mathf.PI; i <= Mathf.PI * 2; i += step)
+                positions.Add(new Vector3(center.x + radius * Mathf.Cos(i), newY + radius * Mathf.Sin(i), center.z));
+
+            // lower half-circle
+            step = Mathf.PI * 2 / (pointsPerSegment * 2);
+            for (float i = 0; i <= Mathf.PI * 2; i += step)
+                positions.Add(new Vector3(center.x + radius * Mathf.Cos(i), newY, center.z + radius * Mathf.Sin(i)));
+            positions.Add(new Vector3(center.x + radius, newY, center.z));
+            newY = center.y + centerOffset;
+            // Connect with upper half-circle
+            positions.Add(new Vector3(center.x + radius, newY, center.z));
+
+            // Go to upper point
+            step = Mathf.PI * 2 / (pointsPerSegment * 2);
+            for (float i = 0; i <= Mathf.PI / 2; i += step)
+                positions.Add(new Vector3(center.x + radius * Mathf.Cos(i), newY, center.z + radius * Mathf.Sin(i)));
+
+            // Ellipse by X
+            for (float i = 0; i <= Mathf.PI; i += step)
+                positions.Add(new Vector3(center.x, newY + radius * Mathf.Sin(i), center.z + radius * Mathf.Cos(i)));
+            positions.Add(new Vector3(center.x, newY, center.z - radius));
+
+            newY = center.y - centerOffset;
+            for (float i = Mathf.PI; i <= Mathf.PI * 2; i += step)
+                positions.Add(new Vector3(center.x, newY + radius * Mathf.Sin(i), center.z + radius * Mathf.Cos(i)));
+
+            newY = center.y + centerOffset;
+            positions.Add(new Vector3(center.x, newY, center.z + radius));
+
+            positions.Rotate(center, obstacle.transform.rotation);
+            SetPositions(lineRenderer, positions);
+        }
+
+
+        public static void UpdatePre()
+        {
+            NavMeshObstacleDisplayer.all.RemoveAll(x => x == null);
+            if (Input.GetKeyDown(HitboxViewConfig.ChangeNavMeshObstacleVisualizeMode))
+            {
+                BasePlugin.NavMeshObstacleVisualize = (NavMeshObstacleVisualizationMode)(((int)BasePlugin.NavMeshObstacleVisualize + 1) % 4);
+                NavMeshObstacleDisplayer.HideAll();
+                NavMeshObstacleDisplayer.Show();
+            }
+            if (BasePlugin.NavMeshObstacleVisualize == NavMeshObstacleVisualizationMode.Hide)
+            {
+                NavMeshObstacleDisplayer.HideAll();
+                return;
+            }
+        }
+    }
+}
