@@ -24,6 +24,7 @@ namespace HitboxViewer
             {typeof(BoxCollider2D), "#FF19AF"},
             {typeof(CircleCollider2D), "#039AFF"},
             {typeof(CapsuleCollider2D), "#633310"},
+            {typeof(CharacterController), "#8A2BE2"},
             {typeof(PolygonCollider2D), "#000000"},
             {typeof(EdgeCollider2D), "#FFFFFF"},
             {typeof(CompositeCollider2D), "#363636"},
@@ -31,19 +32,6 @@ namespace HitboxViewer
         };
         private static Dictionary<Type, ConfigEntry<string>> hitboxColors = new Dictionary<Type, ConfigEntry<string>>()
         {
-            {typeof(BoxCollider), null},
-            {typeof(SphereCollider), null},
-            {typeof(CapsuleCollider), null},
-            {typeof(MeshCollider), null},
-            {typeof(WheelCollider), null},
-            {typeof(TerrainCollider), null},
-            {typeof(BoxCollider2D), null},
-            {typeof(CircleCollider2D), null},
-            {typeof(CapsuleCollider2D), null},
-            {typeof(PolygonCollider2D), null},
-            {typeof(EdgeCollider2D), null},
-            {typeof(CompositeCollider2D), null},
-            {typeof(NavMeshObstacle), null }
         };
         public static Color GetHitboxColor(object collider)
         {

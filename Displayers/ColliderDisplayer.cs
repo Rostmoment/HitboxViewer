@@ -24,6 +24,7 @@ namespace HitboxViewer.Displayers
             {typeof(BoxCollider),  (disaplyer, collider) => disaplyer.Initialize((BoxCollider)collider)},
             {typeof(SphereCollider),  (disaplyer, collider) => disaplyer.Initialize((SphereCollider)collider)},
             {typeof(CapsuleCollider),  (disaplyer, collider) => disaplyer.Initialize((CapsuleCollider)collider)},
+            {typeof(CharacterController),  (disaplyer, collider) => disaplyer.Initialize((CharacterController)collider)},
             {typeof(MeshCollider),  (disaplyer, collider) => disaplyer.Initialize((MeshCollider)collider)},
             {typeof(WheelCollider),  (disaplyer, collider) => disaplyer.Initialize((WheelCollider)collider)},
             {typeof(TerrainCollider),  (disaplyer, collider) => disaplyer.Initialize((TerrainCollider)collider)}
@@ -49,7 +50,7 @@ namespace HitboxViewer.Displayers
         }
         public static void Show()
         {
-            bool showCollider = BasePlugin.ColliderVisualize == CollidersVisualizationMode.Collider;
+            bool showCollider = BasePlugin.ColliderVisualize == CollidersVisualizationMode.NotTrigger;
             bool showTrigger = BasePlugin.ColliderVisualize == CollidersVisualizationMode.Trigger;
             if (BasePlugin.ColliderVisualize == CollidersVisualizationMode.All)
             {
@@ -102,7 +103,7 @@ namespace HitboxViewer.Displayers
                     colliders.RemoveAll(x => !x.isTrigger);
                     colliders2D.RemoveAll(x => !x.isTrigger);
                     break;
-                case CollidersVisualizationMode.Collider:
+                case CollidersVisualizationMode.NotTrigger:
                     colliders.RemoveAll(x => x.isTrigger);
                     colliders2D.RemoveAll(x => x.isTrigger);
                     break;
@@ -137,12 +138,7 @@ namespace HitboxViewer.Displayers
             if (BasePlugin.ColliderVisualize == CollidersVisualizationMode.Hide)
             {
                 ColliderDisplayer.HideAll();
-                return;
             }
-        }
-        public static void UpdatePost()
-        {
-
         }
 
 
@@ -175,13 +171,14 @@ namespace HitboxViewer.Displayers
             }
             SetPositions(lineRenderer, positions);
         }
-        public void Initialize(CapsuleCollider collider)
+
+        public void Initialize(CharacterController characterController) => DrawCapsule(characterController, characterController.height, characterController.height, characterController.center);
+        public void Initialize(CapsuleCollider capsuleCollider) => DrawCapsule(capsuleCollider, capsuleCollider.height, capsuleCollider.height, capsuleCollider.center);
+        public void DrawCapsule(Collider collider, float localRadius, float localHeight, Vector3 localCenter)
         {
             Vector3 worldScale = collider.transform.lossyScale;
-            Vector3 center = collider.transform.TransformPoint(collider.center);
-            float localRadius = collider.radius;
+            Vector3 center = collider.transform.TransformPoint(localCenter);
             float radius = localRadius * Mathf.Max(Mathf.Abs(worldScale.x), Mathf.Abs(worldScale.y), Mathf.Abs(worldScale.z));
-            float localHeight = collider.radius;
             float height = localHeight * Mathf.Max(Mathf.Abs(worldScale.x), Mathf.Abs(worldScale.y), Mathf.Abs(worldScale.z));
             int pointsCount = Mathf.RoundToInt(localRadius * HitboxViewConfig.PointsPerRadius);
             int pointsPerSegment = pointsCount / 8;
@@ -291,9 +288,8 @@ namespace HitboxViewer.Displayers
             float localRadius = collider.radius;
             Vector3 worldScale = collider.transform.lossyScale;
             float radius = localRadius * Mathf.Max(Mathf.Abs(worldScale.x), Mathf.Abs(worldScale.y), Mathf.Abs(worldScale.z));
-            Vector3 position = collider.transform.position;
             Vector2 offset = collider.offset; 
-            Vector3 worldCenter = new Vector3(position.x + offset.x, position.y + offset.y, position.z);
+            Vector3 worldCenter = new Vector3(collider.transform.position.x + offset.x, collider.transform.position.y + offset.y, collider.transform.position.z);
             int pointsCount = Mathf.RoundToInt(collider.radius * HitboxViewConfig.PointsPerRadius);
             float step = Mathf.PI * 2 / pointsCount;
             for (float i = 0; i <= Mathf.PI; i += step)
@@ -307,7 +303,19 @@ namespace HitboxViewer.Displayers
 
         public void Initialize(PolygonCollider2D collider)
         {
-
+            Vector3 sum = Vector3.zero;
+            for (int i = 0; i < collider.pathCount; i++)
+            {
+                Vector2[] path = collider.GetPath(i);
+                foreach (Vector2 localPoint in path)
+                {
+                    Vector3 worldPoint = collider.transform.TransformPoint(localPoint);
+                    sum += worldPoint;
+                    positions.Add(worldPoint);
+                }
+            }
+            positions.Rotate(sum / positions.Count, collider.transform.rotation);
+            SetPositions(lineRenderer, positions);
         }
         public void Initialize(EdgeCollider2D collider)
         {

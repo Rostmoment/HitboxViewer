@@ -18,13 +18,12 @@ namespace HitboxViewer
         public const string GUID = "rost.moment.unity.hitboxviewer";
         public const string VERSION = "0.0.2";
         public const string NAME = "Hitbox View";
-        public const string TAS_GUID = "rost.moment.unity.tas";
     }
     public enum CollidersVisualizationMode
     {
         Hide = 0,
         Trigger = 1,
-        Collider = 2,
+        NotTrigger = 2,
         All = 3
     }
     public enum NavMeshObstacleVisualizationMode
@@ -60,9 +59,8 @@ namespace HitboxViewer
             GUIStyle style = new GUIStyle();
             style.normal.textColor = Color.white;
             style.fontSize = 24;
-            HitboxMode = $"Collders: {ColliderVisualize}\nNavMeshObstacle: {NavMeshObstacleVisualize}";
-            if (!Chainloader.PluginInfos.ContainsKey(PluginInfo.TAS_GUID))
-                GUI.Label(new Rect(10f, 70f, 100f, 50f), HitboxMode, style);
+            HitboxMode = $"Colliders: {ColliderVisualize.ToName()}\nNavMeshObstacle: {NavMeshObstacleVisualize.ToName()}";
+            GUI.Label(new Rect(10f, 70f, 100f, 50f), HitboxMode, style);
         }
 
 
