@@ -37,7 +37,7 @@ Each category has its own set of **4 display modes**:
 | `Hide`     | Hides all colliders                                                         |
 | `All`      | Shows all colliders (`isTrigger = true` and `false`)                        |
 | `Trigger`  | Shows only colliders where `isTrigger == true`                              |
-| `Collider` | Shows only colliders where `isTrigger == false`                             |
+| `Not Trigger` | Shows only colliders where `isTrigger == false`                             |
 
 ✅ Applies to both `Collider` and `Collider2D`.
 
@@ -67,10 +67,12 @@ Supported hitbox types:
 2. SphereCollider
 3. CapsuleCollider
 4. TerrainCollider (maybe, I didn't test this one)
-5. BoxCollider2D
+5. CharacterController
 6. CircleCollider2D
-7. NavMeshObstacle Box
-8. NavMeshObstacle Capsule
+7. PolygonCollider2D
+8. BoxCollider2D
+9. NavMeshObstacle Box
+10. NavMeshObstacle Capsule
 ## If game throws exception (error) when trying to display hitbox, try to change shader name in configs (see below for instructions on how to do this). Shader name can be found using [UnityExplorer](https://github.com/sinai-dev/UnityExplorer)
 # Showcasing
 There are few screenshots of testing this tools
@@ -92,6 +94,7 @@ Open it as a text file using any text editor.
 | BoxCollider Color                     | Colors        | `string`  | `#DB220D` | RGBA hex code of the color used to display hitboxes of the BoxCollider type |
 | SphereCollider Color                  | Colors        | `string`  | `#0D2FDB` | RGBA hex code of the color used to display hitboxes of the SphereCollider type |
 | CapsuleCollider Color                 | Colors        | `string`  | `#28DB0D` | RGBA hex code of the color used to display hitboxes of the CapsuleCollider type |
+| CharacterController Color             | Colors        | `string`  | `#8A2BE2` | RGBA hex code of the color used to display hitboxes of the CharacterController type |
 | MeshCollider Color                    | Colors        | `string`  | `#DBDB0D` | RGBA hex code of the color used to display hitboxes of the MeshCollider type |
 | WheelCollider Color                   | Colors        | `string`  | `#DB7B0D` | RGBA hex code of the color used to display hitboxes of the WheelCollider type |
 | TerrainCollider Color                 | Colors        | `string`  | `#A020F0` | RGBA hex code of the color used to display hitboxes of the TerrainCollider type |
