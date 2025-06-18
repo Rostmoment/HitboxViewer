@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HitboxViewer.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -81,6 +82,61 @@ namespace HitboxViewer.Displayers
         public virtual void InitializeGlobal<T>(T collider)
         {
 
+        }
+
+        public void DrawCapsule(Transform tranformOfHitbox, float localRadius, float localHeight, Vector3 localCenter)
+        {
+            Vector3 worldScale = tranformOfHitbox.lossyScale;
+            Vector3 center = tranformOfHitbox.TransformPoint(localCenter);
+            float radius = localRadius * Mathf.Max(Mathf.Abs(worldScale.x), Mathf.Abs(worldScale.y), Mathf.Abs(worldScale.z));
+            float height = localHeight * Mathf.Max(Mathf.Abs(worldScale.x), Mathf.Abs(worldScale.y), Mathf.Abs(worldScale.z));
+            int pointsCount = Mathf.RoundToInt(localRadius * HitboxViewConfig.PointsPerRadius);
+            int pointsPerSegment = pointsCount / 8;
+            float centerOffset = Mathf.Abs((height - 2 * radius) / 2);
+
+            // upper half-circle
+            float newY = center.y + centerOffset;
+            float step = Mathf.PI * 2 / (pointsPerSegment * 2);
+            for (float i = 0; i <= Mathf.PI * 2; i += step)
+                positions.Add(new Vector3(center.x + radius * Mathf.Cos(i), newY, center.z + radius * Mathf.Sin(i)));
+
+            // Ellipse by Z
+            step = Mathf.PI / (pointsPerSegment * 2);
+            for (float i = 0; i <= Mathf.PI; i += step)
+                positions.Add(new Vector3(center.x + radius * Mathf.Cos(i), newY + radius * Mathf.Sin(i), center.z));
+
+            newY = center.y - centerOffset;
+            for (float i = Mathf.PI; i <= Mathf.PI * 2; i += step)
+                positions.Add(new Vector3(center.x + radius * Mathf.Cos(i), newY + radius * Mathf.Sin(i), center.z));
+
+            // lower half-circle
+            step = Mathf.PI * 2 / (pointsPerSegment * 2);
+            for (float i = 0; i <= Mathf.PI * 2; i += step)
+                positions.Add(new Vector3(center.x + radius * Mathf.Cos(i), newY, center.z + radius * Mathf.Sin(i)));
+            positions.Add(new Vector3(center.x + radius, newY, center.z));
+            newY = center.y + centerOffset;
+            // Connect with upper half-circle
+            positions.Add(new Vector3(center.x + radius, newY, center.z));
+
+            // Go to upper point
+            step = Mathf.PI * 2 / (pointsPerSegment * 2);
+            for (float i = 0; i <= Mathf.PI / 2; i += step)
+                positions.Add(new Vector3(center.x + radius * Mathf.Cos(i), newY, center.z + radius * Mathf.Sin(i)));
+
+            // Ellipse by X
+            for (float i = 0; i <= Mathf.PI; i += step)
+                positions.Add(new Vector3(center.x, newY + radius * Mathf.Sin(i), center.z + radius * Mathf.Cos(i)));
+            positions.Add(new Vector3(center.x, newY, center.z - radius));
+
+            newY = center.y - centerOffset;
+            for (float i = Mathf.PI; i <= Mathf.PI * 2; i += step)
+                positions.Add(new Vector3(center.x, newY + radius * Mathf.Sin(i), center.z + radius * Mathf.Cos(i)));
+
+            newY = center.y + centerOffset;
+            positions.Add(new Vector3(center.x, newY, center.z + radius));
+
+            positions.Rotate(center, tranformOfHitbox.transform.rotation);
+            SetPositions(lineRenderer, positions);
         }
     }
 }

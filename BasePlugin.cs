@@ -12,11 +12,16 @@ using UnityEngine.AI;
 
 namespace HitboxViewer
 {
-    // WTH, Why I can not delete MyPluginInfo
+    /*
+     * git add --all
+     * git commit -m "Message"
+     * git pull origin master --rebase
+     * git push origin master
+     */
     class PluginInfo
     {
         public const string GUID = "rost.moment.unity.hitboxviewer";
-        public const string VERSION = "0.0.3";
+        public const string VERSION = "0.0.4";
         public const string NAME = "Hitbox View";
     }
     public enum CollidersVisualizationMode
@@ -30,7 +35,7 @@ namespace HitboxViewer
     {
         Hide = 0,
         Box = 1,
-        Sphrere = 2,
+        Capsule = 2,
         All = 3
     }
     [BepInPlugin(PluginInfo.GUID, PluginInfo.NAME, PluginInfo.VERSION)]
