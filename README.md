@@ -67,12 +67,13 @@ Supported hitbox types:
 2. SphereCollider
 3. CapsuleCollider
 4. TerrainCollider (maybe, I didn't test this one)
-5. CharacterController
-6. CircleCollider2D
-7. PolygonCollider2D
-8. BoxCollider2D
-9. NavMeshObstacle Box
-10. NavMeshObstacle Capsule
+5. MeshCollider
+6. CharacterController
+7. CircleCollider2D
+8. PolygonCollider2D
+9. BoxCollider2D
+10. NavMeshObstacle Box
+11. NavMeshObstacle Capsule
 ## If game throws exception (error) when trying to display hitbox, try to change shader name in configs (see below for instructions on how to do this). Shader name can be found using [UnityExplorer](https://github.com/sinai-dev/UnityExplorer)
 # Showcasing
 There are few screenshots of testing this tools
