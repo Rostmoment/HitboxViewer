@@ -21,7 +21,7 @@ namespace HitboxViewer
     class PluginInfo
     {
         public const string GUID = "rost.moment.unity.hitboxviewer";
-        public const string VERSION = "0.0.4";
+        public const string VERSION = "0.0.5";
         public const string NAME = "Hitbox View";
     }
     public enum CollidersVisualizationMode

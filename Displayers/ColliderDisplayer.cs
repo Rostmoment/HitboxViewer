@@ -174,10 +174,45 @@ namespace HitboxViewer.Displayers
 
         public void Initialize(CharacterController characterController) => DrawCapsule(characterController.transform, characterController.height, characterController.height, characterController.center);
         public void Initialize(CapsuleCollider capsuleCollider) => DrawCapsule(capsuleCollider.transform, capsuleCollider.height, capsuleCollider.height, capsuleCollider.center);
-       
+
         public void Initialize(MeshCollider collider)
         {
+            if (collider.sharedMesh == null)
+                return;
+
+            Mesh mesh = collider.sharedMesh;
+            Vector3[] vertices = mesh.vertices;
+            int[] triangles = mesh.triangles;
+
+
+            HashSet<(int, int)> drawnEdges = new HashSet<(int, int)>();
+
+            for (int i = 0; i < triangles.Length; i += 3)
+            {
+                int i0 = triangles[i];
+                int i1 = triangles[i + 1];
+                int i2 = triangles[i + 2];
+
+                DrawEdge(i0, i1);
+                DrawEdge(i1, i2);
+                DrawEdge(i2, i0);
+            }
+            positions.Add(positions[0]);
+            SetPositions(lineRenderer, positions);
+
+            void DrawEdge(int a, int b)
+            {
+                (int, int) edge = (Mathf.Min(a, b), Mathf.Max(a, b));
+                if (!drawnEdges.Add(edge))
+                    return;
+
+                Vector3 worldA = collider.transform.TransformPoint(vertices[a]);
+                Vector3 worldB = collider.transform.TransformPoint(vertices[b]);
+                positions.Add(worldA);
+                positions.Add(worldB);
+            }
         }
+
         public void Initialize(WheelCollider collider)
         {
             Vector3 worldScale = collider.transform.lossyScale;
