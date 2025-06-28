@@ -50,7 +50,7 @@ Each category has its own set of **4 display modes**:
 | `Hide`   | Hides all `NavMeshObstacle` components                                        |
 | `All`    | Shows all `NavMeshObstacle` components                                        |
 | `Box`    | Shows only obstacles with a **box** shape                                     |
-| `Sphere` | Shows only obstacles with a **capsule** shape (used for spherical obstacles)  |
+| `Capsule ` | Shows only obstacles with a **capsule** shape (used for spherical obstacles)  |
 
 ❗ These modes apply **only to `NavMeshObstacle`**, not to colliders
 
