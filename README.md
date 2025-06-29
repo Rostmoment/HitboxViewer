@@ -7,8 +7,6 @@ Tool for viewing hitboxes in Unity games
 
 It uses LineRenderer for visualization hitboxes of most forms
 
-Supports «Collider», «Collider2D» and «NavMeshObstacle» classes, by word «hitbox» I mean anything of them
-
 ## 🎯 Supported Components
 
 HitboxViewer supports the following Unity components:
@@ -60,7 +58,7 @@ Each category has its own set of **4 display modes**:
 - Modes are **independent** — for example, `Trigger` affects only colliders, and `Box` affects only NavMesh obstacles.
 - This separation allows clear and flexible control over hitbox visualization.
 
-Press F1 for changing colliders displaying mode or F2 for navmeshes displaying mode
+# Press F1 for changing colliders displaying mode or F2 for navmeshes displaying mode
 
 Supported hitbox types:
 1. BoxCollider
