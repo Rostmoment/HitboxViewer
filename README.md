@@ -54,7 +54,7 @@ Each category has its own set of **4 display modes**:
 
 ---
 
-- There are **two separate dropdowns** in the UI: one for colliders and one for NavMesh obstacles.
+- There are **Two separate selection settings**: one for colliders and one for NavMesh obstacles.
 - Modes are **independent** — for example, `Trigger` affects only colliders, and `Box` affects only NavMesh obstacles.
 - This separation allows clear and flexible control over hitbox visualization.
 
@@ -80,7 +80,7 @@ There are few screenshots of testing this tools
 ![Testing in Baldi's Basics Plus](https://github.com/Rostmoment/HitboxViewer/blob/master/Showcasing/baldiplus3.png?Raw=true)
 ![Testing in Deltatraveler](https://github.com/Rostmoment/HitboxViewer/blob/master/Showcasing/deltatraveler.png?Raw=true)
 ![Testing in Deltatraveler](https://github.com/Rostmoment/HitboxViewer/blob/master/Showcasing/deltatraveler1.png?Raw=true)
-![Testing in Deltatraveler](https://github.com/Rostmoment/HitboxViewer/blob/master/Showcasing/deltatraveler2.png?Raw=true)✅
+![Testing in Deltatraveler](https://github.com/Rostmoment/HitboxViewer/blob/master/Showcasing/deltatraveler2.png?Raw=true)
 ✅ As you can see, hitboxes are displaying with LineRenderer
 
 # Configs
