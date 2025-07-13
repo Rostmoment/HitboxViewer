@@ -59,7 +59,7 @@ UI has 5 different modes
 
 ---
 
-### 🟩 UI Display Modes
+### 🟡 UI Display Modes
 
 | Mode     | Description                                                                   |
 |----------|-------------------------------------------------------------------------------|
