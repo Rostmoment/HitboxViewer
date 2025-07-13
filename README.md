@@ -75,7 +75,9 @@ UI has 5 different modes
 - Modes are **independent** — for example, `Trigger` affects only colliders, and `Box` affects only NavMesh obstacles.
 - This separation allows clear and flexible control over hitbox visualization.
 
-# Press F1 for changing colliders displaying mode or F2 for navmeshes displaying mode
+# Press F1 for changing colliders displaying mode
+# Press F2 for changing navmesh displaying mode
+# Press F3 for changing UI displaying mode
 
 Supported hitbox types:
 1. BoxCollider
@@ -124,7 +126,8 @@ Open it as a text file using any text editor.
 | NavMeshObstacle Color                 | Colors        | `string`  | `#008080` | RGBA hex code of the color used to display hitboxes of the NavMeshObstacle type |
 | UI Color                 | Colors        | `string`  | `#FFA500` | RGBA hex code of the color used to display hitboxes of the UI components |
 | Change Collider Visualization Mode    | Key Binds     | `KeyCode` | `F1`      | Key used to change the collider visualization mode |
-| Change NavMeshObstacle Visualization Mode | Key Binds | `KeyCode` | `F2`      | Key used to change the NavMeshObstacle visualization mode |
+| Change NavMeshObstacle Visualization Mode | Key Binds | `KeyCode` | `F2`      | Key used to change the UI visualization mode |
+| Change UI Visualization Mode | Key Binds | `KeyCode` | `F3`      | Key used to change the NavMeshObstacle visualization mode |
 | Update Rate                           | Update        | `int`     | `60`      | Determines how often (in frames) hitbox outlines are recalculated. If 0 or less, hitboxes will not be updated |
 | Points Per Radius                     | Visualization | `int`     | `100`     | Number of points used per unit of circle radius; applies to round hitboxes like CircleCollider2D, SphereCollider, etc. |
 | Hitbox Line Width                     | Visualization | `float`   | `0.1`     | Line width for hitbox outlines |
