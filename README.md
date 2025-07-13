@@ -13,8 +13,11 @@ HitboxViewer supports the following Unity components:
 - `Collider` (3D)
 - `Collider2D`
 - `NavMeshObstacle`
-
-The term **"hitbox"** refers to **any of these components**
+- `Button`
+- `Dropdown`
+- `Slider`
+  
+The term **"hitbox"** refers to **any of these components** or its bound
 
 ---
 
@@ -23,8 +26,10 @@ The term **"hitbox"** refers to **any of these components**
 HitboxViewer provides **separate display settings** for:
 - **Colliders** (`Collider` and `Collider2D`)
 - **NavMesh Obstacles** (`NavMeshObstacle`)
+- **UI** (`Button`, `Dropdown` and `Slider`)
 
-Each category has its own set of **4 display modes**:
+Colliders and NaxMeshObstacles have 4 different modes
+UI has 5 different modes
 
 ---
 
@@ -34,8 +39,8 @@ Each category has its own set of **4 display modes**:
 |------------|-----------------------------------------------------------------------------|
 | `Hide`     | Hides all colliders                                                         |
 | `All`      | Shows all colliders (`isTrigger = true` and `false`)                        |
-| `Trigger`  | Shows only colliders where `isTrigger == true`                              |
 | `Not Trigger` | Shows only colliders where `isTrigger == false`                             |
+| `Trigger`  | Shows only colliders where `isTrigger == true`                              |
 
 ✅ Applies to both `Collider` and `Collider2D`.
 
@@ -51,6 +56,18 @@ Each category has its own set of **4 display modes**:
 | `Capsule ` | Shows only obstacles with a **capsule** shape (used for spherical obstacles)  |
 
 ❗ These modes apply **only to `NavMeshObstacle`**, not to colliders
+
+---
+
+### 🟩 UI Display Modes
+
+| Mode     | Description                                                                   |
+|----------|-------------------------------------------------------------------------------|
+| `Hide`   | Hides all UI components                                        |
+| `All`    | Shows all ui components                                        |
+| `Button`    | Shows only `Button` component                                     |
+| `Dropdown`    | Shows only `Dropdown` component                                     |
+| `Slider`    | Shows only `Slider` component                                     |
 
 ---
 
@@ -72,6 +89,7 @@ Supported hitbox types:
 9. BoxCollider2D
 10. NavMeshObstacle Box
 11. NavMeshObstacle Capsule
+12. Button, Slider and Dropdown
 ## If game throws exception (error) when trying to display hitbox, try to change shader name in configs (see below for instructions on how to do this). Shader name can be found using [UnityExplorer](https://github.com/sinai-dev/UnityExplorer)
 # Showcasing
 There are few screenshots of testing this tools
@@ -104,6 +122,7 @@ Open it as a text file using any text editor.
 | EdgeCollider2D Color                  | Colors        | `string`  | `#FFFFFF` | RGBA hex code of the color used to display hitboxes of the EdgeCollider2D type |
 | CompositeCollider2D Color             | Colors        | `string`  | `#363636` | RGBA hex code of the color used to display hitboxes of the CompositeCollider2D type |
 | NavMeshObstacle Color                 | Colors        | `string`  | `#008080` | RGBA hex code of the color used to display hitboxes of the NavMeshObstacle type |
+| UI Color                 | Colors        | `string`  | `#FFA500` | RGBA hex code of the color used to display hitboxes of the UI components |
 | Change Collider Visualization Mode    | Key Binds     | `KeyCode` | `F1`      | Key used to change the collider visualization mode |
 | Change NavMeshObstacle Visualization Mode | Key Binds | `KeyCode` | `F2`      | Key used to change the NavMeshObstacle visualization mode |
 | Update Rate                           | Update        | `int`     | `60`      | Determines how often (in frames) hitbox outlines are recalculated. If 0 or less, hitboxes will not be updated |
