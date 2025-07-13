@@ -43,7 +43,7 @@ namespace HitboxViewer.Displayers
         }
         public static void HideAll()
         {
-            renderers = renderers.Where(x => x.Value != null && x.Key != null).ToDictionary(x => x.Key, x => x.Value);
+            renderers = ClearFromNull(renderers);
             LineRenderer[] lines = renderers.Values.ToArray();
             for (int i = 0; i < lines.Length; i++)
                 lines[i].gameObject.SetActive(false);
@@ -57,10 +57,9 @@ namespace HitboxViewer.Displayers
                 showCollider = true;
                 showTrigger = true;
             }
-            renderers = renderers.Where(x => x.Value != null && x.Key != null).ToDictionary(x => x.Key, x => x.Value);
-            for (int i = 0; i < renderers.Count; i++)
+            renderers = ClearFromNull(renderers);
+            foreach (var data in renderers)
             {
-                var data = renderers.ElementAt(i);
                 try
                 {
                     if (data.Key is Collider collider)
@@ -131,14 +130,12 @@ namespace HitboxViewer.Displayers
             ColliderDisplayer.all.RemoveAll(x => x == null);
             if (Input.GetKeyDown(HitboxViewConfig.ChangeColliderVisualizeMode))
             {
-                BasePlugin.ColliderVisualize = (CollidersVisualizationMode)(((int)BasePlugin.ColliderVisualize + 1) % 4);
+                BasePlugin.ColliderVisualize = BasePlugin.ColliderVisualize.Next();
                 ColliderDisplayer.HideAll();
                 ColliderDisplayer.Show();
             }
             if (BasePlugin.ColliderVisualize == CollidersVisualizationMode.Hide)
-            {
                 ColliderDisplayer.HideAll();
-            }
         }
 
 
@@ -215,17 +212,23 @@ namespace HitboxViewer.Displayers
 
         public void Initialize(WheelCollider collider)
         {
-            Vector3 worldScale = collider.transform.lossyScale;
             Vector3 center = collider.transform.TransformPoint(collider.center);
-            float localRadius = collider.radius;
-            float radius = localRadius * Mathf.Max(Mathf.Abs(worldScale.x), Mathf.Abs(worldScale.y), Mathf.Abs(worldScale.z));
-            int pointsCount = Mathf.RoundToInt(localRadius * HitboxViewConfig.PointsPerRadius);
+            float radius = collider.radius * Mathf.Max(Mathf.Abs(collider.transform.lossyScale.y), Mathf.Abs(collider.transform.lossyScale.z));
+
+            int pointsCount = Mathf.RoundToInt(radius * HitboxViewConfig.PointsPerRadius);
             float step = Mathf.PI * 2 / pointsCount;
-            for (float i = 0; i <= Mathf.PI; i += step)
-                positions.Add(new Vector3(center.x + radius * Mathf.Sin(i), center.y + radius * Mathf.Cos(i), center.z));
-            positions.Rotate(center, collider.transform.rotation);
+
+            for (int i = 0; i <= pointsCount; i++)
+            {
+                float angle = step * i;
+                Vector3 localPos = new Vector3(0, Mathf.Cos(angle) * radius, Mathf.Sin(angle) * radius);
+                Vector3 worldPos = collider.transform.TransformPoint(localPos + collider.center);
+                positions.Add(worldPos);
+            }
+
             SetPositions(lineRenderer, positions);
         }
+
         public void Initialize(TerrainCollider collider)
         {
             if (!collider.TryGetComponent<Terrain>(out Terrain terrain))

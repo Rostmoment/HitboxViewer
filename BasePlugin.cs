@@ -7,6 +7,7 @@ using HitboxViewer.Helpers;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -21,31 +22,21 @@ namespace HitboxViewer
     class PluginInfo
     {
         public const string GUID = "rost.moment.unity.hitboxviewer";
-        public const string VERSION = "0.0.5";
-        public const string NAME = "Hitbox View";
+        public const string VERSION = "0.0.6";
+        public const string NAME = "Hitbox Viewer";
     }
-    public enum CollidersVisualizationMode
-    {
-        Hide = 0,
-        Trigger = 1,
-        NotTrigger = 2,
-        All = 3
-    }
-    public enum NavMeshObstacleVisualizationMode
-    {
-        Hide = 0,
-        Box = 1,
-        Capsule = 2,
-        All = 3
-    }
+   
+
     [BepInPlugin(PluginInfo.GUID, PluginInfo.NAME, PluginInfo.VERSION)]
     public class BasePlugin : BaseUnityPlugin
     {
         public static Vector3 VectorNaN => new Vector3(float.NaN, float.NaN, float.NaN);
-
-        public static int FrameCounter { private set; get; }
         public static CollidersVisualizationMode ColliderVisualize { set; get; }
         public static NavMeshObstacleVisualizationMode NavMeshObstacleVisualize { set; get; }
+        public static UIVisualizationMode UIVisualize { set; get; }
+        public static bool HasUI => AppDomain.CurrentDomain.GetAssemblies().Any(a => a.GetName().Name == "UnityEngine.UI");
+
+        public static int FrameCounter { private set; get; }
         public static string HitboxMode { private set; get; }
         public static Harmony HarmonyInstance { private set; get; }
         public static BasePlugin Instance { private set; get; }
@@ -64,7 +55,9 @@ namespace HitboxViewer
             GUIStyle style = new GUIStyle();
             style.normal.textColor = Color.white;
             style.fontSize = 24;
-            HitboxMode = $"Colliders: {ColliderVisualize.ToName()}\nNavMeshObstacle: {NavMeshObstacleVisualize.ToName()}";
+            HitboxMode = $"Colliders: {ColliderVisualize.ToName()}\n" +
+                $"NavMeshObstacle: {NavMeshObstacleVisualize.ToName()}\n" +
+                $"UI: {UIVisualize.ToName()}";
             GUI.Label(new Rect(10f, 70f, 100f, 50f), HitboxMode, style);
         }
 
@@ -73,22 +66,41 @@ namespace HitboxViewer
         {
             ColliderDisplayer.UpdatePre();
             NavMeshObstacleDisplayer.UpdatePre();
+            if (BasePlugin.HasUI)
+                UIDisplayer.UpdatePre();
+
             if (HitboxViewConfig.UpdateRate <= 0)
                 return;
+
             FrameCounter -= 1;
             if (FrameCounter <= 0)
             {
                 List<Component> hitboxes = new List<Component>();
-                hitboxes.AddRange(GameObject.FindObjectsOfType<Collider>());
-                hitboxes.AddRange(GameObject.FindObjectsOfType<Collider2D>());
+                if (BasePlugin.ColliderVisualize != CollidersVisualizationMode.Hide)
+                {
+                    hitboxes.AddRange(GameObject.FindObjectsOfType<Collider>());
+                    hitboxes.AddRange(GameObject.FindObjectsOfType<Collider2D>());
 
-                for (int i = 0; i < hitboxes.Count; i++)
-                    hitboxes[i].gameObject.GetOrAddComponent<ColliderDisplayer>().Visualize();
+                    for (int i = 0; i < hitboxes.Count; i++)
+                    {
+                        hitboxes[i].gameObject.GetOrAddComponent<ColliderDisplayer>().Visualize();
+
+                    }
+                }
                 hitboxes.Clear();
 
-                hitboxes.AddRange(GameObject.FindObjectsOfType<NavMeshObstacle>());
-                for (int i = 0; i < hitboxes.Count; i++)
-                    hitboxes[i].gameObject.GetOrAddComponent<NavMeshObstacleDisplayer>().Visualize();
+                if (BasePlugin.NavMeshObstacleVisualize != NavMeshObstacleVisualizationMode.Hide)
+                {
+                    hitboxes.AddRange(GameObject.FindObjectsOfType<NavMeshObstacle>());
+                    for (int i = 0; i < hitboxes.Count; i++)
+                        hitboxes[i].gameObject.GetOrAddComponent<NavMeshObstacleDisplayer>().Visualize();
+                }
+                hitboxes.Clear();
+
+                if (BasePlugin.UIVisualize != UIVisualizationMode.Hide && BasePlugin.HasUI)
+                    UIDisplayer.VisualizeGlobal(hitboxes);
+                hitboxes.Clear();
+
                 FrameCounter = HitboxViewConfig.UpdateRate;
             }
         }

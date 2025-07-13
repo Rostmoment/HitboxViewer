@@ -237,5 +237,13 @@ namespace HitboxViewer.Helpers
             key = dictonary.FindKey(value);
             return key != null;
         }
+
+        public static T Next<T>(this T value) where T : Enum
+        {
+            int intValue = Convert.ToInt32(value);
+            int nextValue = (intValue + 1) % Enum.GetValues(typeof(T)).Length;
+            return (T)Enum.ToObject(typeof(T), nextValue);
+        }
+
     }
 }

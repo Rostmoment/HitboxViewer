@@ -25,7 +25,7 @@ namespace HitboxViewer.Displayers
         }
         public static void HideAll()
         {
-            renderers = renderers.Where(x => x.Value != null && x.Key != null).ToDictionary(x => x.Key, x => x.Value);
+            renderers = ClearFromNull(renderers);
             LineRenderer[] lines = renderers.Values.ToArray();
             for (int i = 0; i < lines.Length; i++)
                 lines[i].gameObject.SetActive(false);
@@ -48,10 +48,9 @@ namespace HitboxViewer.Displayers
                 box = true;
                 capsule = true;
             }
-            renderers = renderers.Where(x => x.Value != null && x.Key != null).ToDictionary(x => x.Key, x => x.Value);
-            for (int i = 0; i < renderers.Count; i++)
+            renderers = ClearFromNull(renderers); 
+            foreach (var data in renderers)
             {
-                var data = renderers.ElementAt(i);
                 try
                 {
                     if (box && data.Key.shape == NavMeshObstacleShape.Box)
@@ -102,15 +101,12 @@ namespace HitboxViewer.Displayers
             NavMeshObstacleDisplayer.all.RemoveAll(x => x == null);
             if (Input.GetKeyDown(HitboxViewConfig.ChangeNavMeshObstacleVisualizeMode))
             {
-                BasePlugin.NavMeshObstacleVisualize = (NavMeshObstacleVisualizationMode)(((int)BasePlugin.NavMeshObstacleVisualize + 1) % 4);
+                BasePlugin.NavMeshObstacleVisualize = BasePlugin.NavMeshObstacleVisualize.Next();
                 NavMeshObstacleDisplayer.HideAll();
                 NavMeshObstacleDisplayer.Show();
             }
             if (BasePlugin.NavMeshObstacleVisualize == NavMeshObstacleVisualizationMode.Hide)
-            {
                 NavMeshObstacleDisplayer.HideAll();
-                return;
-            }
         }
     }
 }

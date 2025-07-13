@@ -33,6 +33,13 @@ namespace HitboxViewer
         private static Dictionary<Type, ConfigEntry<string>> hitboxColors = new Dictionary<Type, ConfigEntry<string>>()
         {
         };
+        private static ConfigEntry<string> uiColor;
+        public static string UIColor
+        {
+            get => uiColor.Value;
+            set => uiColor.Value = value;
+        }
+
         public static Color GetHitboxColor(object collider)
         {
             if (!hitboxColors.TryGetValue(collider.GetType(), out ConfigEntry<string> color))
@@ -73,6 +80,12 @@ namespace HitboxViewer
             get => changeNavMeshObstacleVisualizeMode.Value;
             set => changeNavMeshObstacleVisualizeMode.Value = value;
         }
+        private static ConfigEntry<KeyCode> changeUIVisualizeMode;
+        public static KeyCode ChangeUIVisualizeMode
+        {
+            get => changeUIVisualizeMode.Value;
+            set => changeUIVisualizeMode.Value = value;
+        }
 
         private static ConfigEntry<int> updateRate;
         public static int UpdateRate
@@ -88,6 +101,8 @@ namespace HitboxViewer
             {
                 hitboxColors[data.Key] = StaticConfig.Bind("Colors", $"{data.Key.Name} Color", data.Value, $"Color that will be used to display hitboxes of {data.Key.Name} type");
             }
+            uiColor = StaticConfig.Bind("Colors", "UI Color", "#FFA500", "Color that will be uset to display hitboxes of UI elements");
+
             pointsPerRadius = StaticConfig.Bind("Visualization", "Points Per Radius", 100, "Defines how many points are used per unit of circle radius\nTotal = N × radius. Applies to all round hitboxes");
             hitboxLineWidth = StaticConfig.Bind("Visualization", "Hitbox Line Width", 0.1f, "Line width for hitbox outlines");
             shaderHitboxName = StaticConfig.Bind("Visualization", "Shader Name", "Unlit/Color", "Name of shader that will be used for coloring hitbox outlines\nAdded because not every game has this shader");
@@ -96,6 +111,7 @@ namespace HitboxViewer
 
             changeColliderVisualizeMode = StaticConfig.Bind("Key Binds", "Change Collider Visualization Mode", KeyCode.F1, "Key that is used for changing collider visualization mode");
             changeNavMeshObstacleVisualizeMode = StaticConfig.Bind("Key Binds", "Change NavMeshObstacle Visualization Mode", KeyCode.F2, "Key that is used for changing NavMeshObstacle visualization mode");
+            changeUIVisualizeMode = StaticConfig.Bind("Key Binds", "Change UI Visualization Mode", KeyCode.F3, "Key that is used for changing UI visualization mode");
         }
     }
 }
