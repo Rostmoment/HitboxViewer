@@ -1,7 +1,7 @@
 # HitboxViewer
 # Main Information
  
-Tool for viewing hitboxes in Unity games
+## Tool for viewing hitboxes in ANY Unity game
 
 [BepInEx](https://github.com/BepInEx/BepInEx) plugin that works with any Unity game
 
