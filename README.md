@@ -71,8 +71,8 @@ UI has 5 different modes
 
 ---
 
-- There are **Two separate selection settings**: one for colliders and one for NavMesh obstacles.
-- Modes are **independent** — for example, `Trigger` affects only colliders, and `Box` affects only NavMesh obstacles.
+- There are **Three separate selection settings**: one for colliders, one for NavMesh obstacles and one for UI.
+- Modes are **independent** — for example, `Trigger` affects only colliders, and `Box` affects only NavMesh obstacles, `Button` affects only UI.
 - This separation allows clear and flexible control over hitbox visualization.
 
 # Press F1 for changing colliders displaying mode
@@ -92,7 +92,7 @@ Supported hitbox types:
 10. NavMeshObstacle Box
 11. NavMeshObstacle Capsule
 12. Button, Slider and Dropdown
-## If game throws exception (error) when trying to display hitbox, try to change shader name in configs (see below for instructions on how to do this). Shader name can be found using [UnityExplorer](https://github.com/sinai-dev/UnityExplorer)
+## If game throws exception (error) when it tries to display hitbox, try to change shader name in configs (see below for instructions on how to do this). Shader name can be found using [UnityExplorer](https://github.com/sinai-dev/UnityExplorer)
 # Showcasing
 There are few screenshots of testing this tools
 ![Testing in Baldi's Basics Plus](https://github.com/Rostmoment/HitboxViewer/blob/master/Showcasing/baldiplus.png?Raw=true)
