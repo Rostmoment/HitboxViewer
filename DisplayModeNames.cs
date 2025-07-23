@@ -13,7 +13,6 @@ namespace HitboxViewer
             {CollidersVisualizationMode.NotTrigger, "Not Trigger" }
         };
         private static Dictionary<NavMeshObstacleVisualizationMode, string> navMeshes = new Dictionary<NavMeshObstacleVisualizationMode, string>();
-        private static Dictionary<UIVisualizationMode, string> ui = new Dictionary<UIVisualizationMode, string>();
 
         public static string ToName(this CollidersVisualizationMode collider)
         {
@@ -26,13 +25,6 @@ namespace HitboxViewer
             if (navMeshes.TryGetValue(navMesh, out string name))
                 return name;
             return navMesh.ToString();
-        }
-        public static string ToName(this UIVisualizationMode uiMode
-            )
-        {
-            if (ui.TryGetValue(uiMode, out string name))
-                return name;
-            return uiMode.ToString();
         }
     }
 }

@@ -22,7 +22,7 @@ namespace HitboxViewer
     class PluginInfo
     {
         public const string GUID = "rost.moment.unity.hitboxviewer";
-        public const string VERSION = "0.0.6";
+        public const string VERSION = "0.0.7";
         public const string NAME = "Hitbox Viewer";
     }
    
@@ -33,8 +33,6 @@ namespace HitboxViewer
         public static Vector3 VectorNaN => new Vector3(float.NaN, float.NaN, float.NaN);
         public static CollidersVisualizationMode ColliderVisualize { set; get; }
         public static NavMeshObstacleVisualizationMode NavMeshObstacleVisualize { set; get; }
-        public static UIVisualizationMode UIVisualize { set; get; }
-        public static bool HasUI => AppDomain.CurrentDomain.GetAssemblies().Any(a => a.GetName().Name == "UnityEngine.UI");
 
         public static int FrameCounter { private set; get; }
         public static string HitboxMode { private set; get; }
@@ -56,8 +54,7 @@ namespace HitboxViewer
             style.normal.textColor = Color.white;
             style.fontSize = 24;
             HitboxMode = $"Colliders: {ColliderVisualize.ToName()}\n" +
-                $"NavMeshObstacle: {NavMeshObstacleVisualize.ToName()}\n" +
-                $"UI: {UIVisualize.ToName()}";
+                $"NavMeshObstacle: {NavMeshObstacleVisualize.ToName()}\n";
             GUI.Label(new Rect(10f, 70f, 100f, 50f), HitboxMode, style);
         }
 
@@ -66,8 +63,6 @@ namespace HitboxViewer
         {
             ColliderDisplayer.UpdatePre();
             NavMeshObstacleDisplayer.UpdatePre();
-            if (BasePlugin.HasUI)
-                UIDisplayer.UpdatePre();
 
             if (HitboxViewConfig.UpdateRate <= 0)
                 return;
@@ -96,11 +91,6 @@ namespace HitboxViewer
                         hitboxes[i].gameObject.GetOrAddComponent<NavMeshObstacleDisplayer>().Visualize();
                 }
                 hitboxes.Clear();
-
-                if (BasePlugin.UIVisualize != UIVisualizationMode.Hide && BasePlugin.HasUI)
-                    UIDisplayer.VisualizeGlobal(hitboxes);
-                hitboxes.Clear();
-
                 FrameCounter = HitboxViewConfig.UpdateRate;
             }
         }

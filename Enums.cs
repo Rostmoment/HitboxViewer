@@ -33,12 +33,4 @@ namespace HitboxViewer
         Capsule,
         All
     }
-    public enum UIVisualizationMode
-    {
-        Hide,
-        Button,
-        Dropdown,
-        Slider,
-        All
-    }
 }
