@@ -25,7 +25,6 @@ HitboxViewer provides **separate display settings** for:
 - **NavMesh Obstacles** (`NavMeshObstacle`)
 
 Colliders and NaxMeshObstacles have 4 different modes
-UI has 5 different modes
 
 ---
 
