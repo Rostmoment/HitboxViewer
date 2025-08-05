@@ -13,9 +13,6 @@ HitboxViewer supports the following Unity components:
 - `Collider` (3D)
 - `Collider2D`
 - `NavMeshObstacle`
-- `Button`
-- `Dropdown`
-- `Slider`
   
 The term **"hitbox"** refers to **any of these components** or its bound
 
@@ -26,7 +23,6 @@ The term **"hitbox"** refers to **any of these components** or its bound
 HitboxViewer provides **separate display settings** for:
 - **Colliders** (`Collider` and `Collider2D`)
 - **NavMesh Obstacles** (`NavMeshObstacle`)
-- **UI** (`Button`, `Dropdown` and `Slider`)
 
 Colliders and NaxMeshObstacles have 4 different modes
 UI has 5 different modes
@@ -59,25 +55,12 @@ UI has 5 different modes
 
 ---
 
-### 🟡 UI Display Modes
-
-| Mode     | Description                                                                   |
-|----------|-------------------------------------------------------------------------------|
-| `Hide`   | Hides all UI components                                        |
-| `All`    | Shows all ui components                                        |
-| `Button`    | Shows only `Button` component                                     |
-| `Dropdown`    | Shows only `Dropdown` component                                     |
-| `Slider`    | Shows only `Slider` component                                     |
-
----
-
-- There are **Three separate selection settings**: one for colliders, one for NavMesh obstacles and one for UI.
-- Modes are **independent** — for example, `Trigger` affects only colliders, and `Box` affects only NavMesh obstacles, `Button` affects only UI.
+- There are **Two separate selection settings**: one for colliders, one for NavMesh obstacles.
+- Modes are **independent** — for example, `Trigger` affects only colliders, and `Box` affects only NavMesh obstacles.
 - This separation allows clear and flexible control over hitbox visualization.
 
 # Press F1 for changing colliders displaying mode
 # Press F2 for changing navmesh displaying mode
-# Press F3 for changing UI displaying mode
 
 Supported hitbox types:
 1. BoxCollider
@@ -91,7 +74,7 @@ Supported hitbox types:
 9. BoxCollider2D
 10. NavMeshObstacle Box
 11. NavMeshObstacle Capsule
-12. Button, Slider and Dropdown
+
 ## If game throws exception (error) when it tries to display hitbox, try to change shader name in configs (see below for instructions on how to do this). Shader name can be found using [UnityExplorer](https://github.com/sinai-dev/UnityExplorer)
 # Showcasing
 There are few screenshots of testing this tools
