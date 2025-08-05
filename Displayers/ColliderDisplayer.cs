@@ -46,7 +46,7 @@ namespace HitboxViewer.Displayers
             renderers = ClearFromNull(renderers);
             LineRenderer[] lines = renderers.Values.ToArray();
             for (int i = 0; i < lines.Length; i++)
-                lines[i].gameObject.SetActive(false);
+                lines[i]?.gameObject?.SetActive(false);
         }
         public static void Show()
         {
@@ -153,20 +153,8 @@ namespace HitboxViewer.Displayers
             Vector3 worldPosition = collider.transform.position;
             float worldRadius = localRadius * Mathf.Max(Mathf.Abs(worldScale.x), Mathf.Abs(worldScale.y), Mathf.Abs(worldScale.z));
             Vector3 worldCenter = collider.transform.TransformPoint(collider.center);
-            int pointsCount = Mathf.RoundToInt(worldRadius * HitboxViewConfig.PointsPerRadius);
-            float step = Mathf.PI * Mathf.Sqrt(2 * pointsCount) / pointsCount;
-            for (float a = 0; a <= Mathf.PI; a += step)
-            {
-                float sin = Mathf.Sin(a);
-                float cos = Mathf.Cos(a);
-                for (float b = 0; b <= 2 * Mathf.PI; b += step)
-                {
-                    positions.Add(worldCenter + new Vector3(worldRadius * sin * Mathf.Cos(b),
-                        worldRadius * sin * Mathf.Sin(b),
-                        worldRadius * cos));
-                }
-            }
-            SetPositions(lineRenderer, positions);
+
+            DrawSphere(worldCenter, worldRadius);
         }
 
         public void Initialize(CharacterController characterController) => DrawCapsule(characterController.transform, characterController.height, characterController.height, characterController.center);

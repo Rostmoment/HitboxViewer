@@ -13,6 +13,7 @@ namespace HitboxViewer
     class HitboxViewConfig
     {
         public static ConfigFile StaticConfig { get; private set; }
+        #region Colors
         private static readonly Dictionary<Type, string> hitboxDefaultColors = new Dictionary<Type, string>()
         {
             {typeof(BoxCollider), "#DB220D"},
@@ -33,12 +34,6 @@ namespace HitboxViewer
         private static Dictionary<Type, ConfigEntry<string>> hitboxColors = new Dictionary<Type, ConfigEntry<string>>()
         {
         };
-        private static ConfigEntry<string> uiColor;
-        public static string UIColor
-        {
-            get => uiColor.Value;
-            set => uiColor.Value = value;
-        }
 
         public static Color GetHitboxColor(object collider)
         {
@@ -46,27 +41,39 @@ namespace HitboxViewer
                 return Color.clear;
             return HelpfulMethods.ColorFromHex(color.Value);
         }
+        #endregion
 
+        #region Visualization
         private static ConfigEntry<int> pointsPerRadius;
+        private static ConfigEntry<float> hitboxLineWidth;
+        private static ConfigEntry<SphereVisualizationMode> sphereVisualizationMode;
+        private static ConfigEntry<string> shaderHitboxName;
+
+
         public static int PointsPerRadius
         {
             get => pointsPerRadius.Value;
             set => pointsPerRadius.Value = value;
         }
 
-        private static ConfigEntry<float> hitboxLineWidth; 
         public static float HitboxLineWidth
         {
             get => hitboxLineWidth.Value;
             set => hitboxLineWidth.Value = value;
         }
 
-        private static ConfigEntry<string> shaderHitboxName;
+        public static SphereVisualizationMode SphereVisualizationMode
+        {
+            get => sphereVisualizationMode.Value;
+            set => sphereVisualizationMode.Value = value;
+        }
+
         public static string ShaderHitboxName
         {
             get => shaderHitboxName.Value;
             set => shaderHitboxName.Value = value;
         }
+        #endregion
 
         private static ConfigEntry<KeyCode> changeColliderVisualizeMode;
         public static KeyCode ChangeColliderVisualizeMode
@@ -101,11 +108,11 @@ namespace HitboxViewer
             {
                 hitboxColors[data.Key] = StaticConfig.Bind("Colors", $"{data.Key.Name} Color", data.Value, $"Color that will be used to display hitboxes of {data.Key.Name} type");
             }
-            uiColor = StaticConfig.Bind("Colors", "UI Color", "#FFA500", "Color that will be uset to display hitboxes of UI elements");
 
             pointsPerRadius = StaticConfig.Bind("Visualization", "Points Per Radius", 100, "Defines how many points are used per unit of circle radius\nTotal = N × radius. Applies to all round hitboxes");
             hitboxLineWidth = StaticConfig.Bind("Visualization", "Hitbox Line Width", 0.1f, "Line width for hitbox outlines");
             shaderHitboxName = StaticConfig.Bind("Visualization", "Shader Name", "Unlit/Color", "Name of shader that will be used for coloring hitbox outlines\nAdded because not every game has this shader");
+            sphereVisualizationMode = StaticConfig.Bind("Visualization", "Sphere Collider Mode", SphereVisualizationMode.Full, "Determines how sphere colliders are rendered (e.g. full surface, triple axis rings, or double axis rings)");
 
             updateRate = StaticConfig.Bind("Update", "Update Rate", 60, "Determines once every how many frames new hitbox outlines will be calculated\nIf zero or less hitboxes won't be updated themselves. You will need add and update them manually to object with UnityExplorer (HitboxView.HitboxDisplay component)");
 

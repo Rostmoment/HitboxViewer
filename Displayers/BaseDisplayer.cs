@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace HitboxViewer.Displayers
 {
@@ -33,7 +34,7 @@ namespace HitboxViewer.Displayers
 
         }
 
-        public static Dictionary<T, K> ClearFromNull<T, K>(Dictionary<T, K> dictionary) => dictionary.Where(x => x.Value != null && x.Key != null).ToDictionary(x => x.Key, x => x.Value);
+        public static Dictionary<T, K> ClearFromNull<T, K>(Dictionary<T, K> dictionary) => dictionary.Where(x => !x.Value.IsNullOrDestroyed() && !x.Key.IsNullOrDestroyed()).ToDictionary(x => x.Key, x => x.Value);
         public static void SetPositions(LineRenderer line, List<Vector3> vectors) => SetPositions(line, vectors.ToArray());
         public static void SetPositions(LineRenderer line, params Vector3[] positions)
         {
@@ -83,6 +84,26 @@ namespace HitboxViewer.Displayers
 
         }
 
+        public void DrawSphere(Vector3 center, float radius)
+        {
+            int pointsCount = Mathf.RoundToInt(radius * HitboxViewConfig.PointsPerRadius);
+            if (HitboxViewConfig.SphereVisualizationMode == SphereVisualizationMode.Full)
+            {
+                float step = Mathf.PI * Mathf.Sqrt(2 * pointsCount) / pointsCount;
+                for (float a = 0; a <= Mathf.PI; a += step)
+                {
+                    float sin = Mathf.Sin(a);
+                    float cos = Mathf.Cos(a);
+                    for (float b = 0; b <= 2 * Mathf.PI; b += step)
+                    {
+                        positions.Add(center + new Vector3(radius * sin * Mathf.Cos(b),
+                            radius * sin * Mathf.Sin(b),
+                            radius * cos));
+                    }
+                }
+            }
+            SetPositions(lineRenderer, positions);
+        }
         public Vector3[] DrawCircleQuarter(Transform transformOfHitbox, float localRadius, Vector3 center, Plane plane, Quadrant quadrant, float step = float.NaN, bool reverse = false)
         {
             Vector3 worldScale = transformOfHitbox.lossyScale;

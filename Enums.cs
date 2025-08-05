@@ -6,18 +6,24 @@ using System.Threading.Tasks;
 
 namespace HitboxViewer
 {
-    enum Plane
+    public enum Plane
     {
         XY,
         XZ,
         YZ
     }
-    enum Quadrant
+    public enum Quadrant
     {
         First,
         Second,
         Third,
         Fourth
+    }
+    public enum SphereVisualizationMode
+    {
+        Full,
+        ThreeAxis,
+        TwoAxis
     }
     public enum CollidersVisualizationMode
     {
