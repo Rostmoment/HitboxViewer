@@ -84,12 +84,18 @@ namespace HitboxViewer.Displayers
 
         }
 
-        public void DrawSphere(Vector3 center, float radius)
+        public void DrawSphere(Vector3 center, float localRadius, Transform hitboxTransform)
         {
+            Vector3 worldScale = hitboxTransform.lossyScale;
+            Vector3 worldPosition = hitboxTransform.position;
+
+            float radius = localRadius * Mathf.Max(Mathf.Abs(worldScale.x), Mathf.Abs(worldScale.y), Mathf.Abs(worldScale.z));
             int pointsCount = Mathf.RoundToInt(radius * HitboxViewConfig.PointsPerRadius);
+            float step = Mathf.PI * Mathf.Sqrt(2 * pointsCount) / pointsCount;
+
+            #region Full
             if (HitboxViewConfig.SphereVisualizationMode == SphereVisualizationMode.Full)
             {
-                float step = Mathf.PI * Mathf.Sqrt(2 * pointsCount) / pointsCount;
                 for (float a = 0; a <= Mathf.PI; a += step)
                 {
                     float sin = Mathf.Sin(a);
@@ -102,6 +108,30 @@ namespace HitboxViewer.Displayers
                     }
                 }
             }
+            #endregion
+
+            #region 3 and 2 axis
+            else
+            {
+                positions.AddRange(DrawCircleQuarter(hitboxTransform, localRadius, center, Plane.XY, Quadrant.First, step));
+                if (HitboxViewConfig.SphereVisualizationMode == SphereVisualizationMode.ThreeAxis)
+                {
+                    positions.AddRange(DrawCircleQuarter(hitboxTransform, localRadius, center, Plane.YZ, Quadrant.First, step));
+                    positions.AddRange(DrawCircleQuarter(hitboxTransform, localRadius, center, Plane.YZ, Quadrant.Second, step));
+                    positions.AddRange(DrawCircleQuarter(hitboxTransform, localRadius, center, Plane.YZ, Quadrant.Third, step));
+                    positions.AddRange(DrawCircleQuarter(hitboxTransform, localRadius, center, Plane.YZ, Quadrant.Fourth, step));
+                }
+                positions.AddRange(DrawCircleQuarter(hitboxTransform, localRadius, center, Plane.XY, Quadrant.Second, step));
+
+                positions.AddRange(DrawCircleQuarter(hitboxTransform, localRadius, center, Plane.XZ, Quadrant.First, step));
+                positions.AddRange(DrawCircleQuarter(hitboxTransform, localRadius, center, Plane.XZ, Quadrant.Second, step));
+                positions.AddRange(DrawCircleQuarter(hitboxTransform, localRadius, center, Plane.XZ, Quadrant.Third, step));
+                positions.AddRange(DrawCircleQuarter(hitboxTransform, localRadius, center, Plane.XZ, Quadrant.Fourth, step));
+
+                positions.AddRange(DrawCircleQuarter(hitboxTransform, localRadius, center, Plane.XY, Quadrant.Third, step));
+                positions.AddRange(DrawCircleQuarter(hitboxTransform, localRadius, center, Plane.XY, Quadrant.Fourth, step));
+            }
+            #endregion
             SetPositions(lineRenderer, positions);
         }
         public Vector3[] DrawCircleQuarter(Transform transformOfHitbox, float localRadius, Vector3 center, Plane plane, Quadrant quadrant, float step = float.NaN, bool reverse = false)
@@ -128,7 +158,7 @@ namespace HitboxViewer.Displayers
                     minmax = new Vector2(3 * Mathf.PI / 2, 2 * Mathf.PI);
                     break;
                 default:
-                    return [BasePlugin.VectorNaN];
+                    throw new ArgumentException($"Unknown quadrant!\n{quadrant}");
             }
 
             List<Vector3> result = new List<Vector3>();

@@ -12,7 +12,6 @@ namespace HitboxViewer
 {
     class HitboxViewConfig
     {
-        public static ConfigFile StaticConfig { get; private set; }
         #region Colors
         private static readonly Dictionary<Type, string> hitboxDefaultColors = new Dictionary<Type, string>()
         {
@@ -103,22 +102,21 @@ namespace HitboxViewer
 
         public static void Initialize()
         {
-            StaticConfig = new ConfigFile($"{Paths.ConfigPath}/{PluginInfo.GUID}.cfg", true);
             foreach (var data in hitboxDefaultColors)
             {
-                hitboxColors[data.Key] = StaticConfig.Bind("Colors", $"{data.Key.Name} Color", data.Value, $"Color that will be used to display hitboxes of {data.Key.Name} type");
+                hitboxColors[data.Key] = BasePlugin.Instance.Config.Bind("Colors", $"{data.Key.Name} Color", data.Value, $"Color that will be used to display hitboxes of {data.Key.Name} type");
             }
 
-            pointsPerRadius = StaticConfig.Bind("Visualization", "Points Per Radius", 100, "Defines how many points are used per unit of circle radius\nTotal = N × radius. Applies to all round hitboxes");
-            hitboxLineWidth = StaticConfig.Bind("Visualization", "Hitbox Line Width", 0.1f, "Line width for hitbox outlines");
-            shaderHitboxName = StaticConfig.Bind("Visualization", "Shader Name", "Unlit/Color", "Name of shader that will be used for coloring hitbox outlines\nAdded because not every game has this shader");
-            sphereVisualizationMode = StaticConfig.Bind("Visualization", "Sphere Collider Mode", SphereVisualizationMode.Full, "Determines how sphere colliders are rendered (e.g. full surface, triple axis rings, or double axis rings)");
+            pointsPerRadius = BasePlugin.Instance.Config.Bind("Visualization", "Points Per Radius", 100, "Defines how many points are used per unit of circle radius\nTotal = N × radius. Applies to all round hitboxes");
+            hitboxLineWidth = BasePlugin.Instance.Config.Bind("Visualization", "Hitbox Line Width", 0.1f, "Line width for hitbox outlines");
+            shaderHitboxName = BasePlugin.Instance.Config.Bind("Visualization", "Shader Name", "Unlit/Color", "Name of shader that will be used for coloring hitbox outlines\nAdded because not every game has this shader");
+            sphereVisualizationMode = BasePlugin.Instance.Config.Bind("Visualization", "Sphere Collider Mode", SphereVisualizationMode.Full, "Determines how sphere colliders are rendered (e.g. full surface, triple axis rings, or double axis rings)");
 
-            updateRate = StaticConfig.Bind("Update", "Update Rate", 60, "Determines once every how many frames new hitbox outlines will be calculated\nIf zero or less hitboxes won't be updated themselves. You will need add and update them manually to object with UnityExplorer (HitboxView.HitboxDisplay component)");
+            updateRate = BasePlugin.Instance.Config.Bind("Update", "Update Rate", 60, "Determines once every how many frames new hitbox outlines will be calculated\nIf zero or less hitboxes won't be updated themselves. You will need add and update them manually to object with UnityExplorer (HitboxView.HitboxDisplay component)");
 
-            changeColliderVisualizeMode = StaticConfig.Bind("Key Binds", "Change Collider Visualization Mode", KeyCode.F1, "Key that is used for changing collider visualization mode");
-            changeNavMeshObstacleVisualizeMode = StaticConfig.Bind("Key Binds", "Change NavMeshObstacle Visualization Mode", KeyCode.F2, "Key that is used for changing NavMeshObstacle visualization mode");
-            changeUIVisualizeMode = StaticConfig.Bind("Key Binds", "Change UI Visualization Mode", KeyCode.F3, "Key that is used for changing UI visualization mode");
+            changeColliderVisualizeMode = BasePlugin.Instance.Config.Bind("Key Binds", "Change Collider Visualization Mode", KeyCode.F1, "Key that is used for changing collider visualization mode");
+            changeNavMeshObstacleVisualizeMode = BasePlugin.Instance.Config.Bind("Key Binds", "Change NavMeshObstacle Visualization Mode", KeyCode.F2, "Key that is used for changing NavMeshObstacle visualization mode");
+            changeUIVisualizeMode = BasePlugin.Instance.Config.Bind("Key Binds", "Change UI Visualization Mode", KeyCode.F3, "Key that is used for changing UI visualization mode");
         }
     }
 }

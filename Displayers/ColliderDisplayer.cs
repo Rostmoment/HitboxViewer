@@ -146,16 +146,8 @@ namespace HitboxViewer.Displayers
             SetPositions(lineRenderer, vertices[0], vertices[1], vertices[5], vertices[4], vertices[0], vertices[2], vertices[3], vertices[7],
                 vertices[5], vertices[4], vertices[6], vertices[7], vertices[6], vertices[2], vertices[3], vertices[1]);
         }
-        public void Initialize(SphereCollider collider)
-        {
-            float localRadius = collider.radius;
-            Vector3 worldScale = collider.transform.lossyScale;
-            Vector3 worldPosition = collider.transform.position;
-            float worldRadius = localRadius * Mathf.Max(Mathf.Abs(worldScale.x), Mathf.Abs(worldScale.y), Mathf.Abs(worldScale.z));
-            Vector3 worldCenter = collider.transform.TransformPoint(collider.center);
-
-            DrawSphere(worldCenter, worldRadius);
-        }
+        public void Initialize(SphereCollider collider) =>
+            DrawSphere(collider.transform.TransformPoint(collider.center), collider.radius, collider.transform);
 
         public void Initialize(CharacterController characterController) => DrawCapsule(characterController.transform, characterController.height, characterController.height, characterController.center);
         public void Initialize(CapsuleCollider capsuleCollider) => DrawCapsule(capsuleCollider.transform, capsuleCollider.height, capsuleCollider.height, capsuleCollider.center);
