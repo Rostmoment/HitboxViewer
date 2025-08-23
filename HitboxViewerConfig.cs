@@ -86,12 +86,6 @@ namespace HitboxViewer
             get => changeNavMeshObstacleVisualizeMode.Value;
             set => changeNavMeshObstacleVisualizeMode.Value = value;
         }
-        private static ConfigEntry<KeyCode> changeUIVisualizeMode;
-        public static KeyCode ChangeUIVisualizeMode
-        {
-            get => changeUIVisualizeMode.Value;
-            set => changeUIVisualizeMode.Value = value;
-        }
 
         private static ConfigEntry<int> updateRate;
         public static int UpdateRate
@@ -116,7 +110,6 @@ namespace HitboxViewer
 
             changeColliderVisualizeMode = BasePlugin.Instance.Config.Bind("Key Binds", "Change Collider Visualization Mode", KeyCode.F1, "Key that is used for changing collider visualization mode");
             changeNavMeshObstacleVisualizeMode = BasePlugin.Instance.Config.Bind("Key Binds", "Change NavMeshObstacle Visualization Mode", KeyCode.F2, "Key that is used for changing NavMeshObstacle visualization mode");
-            changeUIVisualizeMode = BasePlugin.Instance.Config.Bind("Key Binds", "Change UI Visualization Mode", KeyCode.F3, "Key that is used for changing UI visualization mode");
         }
     }
 }
