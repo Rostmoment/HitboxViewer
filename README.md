@@ -90,30 +90,33 @@ There are few screenshots of testing this tools
 `Your/Game/Folder/BepInEx/config/rost.moment.unity.hitboxviewer.cfg`  
 Open it as a text file using any text editor.
 
+## Configuration
+
 | Config                                | Group         | Type      | Default   | Description |
 |---------------------------------------|---------------|-----------|-----------|-------------|
-| BoxCollider Color                     | Colors        | `string`  | `#DB220D` | RGBA hex code of the color used to display hitboxes of the BoxCollider type |
-| SphereCollider Color                  | Colors        | `string`  | `#0D2FDB` | RGBA hex code of the color used to display hitboxes of the SphereCollider type |
-| CapsuleCollider Color                 | Colors        | `string`  | `#28DB0D` | RGBA hex code of the color used to display hitboxes of the CapsuleCollider type |
-| CharacterController Color             | Colors        | `string`  | `#8A2BE2` | RGBA hex code of the color used to display hitboxes of the CharacterController type |
-| MeshCollider Color                    | Colors        | `string`  | `#DBDB0D` | RGBA hex code of the color used to display hitboxes of the MeshCollider type |
-| WheelCollider Color                   | Colors        | `string`  | `#DB7B0D` | RGBA hex code of the color used to display hitboxes of the WheelCollider type |
-| TerrainCollider Color                 | Colors        | `string`  | `#A020F0` | RGBA hex code of the color used to display hitboxes of the TerrainCollider type |
-| BoxCollider2D Color                   | Colors        | `string`  | `#FF19AF` | RGBA hex code of the color used to display hitboxes of the BoxCollider2D type |
-| CircleCollider2D Color                | Colors        | `string`  | `#039AFF` | RGBA hex code of the color used to display hitboxes of the CircleCollider2D type |
-| CapsuleCollider2D Color               | Colors        | `string`  | `#633310` | RGBA hex code of the color used to display hitboxes of the CapsuleCollider2D type |
-| PolygonCollider2D Color               | Colors        | `string`  | `#000000` | RGBA hex code of the color used to display hitboxes of the PolygonCollider2D type |
-| EdgeCollider2D Color                  | Colors        | `string`  | `#FFFFFF` | RGBA hex code of the color used to display hitboxes of the EdgeCollider2D type |
-| CompositeCollider2D Color             | Colors        | `string`  | `#363636` | RGBA hex code of the color used to display hitboxes of the CompositeCollider2D type |
-| NavMeshObstacle Color                 | Colors        | `string`  | `#008080` | RGBA hex code of the color used to display hitboxes of the NavMeshObstacle type |
-| UI Color                 | Colors        | `string`  | `#FFA500` | RGBA hex code of the color used to display hitboxes of the UI components |
-| Change Collider Visualization Mode    | Key Binds     | `KeyCode` | `F1`      | Key used to change the collider visualization mode |
-| Change NavMeshObstacle Visualization Mode | Key Binds | `KeyCode` | `F2`      | Key used to change the UI visualization mode |
-| Change UI Visualization Mode | Key Binds | `KeyCode` | `F3`      | Key used to change the NavMeshObstacle visualization mode |
-| Update Rate                           | Update        | `int`     | `60`      | Determines how often (in frames) hitbox outlines are recalculated. If 0 or less, hitboxes will not be updated |
-| Points Per Radius                     | Visualization | `int`     | `100`     | Number of points used per unit of circle radius; applies to round hitboxes like CircleCollider2D, SphereCollider, etc. |
+| BoxCollider Color                     | Colors        | `string`  | `#DB220D` | RGBA hex color used to display hitboxes of **BoxCollider** |
+| SphereCollider Color                  | Colors        | `string`  | `#0D2FDB` | RGBA hex color used to display hitboxes of **SphereCollider** |
+| CapsuleCollider Color                 | Colors        | `string`  | `#28DB0D` | RGBA hex color used to display hitboxes of **CapsuleCollider** |
+| MeshCollider Color                    | Colors        | `string`  | `#DBDB0D` | RGBA hex color used to display hitboxes of **MeshCollider** |
+| WheelCollider Color                   | Colors        | `string`  | `#DB7B0D` | RGBA hex color used to display hitboxes of **WheelCollider** |
+| TerrainCollider Color                 | Colors        | `string`  | `#A020F0` | RGBA hex color used to display hitboxes of **TerrainCollider** |
+| BoxCollider2D Color                   | Colors        | `string`  | `#FF19AF` | RGBA hex color used to display hitboxes of **BoxCollider2D** |
+| CircleCollider2D Color                | Colors        | `string`  | `#039AFF` | RGBA hex color used to display hitboxes of **CircleCollider2D** |
+| CapsuleCollider2D Color               | Colors        | `string`  | `#633310` | RGBA hex color used to display hitboxes of **CapsuleCollider2D** |
+| CharacterController Color             | Colors        | `string`  | `#8A2BE2` | RGBA hex color used to display hitboxes of **CharacterController** |
+| PolygonCollider2D Color               | Colors        | `string`  | `#000000` | RGBA hex color used to display hitboxes of **PolygonCollider2D** |
+| EdgeCollider2D Color                  | Colors        | `string`  | `#FFFFFF` | RGBA hex color used to display hitboxes of **EdgeCollider2D** |
+| CompositeCollider2D Color             | Colors        | `string`  | `#363636` | RGBA hex color used to display hitboxes of **CompositeCollider2D** |
+| NavMeshObstacle Color                 | Colors        | `string`  | `#008080` | RGBA hex color used to display hitboxes of **NavMeshObstacle** |
+| Change Collider Visualization Mode    | Key Binds     | `KeyCode` | `F1`      | Key used to switch collider visualization mode |
+| Change NavMeshObstacle Visualization Mode | Key Binds  | `KeyCode` | `F2`      | Key used to switch NavMeshObstacle visualization mode |
+| Update Rate                           | Update        | `int`     | `60`      | Determines how often (in frames) hitbox outlines are recalculated. If `≤ 0`, automatic updates are disabled |
+| Points Per Radius                     | Visualization | `int`     | `100`     | Number of points used per unit of circle radius. Applies to all round colliders (Sphere, Circle2D, etc.) |
 | Hitbox Line Width                     | Visualization | `float`   | `0.1`     | Line width for hitbox outlines |
-| Shader Name                           | Visualization | `string`  | `Unlit/Color` | Shader name used to color hitbox outlines |
+| Shader Name                           | Visualization | `string`  | `Unlit/Color` | Shader name used to render hitbox outlines (added for compatibility across games) |
+| Sphere Collider Mode                  | Visualization | `SphereVisualizationMode`    | `Full`    | Determines how **SphereColliders** are rendered:<br/>• `Full` – full sphere surface<br/>• `TripleRings` – three axis rings<br/>• `DoubleRings` – two axis rings |
+
+
 
 Configs can be easily changed using any text editor—just make sure to use the correct data types
 
