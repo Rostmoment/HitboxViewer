@@ -91,7 +91,14 @@ namespace HitboxViewer.Displayers
 
             float radius = localRadius * Mathf.Max(Mathf.Abs(worldScale.x), Mathf.Abs(worldScale.y), Mathf.Abs(worldScale.z));
             int pointsCount = Mathf.RoundToInt(radius * HitboxViewConfig.PointsPerRadius);
-            float step = Mathf.PI * Mathf.Sqrt(2 * pointsCount) / pointsCount;
+
+            float step = HitboxViewConfig.SphereVisualizationMode switch
+            {
+                SphereVisualizationMode.Full => 4 * Mathf.PI * radius * radius / pointsCount,
+                SphereVisualizationMode.ThreeAxis => 6 * Mathf.PI * radius / pointsCount,
+                SphereVisualizationMode.TwoAxis => 4 * Mathf.PI * radius / pointsCount,
+                _ => throw new ArgumentException($"Unknown SphereVisualizationMode!\n{HitboxViewConfig.SphereVisualizationMode}"),
+            };
 
             #region Full
             if (HitboxViewConfig.SphereVisualizationMode == SphereVisualizationMode.Full)
@@ -140,28 +147,18 @@ namespace HitboxViewer.Displayers
             float radius = localRadius * Mathf.Max(Mathf.Abs(worldScale.x), Mathf.Abs(worldScale.y), Mathf.Abs(worldScale.z));
 
             if (float.IsNaN(step))
-                step = 2 * Mathf.PI / HitboxViewConfig.PointsPerRadius;
+                step = 2 * Mathf.PI * radius / HitboxViewConfig.PointsPerRadius;
 
-            Vector2 minmax = new Vector2();
-            switch (quadrant)
+            Vector2 minmax = quadrant switch
             {
-                case Quadrant.First:
-                    minmax = new Vector2(0, Mathf.PI / 2);
-                    break;
-                case Quadrant.Second:
-                    minmax = new Vector2(Mathf.PI / 2, Mathf.PI);
-                    break;
-                case Quadrant.Third:
-                    minmax = new Vector2(Mathf.PI, 3 * Mathf.PI / 2);
-                    break;
-                case Quadrant.Fourth:
-                    minmax = new Vector2(3 * Mathf.PI / 2, 2 * Mathf.PI);
-                    break;
-                default:
-                    throw new ArgumentException($"Unknown quadrant!\n{quadrant}");
-            }
+                Quadrant.First => new Vector2(0, Mathf.PI / 2),
+                Quadrant.Second => new Vector2(Mathf.PI / 2, Mathf.PI),
+                Quadrant.Third => new Vector2(Mathf.PI, 3 * Mathf.PI / 2),
+                Quadrant.Fourth => new Vector2(3 * Mathf.PI / 2, 2 * Mathf.PI),
+                _ => throw new ArgumentException($"Unknown quadrant! --- '{quadrant}'"),
+            };
 
-            List<Vector3> result = new List<Vector3>();
+            List<Vector3> result = [];
             for (float i = minmax.x; i <= minmax.y + step / 2; i += step)
             {
                 switch (plane)
@@ -176,7 +173,7 @@ namespace HitboxViewer.Displayers
                         result.Add(new Vector3(center.x, center.y + radius * Mathf.Cos(i), center.z + radius * Mathf.Sin(i)));
                         break;
                     default:
-                        return [BasePlugin.VectorNaN];
+                        throw new ArgumentException($"Unknown plane! --- '{plane}'");
                 }
             }
             switch (plane)
@@ -191,7 +188,7 @@ namespace HitboxViewer.Displayers
                     result.Add(new Vector3(center.x, center.y + radius * Mathf.Cos(minmax.y), center.z + radius * Mathf.Sin(minmax.y)));
                     break;
                 default:
-                    break;
+                    throw new ArgumentException($"Unknown plane! --- '{plane}'");
             }
             if (reverse)
                 result.Reverse();
@@ -222,36 +219,33 @@ namespace HitboxViewer.Displayers
             float height = localHeight * Mathf.Max(Mathf.Abs(worldScale.x), Mathf.Abs(worldScale.y), Mathf.Abs(worldScale.z));
             float centerOffset = Mathf.Abs((height - 2 * radius) / 2);
 
-
-            float step = 2 * Mathf.PI / HitboxViewConfig.PointsPerRadius;
-
             // Top circle
-            positions.AddRange(DrawCircleQuarter(transformOfHitbox, localRadius, center + Vector3.up * centerOffset, Plane.XZ, Quadrant.First, step));
-            positions.AddRange(DrawCircleQuarter(transformOfHitbox, localRadius, center + Vector3.up * centerOffset, Plane.XZ, Quadrant.Second, step));
-            positions.AddRange(DrawCircleQuarter(transformOfHitbox, localRadius, center + Vector3.up * centerOffset, Plane.XZ, Quadrant.Third, step));
-            positions.AddRange(DrawCircleQuarter(transformOfHitbox, localRadius, center + Vector3.up * centerOffset, Plane.XZ, Quadrant.Fourth, step));
+            positions.AddRange(DrawCircleQuarter(transformOfHitbox, localRadius, center + Vector3.up * centerOffset, Plane.XZ, Quadrant.First));
+            positions.AddRange(DrawCircleQuarter(transformOfHitbox, localRadius, center + Vector3.up * centerOffset, Plane.XZ, Quadrant.Second));
+            positions.AddRange(DrawCircleQuarter(transformOfHitbox, localRadius, center + Vector3.up * centerOffset, Plane.XZ, Quadrant.Third));
+            positions.AddRange(DrawCircleQuarter(transformOfHitbox, localRadius, center + Vector3.up * centerOffset, Plane.XZ, Quadrant.Fourth));
 
             // XY Ellipse start
-            positions.AddRange(DrawCircleQuarter(transformOfHitbox, localRadius, center + Vector3.up * centerOffset, Plane.XY, Quadrant.First, step));
+            positions.AddRange(DrawCircleQuarter(transformOfHitbox, localRadius, center + Vector3.up * centerOffset, Plane.XY, Quadrant.First));
 
             // YX Ellipse
-            positions.AddRange(DrawCircleQuarter(transformOfHitbox, localRadius, center + Vector3.up * centerOffset, Plane.YZ, Quadrant.First, step));
-            positions.AddRange(DrawCircleQuarter(transformOfHitbox, localRadius, center - Vector3.up * centerOffset, Plane.YZ, Quadrant.Second, step));
-            positions.AddRange(DrawCircleQuarter(transformOfHitbox, localRadius, center - Vector3.up * centerOffset, Plane.YZ, Quadrant.Third, step));
-            positions.AddRange(DrawCircleQuarter(transformOfHitbox, localRadius, center + Vector3.up * centerOffset, Plane.YZ, Quadrant.Fourth, step));
+            positions.AddRange(DrawCircleQuarter(transformOfHitbox, localRadius, center + Vector3.up * centerOffset, Plane.YZ, Quadrant.First));
+            positions.AddRange(DrawCircleQuarter(transformOfHitbox, localRadius, center - Vector3.up * centerOffset, Plane.YZ, Quadrant.Second));
+            positions.AddRange(DrawCircleQuarter(transformOfHitbox, localRadius, center - Vector3.up * centerOffset, Plane.YZ, Quadrant.Third));
+            positions.AddRange(DrawCircleQuarter(transformOfHitbox, localRadius, center + Vector3.up * centerOffset, Plane.YZ, Quadrant.Fourth));
 
             // Other part of XY ellipse
-            positions.AddRange(DrawCircleQuarter(transformOfHitbox, localRadius, center + Vector3.up * centerOffset, Plane.XY, Quadrant.Second, step));
+            positions.AddRange(DrawCircleQuarter(transformOfHitbox, localRadius, center + Vector3.up * centerOffset, Plane.XY, Quadrant.Second));
 
             // Bottom circle
-            positions.AddRange(DrawCircleQuarter(transformOfHitbox, localRadius, center - Vector3.up * centerOffset, Plane.XZ, Quadrant.Third, step));
-            positions.AddRange(DrawCircleQuarter(transformOfHitbox, localRadius, center - Vector3.up * centerOffset, Plane.XZ, Quadrant.Fourth, step));
-            positions.AddRange(DrawCircleQuarter(transformOfHitbox, localRadius, center - Vector3.up * centerOffset, Plane.XZ, Quadrant.First, step));
-            positions.AddRange(DrawCircleQuarter(transformOfHitbox, localRadius, center - Vector3.up * centerOffset, Plane.XZ, Quadrant.Second, step));
+            positions.AddRange(DrawCircleQuarter(transformOfHitbox, localRadius, center - Vector3.up * centerOffset, Plane.XZ, Quadrant.Third));
+            positions.AddRange(DrawCircleQuarter(transformOfHitbox, localRadius, center - Vector3.up * centerOffset, Plane.XZ, Quadrant.Fourth));
+            positions.AddRange(DrawCircleQuarter(transformOfHitbox, localRadius, center - Vector3.up * centerOffset, Plane.XZ, Quadrant.First));
+            positions.AddRange(DrawCircleQuarter(transformOfHitbox, localRadius, center - Vector3.up * centerOffset, Plane.XZ, Quadrant.Second));
 
             // Last part of XY ellipse
-            positions.AddRange(DrawCircleQuarter(transformOfHitbox, localRadius, center - Vector3.up * centerOffset, Plane.XY, Quadrant.Third, step));
-            positions.AddRange(DrawCircleQuarter(transformOfHitbox, localRadius, center - Vector3.up * centerOffset, Plane.XY, Quadrant.Fourth, step));
+            positions.AddRange(DrawCircleQuarter(transformOfHitbox, localRadius, center - Vector3.up * centerOffset, Plane.XY, Quadrant.Third));
+            positions.AddRange(DrawCircleQuarter(transformOfHitbox, localRadius, center - Vector3.up * centerOffset, Plane.XY, Quadrant.Fourth));
 
             // First point
             positions.Add(positions[0]);

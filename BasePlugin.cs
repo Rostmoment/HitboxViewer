@@ -22,7 +22,7 @@ namespace HitboxViewer
     class PluginInfo
     {
         public const string GUID = "rost.moment.unity.hitboxviewer";
-        public const string VERSION = "0.0.8";
+        public const string VERSION = "0.0.9";
         public const string NAME = "Hitbox Viewer";
     }
    

@@ -195,17 +195,15 @@ namespace HitboxViewer.Displayers
             Vector3 center = collider.transform.TransformPoint(collider.center);
             float radius = collider.radius * Mathf.Max(Mathf.Abs(collider.transform.lossyScale.y), Mathf.Abs(collider.transform.lossyScale.z));
 
-            int pointsCount = Mathf.RoundToInt(radius * HitboxViewConfig.PointsPerRadius);
-            float step = Mathf.PI * 2 / pointsCount;
 
-            for (int i = 0; i <= pointsCount; i++)
-            {
-                float angle = step * i;
-                Vector3 localPos = new Vector3(0, Mathf.Cos(angle) * radius, Mathf.Sin(angle) * radius);
-                Vector3 worldPos = collider.transform.TransformPoint(localPos + collider.center);
-                positions.Add(worldPos);
-            }
+            float step = Mathf.PI * 2 * radius / HitboxViewConfig.PointsPerRadius;
 
+            positions.AddRange(DrawCircleQuarter(collider.transform, collider.radius, center, Plane.XZ, Quadrant.First, step));
+            positions.AddRange(DrawCircleQuarter(collider.transform, collider.radius, center, Plane.XZ, Quadrant.Second, step));
+            positions.AddRange(DrawCircleQuarter(collider.transform, collider.radius, center, Plane.XZ, Quadrant.Third, step));
+            positions.AddRange(DrawCircleQuarter(collider.transform, collider.radius, center, Plane.XZ, Quadrant.Fourth, step));
+
+            positions.Rotate(center, collider.transform.rotation);
             SetPositions(lineRenderer, positions);
         }
 
@@ -213,6 +211,7 @@ namespace HitboxViewer.Displayers
         {
             if (!collider.TryGetComponent<Terrain>(out Terrain terrain))
                 return;
+
             TerrainData data = terrain.terrainData;
 
             Vector3 terrainSize = data.size;
@@ -250,15 +249,18 @@ namespace HitboxViewer.Displayers
         }
         public void Initialize(CircleCollider2D collider)
         {
-            float localRadius = collider.radius;
             Vector3 worldScale = collider.transform.lossyScale;
-            float radius = localRadius * Mathf.Max(Mathf.Abs(worldScale.x), Mathf.Abs(worldScale.y), Mathf.Abs(worldScale.z));
+
+            float radius = collider.radius * Mathf.Max(Mathf.Abs(worldScale.x), Mathf.Abs(worldScale.y), Mathf.Abs(worldScale.z));
+
             Vector2 offset = collider.offset; 
             Vector3 worldCenter = new Vector3(collider.transform.position.x + offset.x, collider.transform.position.y + offset.y, collider.transform.position.z);
-            int pointsCount = Mathf.RoundToInt(collider.radius * HitboxViewConfig.PointsPerRadius);
-            float step = Mathf.PI * 2 / pointsCount;
-            for (float i = 0; i <= Mathf.PI; i += step)
+
+            float step = Mathf.PI * 2 * radius / HitboxViewConfig.PointsPerRadius;
+
+            for (float i = 0; i <= 2 * Mathf.PI; i += step)
                 positions.Add(new Vector3(worldCenter.x + radius * Mathf.Sin(i), worldCenter.y + radius * Mathf.Cos(i), worldCenter.z));
+
             positions.Rotate(worldCenter, collider.transform.rotation);
             SetPositions(lineRenderer, positions);
         }
