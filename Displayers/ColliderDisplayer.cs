@@ -149,8 +149,8 @@ namespace HitboxViewer.Displayers
         public void Initialize(SphereCollider collider) =>
             DrawSphere(collider.transform.TransformPoint(collider.center), collider.radius, collider.transform);
 
-        public void Initialize(CharacterController characterController) => DrawCapsule(characterController.transform, characterController.height, characterController.height, characterController.center);
-        public void Initialize(CapsuleCollider capsuleCollider) => DrawCapsule(capsuleCollider.transform, capsuleCollider.height, capsuleCollider.height, capsuleCollider.center);
+        public void Initialize(CharacterController characterController) => DrawCapsule(characterController.transform, characterController.radius, characterController.height, characterController.center);
+        public void Initialize(CapsuleCollider capsuleCollider) => DrawCapsule(capsuleCollider.transform, capsuleCollider.radius, capsuleCollider.height, capsuleCollider.center);
 
         public void Initialize(MeshCollider collider)
         {
