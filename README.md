@@ -24,7 +24,7 @@ HitboxViewer provides **separate display settings** for:
 - **Colliders** (`Collider` and `Collider2D`)
 - **NavMesh Obstacles** (`NavMeshObstacle`)
 
-Colliders and NaxMeshObstacles have 4 different modes
+Colliders and NavMeshObstacles have 4 different modes
 
 ---
 
@@ -33,7 +33,7 @@ Colliders and NaxMeshObstacles have 4 different modes
 | Mode       | Description                                                                 |
 |------------|-----------------------------------------------------------------------------|
 | `Hide`     | Hides all colliders                                                         |
-| `All`      | Shows all colliders (`isTrigger = true` and `false`)                        |
+| `All`      | Shows all colliders (`isTrigger == true` or `false`)                        |
 | `Not Trigger` | Shows only colliders where `isTrigger == false`                             |
 | `Trigger`  | Shows only colliders where `isTrigger == true`                              |
 
@@ -48,7 +48,7 @@ Colliders and NaxMeshObstacles have 4 different modes
 | `Hide`   | Hides all `NavMeshObstacle` components                                        |
 | `All`    | Shows all `NavMeshObstacle` components                                        |
 | `Box`    | Shows only obstacles with a **box** shape                                     |
-| `Capsule ` | Shows only obstacles with a **capsule** shape (used for spherical obstacles)  |
+| `Capsule ` | Shows only obstacles with a **capsule** shape  |
 
 ❗ These modes apply **only to `NavMeshObstacle`**, not to colliders
 
@@ -118,7 +118,7 @@ Open it as a text file using any text editor.
 
 
 
-Configs can be easily changed using any text editor—just make sure to use the correct data types
+Configs can be easily changed using any text editor - just make sure to use the correct data types
 
 
 # How to install
