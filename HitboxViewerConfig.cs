@@ -1,115 +1,82 @@
-﻿using BepInEx;
-using BepInEx.Configuration;
-using HitboxViewer.Helpers;
+﻿using BepInEx.Configuration;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using UnityEngine;
 using UnityEngine.AI;
 
 namespace HitboxViewer
 {
-    class HitboxViewConfig
+    static class HitboxViewerConfig
     {
-        #region Colors
-        private static readonly Dictionary<Type, string> hitboxDefaultColors = new Dictionary<Type, string>()
-        {
-            {typeof(BoxCollider), "#DB220D"},
-            {typeof(SphereCollider), "#0D2FDB"},
-            {typeof(CapsuleCollider), "#28DB0D"},
-            {typeof(MeshCollider), "#DBDB0D"},
-            {typeof(WheelCollider), "#DB7B0D"},
-            {typeof(TerrainCollider), "#A020F0"},
-            {typeof(BoxCollider2D), "#FF19AF"},
-            {typeof(CircleCollider2D), "#039AFF"},
-            {typeof(CapsuleCollider2D), "#633310"},
-            {typeof(CharacterController), "#8A2BE2"},
-            {typeof(PolygonCollider2D), "#000000"},
-            {typeof(EdgeCollider2D), "#FFFFFF"},
-            {typeof(CompositeCollider2D), "#363636"},
-            {typeof(NavMeshObstacle), "#008080"}
-        };
-        private static Dictionary<Type, ConfigEntry<string>> hitboxColors = new Dictionary<Type, ConfigEntry<string>>()
-        {
-        };
+        private const float DEFAULT_LINE_WIDTH = 0.1f;
 
-        public static Color GetHitboxColor(object collider)
-        {
-            if (!hitboxColors.TryGetValue(collider.GetType(), out ConfigEntry<string> color))
-                return Color.clear;
-            return HelpfulMethods.ColorFromHex(color.Value);
-        }
-        #endregion
-
-        #region Visualization
-        private static ConfigEntry<int> pointsPerRadius;
-        private static ConfigEntry<float> hitboxLineWidth;
-        private static ConfigEntry<SphereVisualizationMode> sphereVisualizationMode;
-        private static ConfigEntry<string> shaderHitboxName;
-
-
-        public static int PointsPerRadius
-        {
-            get => pointsPerRadius.Value;
-            set => pointsPerRadius.Value = value;
-        }
-
-        public static float HitboxLineWidth
-        {
-            get => hitboxLineWidth.Value;
-            set => hitboxLineWidth.Value = value;
-        }
-
-        public static SphereVisualizationMode SphereVisualizationMode
-        {
-            get => sphereVisualizationMode.Value;
-            set => sphereVisualizationMode.Value = value;
-        }
-
-        public static string ShaderHitboxName
-        {
-            get => shaderHitboxName.Value;
-            set => shaderHitboxName.Value = value;
-        }
-        #endregion
-
-        private static ConfigEntry<KeyCode> changeColliderVisualizeMode;
-        public static KeyCode ChangeColliderVisualizeMode
-        {
-            get => changeColliderVisualizeMode.Value;
-            set => changeColliderVisualizeMode.Value = value;
-        }
-        private static ConfigEntry<KeyCode> changeNavMeshObstacleVisualizeMode;
-        public static KeyCode ChangeNavMeshObstacleVisualizeMode
-        {
-            get => changeNavMeshObstacleVisualizeMode.Value;
-            set => changeNavMeshObstacleVisualizeMode.Value = value;
-        }
+        private static ConfigEntry<string> shaderName;
+        public static string ShaderName => shaderName.Value;
 
         private static ConfigEntry<int> updateRate;
-        public static int UpdateRate
+        public static int UpdateRate => updateRate.Value;
+
+        private static Dictionary<Type, HitboxTypeConfig> hitboxes = new Dictionary<Type, HitboxTypeConfig>()
         {
-            get => updateRate.Value;
-            set => updateRate.Value = value;
+            [typeof(BoxCollider)] = new HitboxTypeConfig(KeyCode.None, HexToColor("#DB220D"), HexToColor("#DB220D"), DEFAULT_LINE_WIDTH, DEFAULT_LINE_WIDTH),
+
+            [typeof(SphereCollider)] = new HitboxTypeConfig(KeyCode.F2, HexToColor("#0D2FDB"), HexToColor("#0D2FDB"), DEFAULT_LINE_WIDTH, DEFAULT_LINE_WIDTH),
+
+            [typeof(CapsuleCollider)] = new HitboxTypeConfig(KeyCode.F3, HexToColor("#28DB0D"), HexToColor("#28DB0D"), DEFAULT_LINE_WIDTH, DEFAULT_LINE_WIDTH),
+
+            [typeof(MeshCollider)] = new HitboxTypeConfig(KeyCode.F4, HexToColor("#DBDB0D"), HexToColor("#DBDB0D"), DEFAULT_LINE_WIDTH, DEFAULT_LINE_WIDTH),
+
+            [typeof(WheelCollider)] = new HitboxTypeConfig(KeyCode.F5, HexToColor("#DB7B0D"), HexToColor("#DB7B0D"), DEFAULT_LINE_WIDTH, DEFAULT_LINE_WIDTH),
+
+            [typeof(TerrainCollider)] = new HitboxTypeConfig(KeyCode.F6, HexToColor("#A020F0"), HexToColor("#A020F0"), DEFAULT_LINE_WIDTH, DEFAULT_LINE_WIDTH),
+
+            [typeof(BoxCollider2D)] = new HitboxTypeConfig(KeyCode.F7, HexToColor("#FF19AF"), HexToColor("#FF19AF"), DEFAULT_LINE_WIDTH, DEFAULT_LINE_WIDTH),
+
+            [typeof(CircleCollider2D)] = new HitboxTypeConfig(KeyCode.F8, HexToColor("#039AFF"), HexToColor("#039AFF"), DEFAULT_LINE_WIDTH, DEFAULT_LINE_WIDTH),
+
+            [typeof(CapsuleCollider2D)] = new HitboxTypeConfig(KeyCode.F9, HexToColor("#633310"), HexToColor("#633310"), DEFAULT_LINE_WIDTH, DEFAULT_LINE_WIDTH),
+
+            [typeof(CharacterController)] = new HitboxTypeConfig(KeyCode.F10, HexToColor("#8A2BE2"), HexToColor("#8A2BE2"), DEFAULT_LINE_WIDTH, DEFAULT_LINE_WIDTH),
+
+            [typeof(PolygonCollider2D)] = new HitboxTypeConfig(KeyCode.F11, HexToColor("#000000"), HexToColor("#000000"), DEFAULT_LINE_WIDTH, DEFAULT_LINE_WIDTH),
+
+            [typeof(EdgeCollider2D)] = new HitboxTypeConfig(KeyCode.F12, HexToColor("#FFFFFF"), HexToColor("#FFFFFF"), DEFAULT_LINE_WIDTH, DEFAULT_LINE_WIDTH),
+
+            [typeof(CompositeCollider2D)] = new HitboxTypeConfig(KeyCode.None, HexToColor("#363636"), HexToColor("#363636"), DEFAULT_LINE_WIDTH, DEFAULT_LINE_WIDTH),
+
+            [typeof(NavMeshObstacle)] = new HitboxTypeConfig(KeyCode.None, HexToColor("#008080"), HexToColor("#008080"), DEFAULT_LINE_WIDTH, DEFAULT_LINE_WIDTH),
+        };
+
+        private static Color HexToColor(string hex)
+        {
+            if (ColorUtility.TryParseHtmlString(hex, out var color))
+                return color;
+
+            throw new ArgumentException($"Invalid hex color string: {hex}");
         }
+
+        public static HitboxTypeConfig InfoOf<T>() => InfoOf(typeof(T));
+        public static HitboxTypeConfig InfoOf(Type type) => hitboxes[type];
+
 
         public static void Initialize()
         {
-            foreach (var data in hitboxDefaultColors)
-            {
-                hitboxColors[data.Key] = BasePlugin.Instance.Config.Bind("Colors", $"{data.Key.Name} Color", data.Value, $"Color that will be used to display hitboxes of {data.Key.Name} type");
-            }
+            shaderName = BasePlugin.Instance.Config.Bind<string>(
+                "General",
+                "Shader Name",
+                "Unlit/Color",
+                "Name of shader that will be used for coloring hitbox outlines\nAdded because not every game has default shader"
+            );
 
-            pointsPerRadius = BasePlugin.Instance.Config.Bind("Visualization", "Points Per Radius", 100, "Defines how many points are used per unit of circle radius\nTotal = N × radius. Applies to all round hitboxes");
-            hitboxLineWidth = BasePlugin.Instance.Config.Bind("Visualization", "Hitbox Line Width", 0.1f, "Line width for hitbox outlines");
-            shaderHitboxName = BasePlugin.Instance.Config.Bind("Visualization", "Shader Name", "Unlit/Color", "Name of shader that will be used for coloring hitbox outlines\nAdded because not every game has this shader");
-            sphereVisualizationMode = BasePlugin.Instance.Config.Bind("Visualization", "Sphere Collider Mode", SphereVisualizationMode.Full, "Determines how sphere colliders are rendered (e.g. full surface, triple axis rings, or double axis rings)");
+            updateRate = BasePlugin.Instance.Config.Bind<int>(
+                "General",
+                "Update Rate",
+                60,
+                "Number of frames between each hitbox update"
+            );
 
-            updateRate = BasePlugin.Instance.Config.Bind("Update", "Update Rate", 60, "Determines once every how many frames new hitbox outlines will be calculated\nIf zero or less hitboxes won't be updated themselves. You will need add and update them manually to object with UnityExplorer (HitboxView.HitboxDisplay component)");
-
-            changeColliderVisualizeMode = BasePlugin.Instance.Config.Bind("Key Binds", "Change Collider Visualization Mode", KeyCode.F1, "Key that is used for changing collider visualization mode");
-            changeNavMeshObstacleVisualizeMode = BasePlugin.Instance.Config.Bind("Key Binds", "Change NavMeshObstacle Visualization Mode", KeyCode.F2, "Key that is used for changing NavMeshObstacle visualization mode");
+            foreach (var kvp in hitboxes)
+                kvp.Value.Initialize(kvp.Key.Name);
         }
     }
 }
