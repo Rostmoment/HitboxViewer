@@ -13,12 +13,6 @@ using UnityEngine.AI;
 
 namespace HitboxViewer
 {
-    /*
-     * git add --all
-     * git commit -m "Message"
-     * git pull origin master --rebase
-     * git push origin master
-     */
     class PluginInfo
     {
         public const string GUID = "rost.moment.unity.hitboxviewer";

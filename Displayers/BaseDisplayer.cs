@@ -210,7 +210,68 @@ namespace HitboxViewer.Displayers
 
             SetPositions(lineRenderer, positions);
         }
+        public void DrawCapsuleSurface(Transform transformOfHitbox, float localRadius, float localHeight, Vector3 localCenter)
+        {
+            Vector3 worldScale = transformOfHitbox.lossyScale;
+            Vector3 center = transformOfHitbox.TransformPoint(localCenter);
+            float radius = localRadius * Mathf.Max(Mathf.Abs(worldScale.x), Mathf.Abs(worldScale.y), Mathf.Abs(worldScale.z));
+            float height = localHeight * Mathf.Max(Mathf.Abs(worldScale.x), Mathf.Abs(worldScale.y), Mathf.Abs(worldScale.z));
 
+            // The capsule axis is assumed to be aligned with the local Y axis
+            float cylinderLength = Mathf.Max(0, height - 2 * radius);
+
+            int latSegments = Mathf.RoundToInt(radius * HitboxViewConfig.PointsPerRadius); // latitude (from pole to equator)
+            int lonSegments = latSegments * 2; // longitude (around the body)
+            int heightSegments = Mathf.RoundToInt(cylinderLength * HitboxViewConfig.PointsPerRadius / radius);
+
+            // Top hemisphere
+            for (int lat = 0; lat <= latSegments; lat++)
+            {
+                float theta = Mathf.PI / 2 * (lat / (float)latSegments); // 0 (equator) to pi/2 (pole)
+                float y = Mathf.Sin(theta) * radius;
+                float r = Mathf.Cos(theta) * radius;
+                for (int lon = 0; lon < lonSegments; lon++)
+                {
+                    float phi = 2 * Mathf.PI * (lon / (float)lonSegments);
+                    float x = Mathf.Cos(phi) * r;
+                    float z = Mathf.Sin(phi) * r;
+                    Vector3 pt = center + Vector3.up * (cylinderLength / 2 + y) + new Vector3(x, 0, z);
+                    positions.Add(transformOfHitbox.TransformDirection(pt - center) + center);
+                }
+            }
+
+            // Cylinder body
+            for (int h = 1; h < heightSegments; h++)
+            {
+                float y = cylinderLength * (h / (float)heightSegments) - cylinderLength / 2;
+                for (int lon = 0; lon < lonSegments; lon++)
+                {
+                    float phi = 2 * Mathf.PI * (lon / (float)lonSegments);
+                    float x = Mathf.Cos(phi) * radius;
+                    float z = Mathf.Sin(phi) * radius;
+                    Vector3 pt = center + Vector3.up * y + new Vector3(x, 0, z);
+                    positions.Add(transformOfHitbox.TransformDirection(pt - center) + center);
+                }
+            }
+
+            // Bottom hemisphere
+            for (int lat = 0; lat <= latSegments; lat++)
+            {
+                float theta = Mathf.PI / 2 * (lat / (float)latSegments); // 0 (equator) to pi/2 (pole)
+                float y = -Mathf.Sin(theta) * radius;
+                float r = Mathf.Cos(theta) * radius;
+                for (int lon = 0; lon < lonSegments; lon++)
+                {
+                    float phi = 2 * Mathf.PI * (lon / (float)lonSegments);
+                    float x = Mathf.Cos(phi) * r;
+                    float z = Mathf.Sin(phi) * r;
+                    Vector3 pt = center + Vector3.down * (cylinderLength / 2) + Vector3.up * y + new Vector3(x, 0, z);
+                    positions.Add(transformOfHitbox.TransformDirection(pt - center) + center);
+                }
+            }
+
+            SetPositions(lineRenderer, positions);
+        }
         public void DrawCapsule(Transform transformOfHitbox, float localRadius, float localHeight, Vector3 localCenter)
         {
             Vector3 worldScale = transformOfHitbox.lossyScale;
