@@ -7,12 +7,15 @@ namespace HitboxViewer.Displayers
 {
     public abstract class BaseDisplayer : MonoBehaviour
     {
+        #region virtual unity methods
         private void Update() => VirtualUpdate();
         protected virtual void VirtualUpdate() { }
 
         private void Awake() => VirtualAwake();
         protected virtual void VirtualAwake() { }
+        #endregion
 
+        #region creation of line renderer and instance management
         protected static Dictionary<Component, BaseDisplayer> instances = new Dictionary<Component, BaseDisplayer>();
         public static BaseDisplayer GetOrAdd(Component component, Type displayerType)
         {
@@ -22,7 +25,9 @@ namespace HitboxViewer.Displayers
             diplayer = (BaseDisplayer)component.gameObject.AddComponent(displayerType);
             return diplayer;
         }
+        #endregion
 
+        #region fields and properties
         protected Vector3[] points;
         protected LineRenderer lineRenderer;
         protected GameObject parentObject;
@@ -33,31 +38,40 @@ namespace HitboxViewer.Displayers
             get => !lineRenderer.enabled;
         }
 
-        public virtual void Hide()
-        {
-            Hidden = true;
-        }
+        public abstract HitboxesFlags HitboxFlags { get; }
 
+        #endregion
 
+        #region position setting
         public void SetPositions(List<Vector3> vectors) => SetPositions(vectors.ToArray());
         public void SetPositions(params Vector3[] positions)
         {
             lineRenderer.positionCount = positions.Length;
             lineRenderer.SetPositions(positions);
-            
+
             points = positions;
+        }
+        #endregion
+
+        #region visualizer control
+        public virtual void Hide()
+        {
+            Hidden = true;
         }
 
         protected abstract void _Visualize();
 
         public void Visualize()
         {
-            if (Hidden)
+            if (!ShouldBeDisplayed())
                 return;
 
             _Visualize();
         }
 
+        public bool ShouldBeDisplayed() => _ShouldBeDisplayed() && !Hidden;
+        public virtual bool _ShouldBeDisplayed() => true;
+        #endregion
     }
     public abstract class BaseDisplayer<T> : BaseDisplayer where T : Component
     {
@@ -104,6 +118,7 @@ namespace HitboxViewer.Displayers
             lineRenderer.endColor = config.EndColor;
 
             lineRenderer.startWidth = config.StartWidth;
+
             lineRenderer.endWidth = config.EndWidth;
             lineRenderer.loop = false;
             lineRenderer.useWorldSpace = true;

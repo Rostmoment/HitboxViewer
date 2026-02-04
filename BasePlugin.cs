@@ -2,6 +2,7 @@
 using BepInEx.Logging;
 using HarmonyLib;
 using HitboxViewer.Displayers;
+using HitboxViewer.UI;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -30,6 +31,9 @@ namespace HitboxViewer
             [typeof(BoxCollider)] = typeof(BoxColliderDisplayer),
         };
 
+        public readonly static Vector3 NaNVector = new Vector3(float.NaN, float.NaN, float.NaN);
+        public readonly static Quaternion NaNQuaternion = new Quaternion(float.NaN, float.NaN, float.NaN, float.NaN);
+
         public static Harmony HarmonyInstance { private set; get; }
         public static BasePlugin Instance { private set; get; }
         public static new ManualLogSource Logger { private set; get; }
@@ -42,10 +46,20 @@ namespace HitboxViewer
             Instance = this;
             HarmonyInstance = new Harmony(PluginInfo.GUID);
             HitboxViewerConfig.Initialize();
+
+            UniverseLib.Universe.Init(1, MainUI.InitializeUI, (x, y) => { }, new UniverseLib.Config.UniverseLibConfig()
+            {
+                Force_Unlock_Mouse = true,
+            });
         }
 
         private void Update()
         {
+            if (Input.GetKeyDown(KeyCode.F1))
+            {
+                MainUI.ShowMenu = !MainUI.ShowMenu;
+            }
+
             if (updateCounter < 0)
                 return;
 

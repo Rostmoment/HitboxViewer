@@ -10,7 +10,7 @@ namespace HitboxViewer
 {
     internal class HitboxTypeConfig
     {
-        public HitboxTypeConfig(KeyCode defaultKey, Color defaultStartColor, Color defaultEndColor, float defaultStartWidth, float defaultEndWidth)
+        public HitboxTypeConfig(KeyCode defaultKey, Color defaultStartColor, Color defaultEndColor, float defaultStartWidth, float defaultEndWidth, HitboxesFlags flags)
         {
             DefaultKeyBind = defaultKey;
 
@@ -19,8 +19,10 @@ namespace HitboxViewer
 
             DefaultStartWidth = defaultStartWidth;
             DefaultEndWidth = defaultEndWidth;
-        }
 
+            PotentionalFlags = flags;
+            EnabledFlags = HitboxesFlags.None;
+        }
 
         public Color DefaultStartColor { get; }
         public Color DefaultEndColor { get; }
@@ -44,7 +46,7 @@ namespace HitboxViewer
 
         public float EndWidth => endWidthEntry.Value;
         private ConfigEntry<float> endWidthEntry;
-
+        
 
         public void Initialize(string category)
         {
@@ -83,5 +85,29 @@ namespace HitboxViewer
                 $"End width of the {category} hitbox outline"
             );
         }
+
+        public HitboxesFlags PotentionalFlags { get; }
+        public HitboxesFlags EnabledFlags { get; private set; }
+
+        public void Enable(HitboxesFlags flag)
+        {
+            if (!EnabledFlags.HasFlag(flag))
+                EnabledFlags |= flag;
+        }
+
+        public void Disable(HitboxesFlags flag)
+        {
+            if (EnabledFlags.HasFlag(flag))
+                EnabledFlags &= ~flag;
+        }
+
+        public void SetEnabled(bool enabled, HitboxesFlags flag)
+        {
+            if (enabled)
+                Enable(flag);
+            else
+                Disable(flag);
+        }
+        public bool IsEnabled(HitboxesFlags flag) => EnabledFlags.HasFlag(flag);
     }
 }
