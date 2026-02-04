@@ -10,6 +10,8 @@ namespace HitboxViewer
 {
     internal class HitboxTypeConfig
     {
+        internal static List<HitboxTypeConfig> all = new List<HitboxTypeConfig>();
+
         public HitboxTypeConfig(KeyCode defaultKey, Color defaultStartColor, Color defaultEndColor, float defaultStartWidth, float defaultEndWidth, HitboxesFlags flags)
         {
             DefaultKeyBind = defaultKey;
@@ -22,6 +24,8 @@ namespace HitboxViewer
 
             PotentionalFlags = flags;
             EnabledFlags = HitboxesFlags.None;
+
+            all.Add(this);
         }
 
         public Color DefaultStartColor { get; }
@@ -41,15 +45,28 @@ namespace HitboxViewer
         public Color EndColor => endColorEntry.Value;
         private ConfigEntry<Color> endColorEntry;
 
+        public Color AverageColor => Color.Lerp(StartColor, EndColor, 0.5f);
+
         public float StartWidth => startWidthEntry.Value;
         private ConfigEntry<float> startWidthEntry;
 
         public float EndWidth => endWidthEntry.Value;
         private ConfigEntry<float> endWidthEntry;
-        
+
+        public HitboxesFlags PotentionalFlags { get; }
+        public HitboxesFlags EnabledFlags { get; private set; }
+
+        public string Category { get; private set; }
+        private bool initialized = false;
 
         public void Initialize(string category)
         {
+            if (initialized)
+                return;
+
+            Category = category;
+            initialized = true;
+
             startColorEntry = BasePlugin.Instance.Config.Bind<Color>(
                 category,
                 "Start Color",
@@ -85,9 +102,6 @@ namespace HitboxViewer
                 $"End width of the {category} hitbox outline"
             );
         }
-
-        public HitboxesFlags PotentionalFlags { get; }
-        public HitboxesFlags EnabledFlags { get; private set; }
 
         public void Enable(HitboxesFlags flag)
         {

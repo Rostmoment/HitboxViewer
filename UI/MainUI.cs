@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using UniverseLib;
 using UniverseLib.Config;
 using UniverseLib.UI;
 using UniverseLib.UI.Models;
@@ -37,7 +38,7 @@ namespace HitboxViewer.UI
             Instance = this;
         }
 
-        public override string Name => "Hitbox Viewer";
+        public override string Name => $"{PluginInfo.NAME} V{PluginInfo.VERSION}";
         public override int MinWidth => 750;
         public override int MinHeight => 750;
 
@@ -45,25 +46,41 @@ namespace HitboxViewer.UI
         public override Vector2 DefaultAnchorMax => Vector2.one;
 
         public GameObject RootObject => Owner?.RootObject;
-        private static RectTransform NavBarRect { get; set; }
+
+        private GameObject hitboxesButtons;
+        private GameObject editorContent;
+        private GameObject currentCategory;
 
         #endregion
 
-
+        #region overrides
         protected override void ConstructPanelContent()
         {
         }
+        protected override void OnClosePanelClicked()
+        {
+            base.OnClosePanelClicked();
+
+            ShowMenu = false;
+        }
 
 
+        #endregion
+
+        #region static methods
         public static void InitializeUI()
         {
             UIBase uiBase = UniversalUI.RegisterUI(PluginInfo.GUID, null);
             CreateMainUI(uiBase);
+
+            Instance.AddButtonsUnderPanel();
+
+            Instance.CreateScrollView();
+            for (int i = 0; i < HitboxTypeConfig.all.Count; i++)
+                Instance.AddButton(HitboxTypeConfig.all[i]);
+
         }
 
-        private void AddButton()
-        {
-        }
         private static void CreateMainUI(UIBase uIBase)
         {
             if (!Instance.IsNullOrDestroyed())
@@ -71,6 +88,76 @@ namespace HitboxViewer.UI
 
             new MainUI(uIBase);
         }
+        #endregion
 
+        private void CreateScrollView()
+        {
+            GameObject horiGroup = UIFactory.CreateHorizontalGroup(ContentRoot, "Main", true, true, true, true, 2, default, new Color(0.08f, 0.08f, 0.08f));
+            GameObject ctgList = UIFactory.CreateScrollView(horiGroup, "CategoryList", out hitboxesButtons, out _, new Color(0.1f, 0.1f, 0.1f));
+
+            UIFactory.SetLayoutElement(ctgList, minWidth: 300, flexibleWidth: 0);
+            UIFactory.SetLayoutGroup<VerticalLayoutGroup>(hitboxesButtons, spacing: 3);
+
+            GameObject editor = UIFactory.CreateScrollView(horiGroup, "HitboxEditor", out editorContent, out _, new Color(0.05f, 0.05f, 0.05f));
+            UIFactory.SetLayoutElement(editor, flexibleWidth: 9999);
+        }
+
+        private ButtonRef AddButton(HitboxTypeConfig type)
+        {
+            ButtonRef btn = UIFactory.CreateButton(hitboxesButtons, $"Button{type.Category}", type.Category);
+            UIFactory.SetLayoutElement(btn.Component.gameObject, flexibleWidth: 9999, minHeight: 30, flexibleHeight: 0);
+            GameObject myCategory = CreateCategory(type);
+
+            btn.OnClick += () =>
+            {
+                currentCategory?.SetActive(false);
+                myCategory.SetActive(true);
+                currentCategory = myCategory;
+            };
+            
+
+            return btn;
+        }
+        private GameObject CreateCategory(HitboxTypeConfig type)
+        {
+            GameObject content = UIFactory.CreateVerticalGroup(editorContent, $"HitboxConfig{type.Category}", true, false, true, true, 4, default, new Color(0.05f, 0.05f, 0.05f));
+            content.SetActive(false);
+
+            GameObject bg = UIFactory.CreateHorizontalGroup(content, "TitleBG", true, true, true, true, 0, default, new Color(0.07f, 0.07f, 0.07f));
+
+            Text title = UIFactory.CreateLabel(bg, $"Title{type.Category}", type.Category, TextAnchor.MiddleCenter, default, true, 17);
+            UIFactory.SetLayoutElement(title.gameObject, minHeight: 30, minWidth: 200, flexibleWidth: 9999);
+
+
+            return content;
+        }
+
+        private void AddButtonsUnderPanel()
+        {
+            #region close
+            Button closeButton = TitleBar.GetComponentInChildren<Button>();
+            RuntimeHelper.SetColorBlock(closeButton, Color.red, new Color(0.54f, 0.07f, 0.02f), new Color(0.54f, 0.07f, 0.02f));
+
+            Text hideText = closeButton.GetComponentInChildren<Text>();
+            hideText.color = Color.white;
+            hideText.resizeTextForBestFit = true;
+            hideText.resizeTextMinSize = 8;
+            hideText.resizeTextMaxSize = 14;
+            #endregion
+
+            GameObject titleButtonsGroup = UIFactory.CreateHorizontalGroup(ContentRoot, "TitleBarGroup", true, true, true, true, 2, new Vector4(2, 2, 2, 2));
+
+            ButtonRef hitboxesButton = UIFactory.CreateButton(titleButtonsGroup, "HitboxesButton", "Hitboxes", new Color(0, 0.39f, 0f));
+            UIFactory.SetLayoutElement(hitboxesButton.Component.gameObject, minHeight: 35, flexibleHeight: 0, flexibleWidth: 999);
+            hitboxesButton.OnClick += () => { hitboxesButtons.SetActive(true); };
+            /*
+            ButtonRef configButton = UIFactory.CreateButton(titleButtonsGroup, "ConfigButton", "Configs", new Color(0, 0.39f, 0f));
+            UIFactory.SetLayoutElement(configButton.Component.gameObject, minHeight: 35, flexibleHeight: 0, flexibleWidth: 999);
+            configButton.OnClick += () => { hitboxesButtons.SetActive(false); };
+
+            instancesButton = UIFactory.CreateButton(titleButtonsGroup, "HitboxesInstances", "Instances", new Color(0, 0.39f, 0f));
+            UIFactory.SetLayoutElement(instancesButton.Component.gameObject, minHeight: 35, flexibleHeight: 0, flexibleWidth: 999);*/
+
+        }
     }
 }
