@@ -29,6 +29,7 @@ namespace HitboxViewer
         private static Dictionary<Type, Type> types = new Dictionary<Type, Type>()
         {
             [typeof(BoxCollider)] = typeof(BoxColliderDisplayer),
+            [typeof(MeshCollider)] = typeof(MeshColliderDisplayer),
         };
 
         public readonly static Vector3 NaNVector = new Vector3(float.NaN, float.NaN, float.NaN);
@@ -55,10 +56,8 @@ namespace HitboxViewer
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.F1))
-            {
+            if (Input.GetKeyDown(HitboxViewerConfig.KeyCode))
                 MainUI.ShowMenu = !MainUI.ShowMenu;
-            }
 
             if (updateCounter < 0)
                 return;

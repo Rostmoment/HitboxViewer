@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HitboxViewer.HitboxTypes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -71,13 +72,14 @@ namespace HitboxViewer.UI
         public static void InitializeUI()
         {
             UIBase uiBase = UniversalUI.RegisterUI(PluginInfo.GUID, null);
+            uiBase.Canvas.gameObject.AddComponent<CanvasGroup>().alpha = HitboxViewerConfig.MenuAlpha;
             CreateMainUI(uiBase);
 
             Instance.AddButtonsUnderPanel();
 
             Instance.CreateScrollView();
-            for (int i = 0; i < HitboxTypeConfig.all.Count; i++)
-                Instance.AddButton(HitboxTypeConfig.all[i]);
+            for (int i = 0; i < BaseHitboxType.all.Count; i++)
+                Instance.AddButton(BaseHitboxType.all[i]);
 
         }
 
@@ -102,10 +104,10 @@ namespace HitboxViewer.UI
             UIFactory.SetLayoutElement(editor, flexibleWidth: 9999);
         }
 
-        private ButtonRef AddButton(HitboxTypeConfig type)
+        private ButtonRef AddButton(BaseHitboxType type)
         {
             ButtonRef btn = UIFactory.CreateButton(hitboxesButtons, $"Button{type.Category}", type.Category);
-            UIFactory.SetLayoutElement(btn.Component.gameObject, flexibleWidth: 9999, minHeight: 30, flexibleHeight: 0);
+            UIFactory.SetLayoutElement(btn.Component.gameObject, flexibleWidth: 9999, minHeight: 40, flexibleHeight: 0);
             GameObject myCategory = CreateCategory(type);
 
             btn.OnClick += () =>
@@ -118,7 +120,7 @@ namespace HitboxViewer.UI
 
             return btn;
         }
-        private GameObject CreateCategory(HitboxTypeConfig type)
+        private GameObject CreateCategory(BaseHitboxType type)
         {
             GameObject content = UIFactory.CreateVerticalGroup(editorContent, $"HitboxConfig{type.Category}", true, false, true, true, 4, default, new Color(0.05f, 0.05f, 0.05f));
             content.SetActive(false);
@@ -128,6 +130,7 @@ namespace HitboxViewer.UI
             Text title = UIFactory.CreateLabel(bg, $"Title{type.Category}", type.Category, TextAnchor.MiddleCenter, default, true, 17);
             UIFactory.SetLayoutElement(title.gameObject, minHeight: 30, minWidth: 200, flexibleWidth: 9999);
 
+            type.BuildSettings(content);
 
             return content;
         }

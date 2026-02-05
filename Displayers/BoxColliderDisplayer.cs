@@ -36,10 +36,10 @@ namespace HitboxViewer.Displayers
                 corners[5], corners[4], corners[6], corners[7], corners[6], corners[2], corners[3], corners[1]);
         }
 
-        public override bool _ShouldBeDisplayed()
+        public override bool _ShouldBeUpdated()
         {
-            return savedCenter != target.center || savedSize != target.size || savedPosition != target.transform.position ||
-                   savedRotation != target.transform.rotation || savedScale != target.transform.lossyScale;
+            return (savedCenter != target.center || savedSize != target.size || savedPosition != target.transform.position ||
+                   savedRotation != target.transform.rotation || savedScale != target.transform.lossyScale) && base._ShouldBeUpdated();
         }
     }
 }

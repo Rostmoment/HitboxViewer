@@ -1,18 +1,23 @@
 ﻿using BepInEx.Configuration;
+using HitboxViewer.Flags;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.UI;
+using UniverseLib.UI;
+using UniverseLib.UI.Models;
 
-namespace HitboxViewer
+namespace HitboxViewer.HitboxTypes
 {
-    internal class HitboxTypeConfig
+    internal class BaseHitboxType
     {
-        internal static List<HitboxTypeConfig> all = new List<HitboxTypeConfig>();
+        internal static List<BaseHitboxType> all = new List<BaseHitboxType>();
 
-        public HitboxTypeConfig(KeyCode defaultKey, Color defaultStartColor, Color defaultEndColor, float defaultStartWidth, float defaultEndWidth, HitboxesFlags flags)
+        #region constructor
+        public BaseHitboxType(KeyCode defaultKey, Color defaultStartColor, Color defaultEndColor, float defaultStartWidth, float defaultEndWidth, HitboxesFlags flags)
         {
             DefaultKeyBind = defaultKey;
 
@@ -27,7 +32,9 @@ namespace HitboxViewer
 
             all.Add(this);
         }
+        #endregion
 
+        #region properties
         public Color DefaultStartColor { get; }
         public Color DefaultEndColor { get; }
 
@@ -58,6 +65,7 @@ namespace HitboxViewer
 
         public string Category { get; private set; }
         private bool initialized = false;
+        #endregion
 
         public void Initialize(string category)
         {
@@ -67,35 +75,35 @@ namespace HitboxViewer
             Category = category;
             initialized = true;
 
-            startColorEntry = BasePlugin.Instance.Config.Bind<Color>(
+            startColorEntry = BasePlugin.Instance.Config.Bind(
                 category,
                 "Start Color",
                 DefaultStartColor,
                 $"Start color of the {category} hitbox outline"
             );
 
-            endColorEntry = BasePlugin.Instance.Config.Bind<Color>(
+            endColorEntry = BasePlugin.Instance.Config.Bind(
                 category,
                 "End Color",
                 DefaultEndColor,
                 $"End color of the {category} hitbox outline"
             );
 
-            keyBindEntry = BasePlugin.Instance.Config.Bind<KeyCode>(
+            keyBindEntry = BasePlugin.Instance.Config.Bind(
                 category,
                 "Key Bind",
                 DefaultKeyBind,
                 $"Key bind to toggle the {category} hitbox outline"
             );
 
-            startWidthEntry = BasePlugin.Instance.Config.Bind<float>(
+            startWidthEntry = BasePlugin.Instance.Config.Bind(
                 category,
                 "Start Width",
                 DefaultStartWidth,
                 $"Start width of the {category} hitbox outline"
             );
 
-            endWidthEntry = BasePlugin.Instance.Config.Bind<float>(
+            endWidthEntry = BasePlugin.Instance.Config.Bind(
                 category,
                 "End Width",
                 DefaultEndWidth,
@@ -123,5 +131,33 @@ namespace HitboxViewer
                 Disable(flag);
         }
         public bool IsEnabled(HitboxesFlags flag) => EnabledFlags.HasFlag(flag);
+        public bool HasFlag(HitboxesFlags flag) => PotentionalFlags.HasFlag(flag);
+
+        public void BuildSettings(GameObject content)
+        {
+            foreach (HitboxesFlags flag in FlagsExtensions.all)
+            {
+                if (!HasFlag(flag))
+                    continue;
+
+                GameObject bg = UIFactory.CreateVerticalGroup(content, "BG", true, true, true, true, 0, default, new Color(0.07f, 0.07f, 0.07f));
+
+                GameObject toggleObject = UIFactory.CreateToggle(bg, $"Toggle{flag}", out Toggle toggle, out Text text, new Color(0.1f, 0.1f, 0.1f));
+                toggle.isOn = false;
+                UIFactory.SetLayoutElement(toggleObject, 1, 25);
+
+                Text description = UIFactory.CreateLabel(bg, $"Description{flag}", flag.GetDescription());
+                UIFactory.SetLayoutElement(description.gameObject, flexibleWidth: 1);
+
+                ButtonRef apply = UIFactory.CreateButton(bg, $"Apply{flag}", "Apply", new Color(0, 0.39f, 0f));
+                apply.OnClick += () =>
+                {
+                    BasePlugin.Logger.LogDebug($"Setting {flag} for {Category} to {toggle.isOn}");
+                    SetEnabled(toggle.isOn, flag);
+                };
+                UIFactory.SetLayoutElement(apply.Component.gameObject, 100, 25, 100, 25, 100, 25);
+
+            }
+        }
     }
 }

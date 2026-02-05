@@ -1,4 +1,7 @@
 ﻿using BepInEx.Configuration;
+using HitboxViewer.Flags;
+using HitboxViewer.HitboxTypes;
+using HitboxViewer.UI;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,41 +13,50 @@ namespace HitboxViewer
     {
         private const float DEFAULT_LINE_WIDTH = 0.1f;
 
+        private static ConfigEntry<float> menuAlpha;
+        public static float MenuAlpha => menuAlpha.Value;
+
+        private static ConfigEntry<KeyCode> keyCode;
+        public static KeyCode KeyCode => keyCode.Value;
+
+        private static ConfigEntry<float> startupDelay;
+        public static float StartupDelay => startupDelay.Value;
+
         private static ConfigEntry<string> shaderName;
         public static string ShaderName => shaderName.Value;
 
         private static ConfigEntry<int> updateRate;
         public static int UpdateRate => updateRate.Value;
 
-        private static Dictionary<Type, HitboxTypeConfig> hitboxes = new Dictionary<Type, HitboxTypeConfig>()
+        private static Dictionary<Type, BaseHitboxType> hitboxes = new Dictionary<Type, BaseHitboxType>()
         {
-            [typeof(BoxCollider)] = new HitboxTypeConfig(KeyCode.None, HexToColor("#DB220D"), HexToColor("#DB220D"), DEFAULT_LINE_WIDTH, DEFAULT_LINE_WIDTH, HitboxesFlags.Trigger | HitboxesFlags.NotTrigger),
+            [typeof(BoxCollider)] = new BaseHitboxType(KeyCode.None, HexToColor("#DB220D"), HexToColor("#DB220D"), DEFAULT_LINE_WIDTH, DEFAULT_LINE_WIDTH, HitboxesFlags.Trigger | HitboxesFlags.NotTrigger),
 
-            [typeof(SphereCollider)] = new HitboxTypeConfig(KeyCode.None, HexToColor("#0D2FDB"), HexToColor("#0D2FDB"), DEFAULT_LINE_WIDTH, DEFAULT_LINE_WIDTH, HitboxesFlags.Trigger | HitboxesFlags.NotTrigger),
+            [typeof(SphereCollider)] = new BaseHitboxType(KeyCode.None, HexToColor("#0D2FDB"), HexToColor("#0D2FDB"), DEFAULT_LINE_WIDTH, DEFAULT_LINE_WIDTH, HitboxesFlags.Trigger | HitboxesFlags.NotTrigger),
 
-            [typeof(CapsuleCollider)] = new HitboxTypeConfig(KeyCode.None, HexToColor("#28DB0D"), HexToColor("#28DB0D"), DEFAULT_LINE_WIDTH, DEFAULT_LINE_WIDTH, HitboxesFlags.Trigger | HitboxesFlags.NotTrigger),
+            [typeof(CapsuleCollider)] = new BaseHitboxType(KeyCode.None, HexToColor("#28DB0D"), HexToColor("#28DB0D"), DEFAULT_LINE_WIDTH, DEFAULT_LINE_WIDTH, HitboxesFlags.Trigger | HitboxesFlags.NotTrigger),
 
-            [typeof(MeshCollider)] = new HitboxTypeConfig(KeyCode.None, HexToColor("#DBDB0D"), HexToColor("#DBDB0D"), DEFAULT_LINE_WIDTH, DEFAULT_LINE_WIDTH, HitboxesFlags.Trigger | HitboxesFlags.NotTrigger),
+            [typeof(MeshCollider)] = new BaseHitboxType(KeyCode.None, HexToColor("#DBDB0D"), HexToColor("#DBDB0D"), DEFAULT_LINE_WIDTH, DEFAULT_LINE_WIDTH, HitboxesFlags.Trigger | HitboxesFlags.NotTrigger),
 
-            [typeof(WheelCollider)] = new HitboxTypeConfig(KeyCode.None, HexToColor("#DB7B0D"), HexToColor("#DB7B0D"), DEFAULT_LINE_WIDTH, DEFAULT_LINE_WIDTH, HitboxesFlags.Trigger | HitboxesFlags.NotTrigger),
+            [typeof(WheelCollider)] = new BaseHitboxType(KeyCode.None, HexToColor("#DB7B0D"), HexToColor("#DB7B0D"), DEFAULT_LINE_WIDTH, DEFAULT_LINE_WIDTH, HitboxesFlags.Trigger | HitboxesFlags.NotTrigger),
 
-            [typeof(TerrainCollider)] = new HitboxTypeConfig(KeyCode.None, HexToColor("#A020F0"), HexToColor("#A020F0"), DEFAULT_LINE_WIDTH, DEFAULT_LINE_WIDTH, HitboxesFlags.Trigger | HitboxesFlags.NotTrigger),
+            [typeof(TerrainCollider)] = new BaseHitboxType(KeyCode.None, HexToColor("#A020F0"), HexToColor("#A020F0"), DEFAULT_LINE_WIDTH, DEFAULT_LINE_WIDTH, HitboxesFlags.Trigger | HitboxesFlags.NotTrigger),
 
-            [typeof(BoxCollider2D)] = new HitboxTypeConfig(KeyCode.None, HexToColor("#FF19AF"), HexToColor("#FF19AF"), DEFAULT_LINE_WIDTH, DEFAULT_LINE_WIDTH, HitboxesFlags.Trigger | HitboxesFlags.NotTrigger),
+            [typeof(BoxCollider2D)] = new BaseHitboxType(KeyCode.None, HexToColor("#FF19AF"), HexToColor("#FF19AF"), DEFAULT_LINE_WIDTH, DEFAULT_LINE_WIDTH, HitboxesFlags.Trigger | HitboxesFlags.NotTrigger),
 
-            [typeof(CircleCollider2D)] = new HitboxTypeConfig(KeyCode.None, HexToColor("#039AFF"), HexToColor("#039AFF"), DEFAULT_LINE_WIDTH, DEFAULT_LINE_WIDTH, HitboxesFlags.Trigger | HitboxesFlags.NotTrigger),
+            [typeof(CircleCollider2D)] = new BaseHitboxType(KeyCode.None, HexToColor("#039AFF"), HexToColor("#039AFF"), DEFAULT_LINE_WIDTH, DEFAULT_LINE_WIDTH, HitboxesFlags.Trigger | HitboxesFlags.NotTrigger),
 
-            [typeof(CapsuleCollider2D)] = new HitboxTypeConfig(KeyCode.None, HexToColor("#633310"), HexToColor("#633310"), DEFAULT_LINE_WIDTH, DEFAULT_LINE_WIDTH, HitboxesFlags.Trigger | HitboxesFlags.NotTrigger),
+            [typeof(CapsuleCollider2D)] = new BaseHitboxType(KeyCode.None, HexToColor("#633310"), HexToColor("#633310"), DEFAULT_LINE_WIDTH, DEFAULT_LINE_WIDTH, HitboxesFlags.Trigger | HitboxesFlags.NotTrigger),
 
-            [typeof(CharacterController)] = new HitboxTypeConfig(KeyCode.None, HexToColor("#8A2BE2"), HexToColor("#8A2BE2"), DEFAULT_LINE_WIDTH, DEFAULT_LINE_WIDTH, HitboxesFlags.Trigger | HitboxesFlags.NotTrigger),
+            [typeof(CharacterController)] = new BaseHitboxType(KeyCode.None, HexToColor("#8A2BE2"), HexToColor("#8A2BE2"), DEFAULT_LINE_WIDTH, DEFAULT_LINE_WIDTH, HitboxesFlags.Trigger | HitboxesFlags.NotTrigger),
 
-            [typeof(PolygonCollider2D)] = new HitboxTypeConfig(KeyCode.None, HexToColor("#000000"), HexToColor("#000000"), DEFAULT_LINE_WIDTH, DEFAULT_LINE_WIDTH, HitboxesFlags.Trigger | HitboxesFlags.NotTrigger),
+            [typeof(PolygonCollider2D)] = new BaseHitboxType(KeyCode.None, HexToColor("#000000"), HexToColor("#000000"), DEFAULT_LINE_WIDTH, DEFAULT_LINE_WIDTH, HitboxesFlags.Trigger | HitboxesFlags.NotTrigger),
 
-            [typeof(EdgeCollider2D)] = new HitboxTypeConfig(KeyCode.None, HexToColor("#FFFFFF"), HexToColor("#FFFFFF"), DEFAULT_LINE_WIDTH, DEFAULT_LINE_WIDTH, HitboxesFlags.Trigger | HitboxesFlags.NotTrigger),
+            [typeof(EdgeCollider2D)] = new BaseHitboxType(KeyCode.None, HexToColor("#FFFFFF"), HexToColor("#FFFFFF"), DEFAULT_LINE_WIDTH, DEFAULT_LINE_WIDTH, HitboxesFlags.Trigger | HitboxesFlags.NotTrigger),
 
-            [typeof(CompositeCollider2D)] = new HitboxTypeConfig(KeyCode.None, HexToColor("#363636"), HexToColor("#363636"), DEFAULT_LINE_WIDTH, DEFAULT_LINE_WIDTH, HitboxesFlags.Trigger | HitboxesFlags.NotTrigger),
+            [typeof(CompositeCollider2D)] = new BaseHitboxType(KeyCode.None, HexToColor("#363636"), HexToColor("#363636"), DEFAULT_LINE_WIDTH, DEFAULT_LINE_WIDTH, HitboxesFlags.Trigger | HitboxesFlags.NotTrigger),
 
-            [typeof(NavMeshObstacle)] = new HitboxTypeConfig(KeyCode.None, HexToColor("#008080"), HexToColor("#008080"), DEFAULT_LINE_WIDTH, DEFAULT_LINE_WIDTH, HitboxesFlags.SphereBoxNavMeshObstacle | HitboxesFlags.BoxNavMeshObstacle),
+            [typeof(NavMeshObstacle)] = new BaseHitboxType(KeyCode.None, HexToColor("#008080"), HexToColor("#008080"), DEFAULT_LINE_WIDTH, DEFAULT_LINE_WIDTH, HitboxesFlags.BoxNavMeshObstacle | HitboxesFlags.SphereNavMeshObstacle),
         };
 
         private static Color HexToColor(string hex)
@@ -55,12 +67,34 @@ namespace HitboxViewer
             throw new ArgumentException($"Invalid hex color string: {hex}");
         }
 
-        public static HitboxTypeConfig InfoOf<T>() => InfoOf(typeof(T));
-        public static HitboxTypeConfig InfoOf(Type type) => hitboxes[type];
+        public static BaseHitboxType InfoOf<T>() => InfoOf(typeof(T));
+        public static BaseHitboxType InfoOf(Type type) => hitboxes[type];
 
 
         public static void Initialize()
         {
+            menuAlpha = BasePlugin.Instance.Config.Bind<float>(
+                "General",
+                "Menu Alpha",
+                1f,
+                "Value of alpha channel for menu"
+            );
+            menuAlpha.Value = Mathf.Clamp01(menuAlpha.Value);
+
+            keyCode = BasePlugin.Instance.Config.Bind<KeyCode>(
+                "General",
+                "Toggle Key",
+                KeyCode.F4,
+                "Toggle for opening menu"
+            );
+
+            startupDelay = BasePlugin.Instance.Config.Bind<float>(
+                "General",
+                "Startup Delay",
+                1f,
+                "Number of seconds to wait before initializing hitbox viewer. Adjust it if you experience issues"
+            );
+
             shaderName = BasePlugin.Instance.Config.Bind<string>(
                 "General",
                 "Shader Name",

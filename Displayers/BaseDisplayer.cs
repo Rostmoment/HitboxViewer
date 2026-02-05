@@ -1,4 +1,6 @@
-﻿using System;
+﻿using HitboxViewer.Flags;
+using HitboxViewer.HitboxTypes;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UniverseLib.Utility;
@@ -23,6 +25,7 @@ namespace HitboxViewer.Displayers
                 return diplayer;
 
             diplayer = (BaseDisplayer)component.gameObject.AddComponent(displayerType);
+            instances[component] = diplayer;
             return diplayer;
         }
         #endregion
@@ -58,23 +61,49 @@ namespace HitboxViewer.Displayers
         {
             Hidden = true;
         }
+        public virtual void Show()
+        {
+            Hidden = false;
+        }
 
         protected abstract void _Visualize();
 
         public void Visualize()
         {
-            if (!ShouldBeDisplayed())
-                return;
-
-            _Visualize();
+            if (ShouldBeDisplayed())
+            {
+                if (ShouldBeUpdated())
+                    _Visualize();
+                Show();
+            }
+            else
+                Hide();
         }
 
-        public bool ShouldBeDisplayed() => _ShouldBeDisplayed() && !Hidden;
-        public virtual bool _ShouldBeDisplayed() => true;
+        protected abstract bool ShouldBeDisplayed();
+        public bool ShouldBeUpdated() => _ShouldBeUpdated() || points == null || points.Length == 0;
+        public virtual bool _ShouldBeUpdated() => true;
         #endregion
     }
     public abstract class BaseDisplayer<T> : BaseDisplayer where T : Component
     {
+        protected T target;
+        public bool AnyFlagEnabled
+        {
+            get
+            {
+                BaseHitboxType type = HitboxViewerConfig.InfoOf<T>();
+                foreach (HitboxesFlags flag in FlagsExtensions.all)
+                {
+                    if (type.IsEnabled(flag) && HitboxFlags.HasFlag(flag))
+                        return true;
+                }
+                return false;
+            }
+        }
+
+        protected override bool ShouldBeDisplayed() => AnyFlagEnabled;
+
         protected override void VirtualAwake()
         {
             CreateLineRenderer();
@@ -102,7 +131,7 @@ namespace HitboxViewer.Displayers
                 parentObject.transform.SetParent(gameObject.transform);
             }
 
-            HitboxTypeConfig config = HitboxViewerConfig.InfoOf<T>();
+            BaseHitboxType config = HitboxViewerConfig.InfoOf<T>();
             lineRenderer = parentObject.AddComponent<LineRenderer>();
 
             lineRenderer.material = new Material(Shader.Find(HitboxViewerConfig.ShaderName))
@@ -122,8 +151,9 @@ namespace HitboxViewer.Displayers
             lineRenderer.endWidth = config.EndWidth;
             lineRenderer.loop = false;
             lineRenderer.useWorldSpace = true;
+
+            Hide();
         }
 
-        protected T target;
     }
 }

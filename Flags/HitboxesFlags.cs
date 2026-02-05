@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HitboxViewer
+namespace HitboxViewer.Flags
 {
     [Flags]
     public enum HitboxesFlags
@@ -12,7 +12,7 @@ namespace HitboxViewer
         None = 0,
         Trigger = 1 << 0,
         NotTrigger = 1 << 1,
-        SphereBoxNavMeshObstacle = 1 << 2,
-        BoxNavMeshObstacle = 1 << 3
+        BoxNavMeshObstacle = 1 << 2,
+        SphereNavMeshObstacle = 1 << 3
     }
 }
