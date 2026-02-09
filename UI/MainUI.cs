@@ -130,6 +130,16 @@ namespace HitboxViewer.UI
             Text title = UIFactory.CreateLabel(bg, $"Title{type.Category}", type.Category, TextAnchor.MiddleCenter, default, true, 17);
             UIFactory.SetLayoutElement(title.gameObject, minHeight: 30, minWidth: 200, flexibleWidth: 9999);
 
+            GameObject buttons = UIFactory.CreateHorizontalGroup(content, "Buttons", true, true, true, true, 0, default, new Color(0.07f, 0.07f, 0.07f));
+
+            ButtonRef enableAll = UIFactory.CreateButton(buttons, "EnableAllFlags", "Enable all flags", new Color(0, 0.39f, 0f));
+            UIFactory.SetLayoutElement(enableAll.Component.gameObject, minHeight: 35, flexibleHeight: 0, flexibleWidth: 9999);
+            enableAll.OnClick += type.EnableAll;
+
+            ButtonRef disableAll = UIFactory.CreateButton(buttons, "DisableAllFlags", "Disable all flags", new Color(0.39f, 0, 0f));
+            UIFactory.SetLayoutElement(disableAll.Component.gameObject, minHeight: 35, flexibleHeight: 0, flexibleWidth: 9999);
+            disableAll.OnClick += type.DisableAll;
+
             type.BuildSettings(content);
 
             return content;
@@ -158,7 +168,7 @@ namespace HitboxViewer.UI
             UIFactory.SetLayoutElement(configButton.Component.gameObject, minHeight: 35, flexibleHeight: 0, flexibleWidth: 999);
             configButton.OnClick += () => { hitboxesButtons.SetActive(false); };
 
-            instancesButton = UIFactory.CreateButton(titleButtonsGroup, "HitboxesInstances", "Instances", new Color(0, 0.39f, 0f));
+            ButtonRef instancesButton = UIFactory.CreateButton(titleButtonsGroup, "HitboxesInstances", "Instances", new Color(0, 0.39f, 0f));
             UIFactory.SetLayoutElement(instancesButton.Component.gameObject, minHeight: 35, flexibleHeight: 0, flexibleWidth: 999);*/
 
         }

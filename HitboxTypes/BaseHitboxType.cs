@@ -123,6 +123,22 @@ namespace HitboxViewer.HitboxTypes
                 EnabledFlags &= ~flag;
         }
 
+        public void EnableAll()
+        {
+            EnabledFlags = PotentionalFlags;
+        }
+        public void DisableAll()
+        {
+            EnabledFlags = HitboxesFlags.None;
+        }
+        
+        public void SetAll(bool enabled)
+        {
+            if (enabled)
+                EnableAll();
+            else
+                DisableAll();
+        }
         public void SetEnabled(bool enabled, HitboxesFlags flag)
         {
             if (enabled)
@@ -140,23 +156,27 @@ namespace HitboxViewer.HitboxTypes
                 if (!HasFlag(flag))
                     continue;
 
-                GameObject bg = UIFactory.CreateVerticalGroup(content, "BG", true, true, true, true, 0, default, new Color(0.07f, 0.07f, 0.07f));
+                GameObject bg = UIFactory.CreateVerticalGroup(content, "BG", false, true, true, true, 0, default, new Color(0.07f, 0.07f, 0.07f));
 
-                GameObject toggleObject = UIFactory.CreateToggle(bg, $"Toggle{flag}", out Toggle toggle, out Text text, new Color(0.1f, 0.1f, 0.1f));
+                GameObject toggleObject = UIFactory.CreateToggle(bg, $"Toggle{flag}", out Toggle toggle, out Text toggleText, new Color(0.1f, 0.1f, 0.1f));
+                toggleText.color = new Color(0.8f, 0.8f, 0.8f);
+                toggleText.text = "Enabled/Disabled";
                 toggle.isOn = false;
                 UIFactory.SetLayoutElement(toggleObject, 1, 25);
 
                 Text description = UIFactory.CreateLabel(bg, $"Description{flag}", flag.GetDescription());
                 UIFactory.SetLayoutElement(description.gameObject, flexibleWidth: 1);
 
-                ButtonRef apply = UIFactory.CreateButton(bg, $"Apply{flag}", "Apply", new Color(0, 0.39f, 0f));
+                GameObject horizontal = UIFactory.CreateHorizontalGroup(bg, "ApplyButtonBG", true, true, true, true, 0, default, Color.clear);
+
+                ButtonRef apply = UIFactory.CreateButton(horizontal, $"Apply{flag}", "Apply", new Color(0, 0.39f, 0f));
                 apply.OnClick += () =>
                 {
                     BasePlugin.Logger.LogDebug($"Setting {flag} for {Category} to {toggle.isOn}");
                     SetEnabled(toggle.isOn, flag);
                 };
                 UIFactory.SetLayoutElement(apply.Component.gameObject, 100, 25, 100, 25, 100, 25);
-
+                
             }
         }
     }
