@@ -12,10 +12,10 @@ namespace HitboxViewer.Displayers
     {
         protected override void _Visualize()
         {
-            if (target.sharedMesh == null)
+            if (GenericTarget.sharedMesh == null)
                 return;
 
-            Mesh mesh = target.sharedMesh;
+            Mesh mesh = GenericTarget.sharedMesh;
             Vector3[] vertices = mesh.vertices;
             int[] triangles = mesh.triangles;
 

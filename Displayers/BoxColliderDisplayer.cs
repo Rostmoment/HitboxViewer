@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UniverseLib.Utility;
 
 namespace HitboxViewer.Displayers
 {
@@ -14,14 +15,14 @@ namespace HitboxViewer.Displayers
 
         protected override void _Visualize()
         {
-            savedSize = target.size;
-            savedCenter = target.center;
+            savedSize = GenericTarget.size;
+            savedCenter = GenericTarget.center;
             savedPosition = target.transform.position;
             savedRotation = target.transform.rotation;
             savedScale = target.transform.lossyScale;
 
-            Vector3 center = target.center;
-            Vector3 size = target.size * 0.5f;
+            Vector3 center = GenericTarget.center;
+            Vector3 size = GenericTarget.size * 0.5f;
 
             corners[0] = target.transform.TransformPoint(center + new Vector3(-size.x, -size.y, -size.z));
             corners[1] = target.transform.TransformPoint(center + new Vector3(-size.x, -size.y, size.z));
@@ -38,7 +39,7 @@ namespace HitboxViewer.Displayers
 
         public override bool _ShouldBeUpdated()
         {
-            return (savedCenter != target.center || savedSize != target.size || savedPosition != target.transform.position ||
+            return (savedCenter != GenericTarget.center || savedSize != GenericTarget.size || savedPosition != target.transform.position ||
                    savedRotation != target.transform.rotation || savedScale != target.transform.lossyScale) && base._ShouldBeUpdated();
         }
     }

@@ -18,14 +18,20 @@ namespace HitboxViewer.Displayers
         #endregion
 
         #region creation of line renderer and instance management
-        protected static Dictionary<Component, BaseDisplayer> instances = new Dictionary<Component, BaseDisplayer>();
+        protected static Dictionary<Component, BaseDisplayer> displayers = new Dictionary<Component, BaseDisplayer>();
+
         public static BaseDisplayer GetOrAdd(Component component, Type displayerType)
         {
-            if (instances.TryGetValue(component, out BaseDisplayer diplayer))
+            if (displayers.TryGetValue(component, out BaseDisplayer diplayer))
                 return diplayer;
 
-            diplayer = (BaseDisplayer)component.gameObject.AddComponent(displayerType);
-            instances[component] = diplayer;
+            GameObject parentObject = new GameObject("HitboxViewerObject");
+            parentObject.transform.SetParent(component.transform);
+            diplayer = (BaseDisplayer)parentObject.AddComponent(displayerType);
+            diplayer.target = component;
+
+            displayers[component] = diplayer;
+
             return diplayer;
         }
         #endregion
@@ -33,7 +39,7 @@ namespace HitboxViewer.Displayers
         #region fields and properties
         protected Vector3[] points;
         protected LineRenderer lineRenderer;
-        protected GameObject parentObject;
+        protected Component target;
 
         private bool Hidden
         {
@@ -70,6 +76,12 @@ namespace HitboxViewer.Displayers
 
         public void Visualize()
         {
+            if (target.IsNullOrDestroyed())
+            {
+                Destroy(this);
+                return;
+            }
+
             if (ShouldBeDisplayed())
             {
                 if (ShouldBeUpdated())
@@ -87,7 +99,7 @@ namespace HitboxViewer.Displayers
     }
     public abstract class BaseDisplayer<T> : BaseDisplayer where T : Component
     {
-        protected T target;
+        protected T GenericTarget => (T)target;
         public bool AnyFlagEnabled
         {
             get
@@ -95,7 +107,7 @@ namespace HitboxViewer.Displayers
                 HitboxType type = HitboxViewerConfig.InfoOf<T>();
                 foreach (HitboxesFlags flag in FlagsExtensions.all)
                 {
-                    if (type.Flags.IsEnabled(flag))
+                    if (type.Flags.IsEnabled(flag) && HitboxFlags.HasFlag(flag))
                         return true;
                 }
                 return false;
@@ -107,17 +119,10 @@ namespace HitboxViewer.Displayers
         protected override void VirtualAwake()
         {
             CreateLineRenderer();
-            target = GetComponent<T>();
-            instances[target] = this;
         }
 
         protected override void VirtualUpdate()
         {
-            if (target.IsNullOrDestroyed())
-            {
-                Destroy(this);
-                return;
-            }
         }
 
         protected void CreateLineRenderer()
@@ -125,14 +130,8 @@ namespace HitboxViewer.Displayers
             if (!lineRenderer.IsNullOrDestroyed())
                 return;
 
-            if (parentObject.IsNullOrDestroyed())
-            {
-                parentObject = new GameObject($"[HitboxViewer] {typeof(T).Name} Displayer");
-                parentObject.transform.SetParent(gameObject.transform);
-            }
-
             HitboxType config = HitboxViewerConfig.InfoOf<T>();
-            lineRenderer = parentObject.AddComponent<LineRenderer>();
+            lineRenderer = gameObject.AddComponent<LineRenderer>();
 
             lineRenderer.material = new Material(Shader.Find(HitboxViewerConfig.ShaderName))
             {

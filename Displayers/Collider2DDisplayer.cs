@@ -13,7 +13,7 @@ namespace HitboxViewer.Displayers
         {
             get
             {
-                if (target.isTrigger)
+                if (GenericTarget.isTrigger)
                     return HitboxesFlags.Trigger;
                 return HitboxesFlags.NotTrigger;
             }
