@@ -32,4 +32,8 @@
       <HintPath>lib\UnityEngine.UI.dll</HintPath>
     </Reference>
   </ItemGroup>
+  
+  <ItemGroup>
+    <Folder Include="HitboxesDefinition\" />
+  </ItemGroup>
 </Project>

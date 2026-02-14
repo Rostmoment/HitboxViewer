@@ -10,7 +10,7 @@ namespace HitboxViewer.Displayers
 {
     public static class DisplayersHelper
     {
-        public static Vector3[] DrawFibonacciSphere(Vector3 center, float worldRadius, float pointsPerRadius = 0.1f)
+        public static Vector3[] DrawFibonacciSphere(Vector3 center, float worldRadius, float pointsPerRadius = 100f)
         {
             if (worldRadius <= 0)
                 throw new ArgumentOutOfRangeException(nameof(worldRadius), "Radius should be positive");

@@ -1,4 +1,5 @@
-﻿using HitboxViewer.Flags;
+﻿using HitboxViewer.Configs;
+using HitboxViewer.Flags;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,11 +11,11 @@ using UnityEngine.UI;
 using UniverseLib.UI;
 using UniverseLib.UI.Models;
 
-namespace HitboxViewer.HitboxesDefinition
+namespace HitboxViewer.UI
 {
-    public class BaseHitboxUI 
+    public class BaseHitboxUI
     {
-        private GameObject content;
+        protected GameObject content;
         public HitboxDefinition hitboxType;
 
         public virtual GameObject BuildCategory(GameObject editorContent)

@@ -1,5 +1,4 @@
 ﻿using HitboxViewer.Flags;
-using HitboxViewer.HitboxesDefinition;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -104,7 +103,7 @@ namespace HitboxViewer.Displayers
         {
             get
             {
-                HitboxDefinition type = HitboxViewerConfig.InfoOf<T>();
+                HitboxDefinition type = HitboxViewerConfig.DefinitionOf<T>();
                 foreach (HitboxesFlags flag in FlagsExtensions.all)
                 {
                     if (type.Flags.IsEnabled(flag) && HitboxFlags.HasFlag(flag))
@@ -130,7 +129,7 @@ namespace HitboxViewer.Displayers
             if (!lineRenderer.IsNullOrDestroyed())
                 return;
 
-            HitboxDefinition definition = HitboxViewerConfig.InfoOf<T>();
+            HitboxDefinition definition = HitboxViewerConfig.DefinitionOf<T>();
             lineRenderer = gameObject.AddComponent<LineRenderer>();
 
             lineRenderer.material = new Material(Shader.Find(HitboxViewerConfig.ShaderName))

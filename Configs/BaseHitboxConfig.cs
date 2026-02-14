@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using UnityEngine;
 
-namespace HitboxViewer.HitboxesDefinition
+namespace HitboxViewer.Configs
 {
     public class BaseHitboxConfig
     {

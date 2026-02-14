@@ -1,6 +1,6 @@
 ﻿using BepInEx.Configuration;
+using HitboxViewer.Configs;
 using HitboxViewer.Flags;
-using HitboxViewer.HitboxesDefinition;
 using HitboxViewer.UI;
 using System;
 using System.Collections.Generic;
@@ -42,7 +42,8 @@ namespace HitboxViewer
 
             [typeof(SphereCollider)] = new(
                 nameof(SphereCollider),
-                new(KeyCode.None, HexToColor("#0D2FDB"), HexToColor("#0D2FDB")),
+                new SphereHitboxConfig(KeyCode.None, HexToColor("#0D2FDB"), HexToColor("#0D2FDB")),
+                new SphereHitboxUI(),
                 HitboxesFlags.Trigger | HitboxesFlags.NotTrigger
             ),
             [typeof(CapsuleCollider)] = new(
@@ -127,8 +128,8 @@ namespace HitboxViewer
             throw new ArgumentException($"Invalid hex color string: {hex}");
         }
 
-        public static HitboxDefinition InfoOf<T>() => InfoOf(typeof(T));
-        public static HitboxDefinition InfoOf(Type type) => hitboxes[type];
+        public static HitboxDefinition DefinitionOf<T>() => DefinitionOf(typeof(T));
+        public static HitboxDefinition DefinitionOf(Type type) => hitboxes[type];
 
 
         public static void Initialize()

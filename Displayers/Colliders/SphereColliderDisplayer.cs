@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HitboxViewer.Configs;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,7 +24,16 @@ namespace HitboxViewer.Displayers.Colliders
             savedScale = worldScale;
             savedRadius = GenericTarget.radius;
 
-            SetPositions(DisplayersHelper.DrawLatitudeLongitudeSphere(worldCenter, worldRadius));
+            SphereHitboxConfig config = (SphereHitboxConfig)HitboxViewerConfig.DefinitionOf<SphereCollider>().Config;
+
+            Vector3[] points;
+
+            if (config.UseFibonacci)
+                points = DisplayersHelper.DrawFibonacciSphere(worldCenter, worldRadius, config.PointsPerUnit);
+            else
+                points = DisplayersHelper.DrawLatitudeLongitudeSphere(worldCenter, worldRadius, config.PointsPerUnit);
+
+            SetPositions(points);
         }
         public override bool _ShouldBeUpdated()
         {

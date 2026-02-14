@@ -1,5 +1,7 @@
 ﻿using BepInEx.Configuration;
+using HitboxViewer.Configs;
 using HitboxViewer.Flags;
+using HitboxViewer.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +12,7 @@ using UnityEngine.UI;
 using UniverseLib.UI;
 using UniverseLib.UI.Models;
 
-namespace HitboxViewer.HitboxesDefinition
+namespace HitboxViewer
 {
     public class HitboxDefinition
     {
