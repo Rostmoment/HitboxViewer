@@ -2,6 +2,7 @@
 using BepInEx.Logging;
 using HarmonyLib;
 using HitboxViewer.Displayers;
+using HitboxViewer.Displayers.Colliders;
 using HitboxViewer.UI;
 using System;
 using System.Collections.Generic;
@@ -29,6 +30,7 @@ namespace HitboxViewer
         private static Dictionary<Type, Type> types = new Dictionary<Type, Type>()
         {
             [typeof(BoxCollider)] = typeof(BoxColliderDisplayer),
+            [typeof(SphereCollider)] = typeof(SphereColliderDisplayer),
             [typeof(MeshCollider)] = typeof(MeshColliderDisplayer),
         };
 
@@ -48,7 +50,7 @@ namespace HitboxViewer
             HarmonyInstance = new Harmony(PluginInfo.GUID);
             HitboxViewerConfig.Initialize();
 
-            UniverseLib.Universe.Init(1, MainUI.InitializeUI, (x, y) => { }, new UniverseLib.Config.UniverseLibConfig()
+            UniverseLib.Universe.Init(HitboxViewerConfig.StartupDelay, MainUI.InitializeUI, (x, y) => { }, new UniverseLib.Config.UniverseLibConfig()
             {
                 Force_Unlock_Mouse = true,
             });

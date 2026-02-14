@@ -52,7 +52,6 @@ namespace HitboxViewer.Displayers
         #endregion
 
         #region position setting
-        public void SetPositions(List<Vector3> vectors) => SetPositions(vectors.ToArray());
         public void SetPositions(params Vector3[] positions)
         {
             lineRenderer.positionCount = positions.Length;
@@ -81,6 +80,7 @@ namespace HitboxViewer.Displayers
                 Destroy(this);
                 return;
             }
+
 
             if (ShouldBeDisplayed())
             {

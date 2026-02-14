@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UniverseLib.Utility;
 
-namespace HitboxViewer.Displayers
+namespace HitboxViewer.Displayers.Colliders
 {
     public class BoxColliderDisplayer : ColliderDisplayer<BoxCollider>
     {

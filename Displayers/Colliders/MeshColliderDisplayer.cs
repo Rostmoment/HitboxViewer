@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace HitboxViewer.Displayers
+namespace HitboxViewer.Displayers.Colliders
 {
     class MeshColliderDisplayer : ColliderDisplayer<MeshCollider>
     {

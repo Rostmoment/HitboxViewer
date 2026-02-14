@@ -27,6 +27,9 @@ namespace HitboxViewer
         private static ConfigEntry<int> updateRate;
         public static int UpdateRate => updateRate.Value;
 
+        private static ConfigEntry<bool> hideOnStart;
+        public static bool HideOnStart => hideOnStart.Value;
+
         private static Dictionary<Type, HitboxType> hitboxes = new Dictionary<Type, HitboxType>()
         {
             [typeof(BoxCollider)] = new(KeyCode.None, HexToColor("#DB220D"), HexToColor("#DB220D"), HitboxesFlags.Trigger | HitboxesFlags.NotTrigger),
@@ -73,11 +76,16 @@ namespace HitboxViewer
         public static void Initialize()
         {
             menuAlpha = BasePlugin.Instance.Config.Bind<float>(
-                "General",
-                "Menu Alpha",
-                1f,
-                "Value of alpha channel for menu"
+              "General",
+              "Menu Alpha",
+              1f,
+              "Value of alpha channel for menu"
             );
+            menuAlpha.SettingChanged += (x, y) =>
+            {
+
+                MainUI.Alpha = menuAlpha.Value;
+            };
             menuAlpha.Value = Mathf.Clamp01(menuAlpha.Value);
 
             keyCode = BasePlugin.Instance.Config.Bind<KeyCode>(
@@ -86,6 +94,7 @@ namespace HitboxViewer
                 KeyCode.F4,
                 "Toggle for opening menu"
             );
+
 
             startupDelay = BasePlugin.Instance.Config.Bind<float>(
                 "General",
@@ -106,6 +115,13 @@ namespace HitboxViewer
                 "Update Rate",
                 60,
                 "Number of frames between each hitbox update"
+            );
+
+            hideOnStart = BasePlugin.Instance.Config.Bind<bool>(
+                "General", 
+                "Hide On Startup",
+                true,
+                "Hide menu on start"
             );
 
             foreach (var kvp in hitboxes)

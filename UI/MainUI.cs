@@ -52,6 +52,13 @@ namespace HitboxViewer.UI
         private GameObject editorContent;
         private GameObject currentCategory;
 
+        private static CanvasGroup canvasGroup;
+        public static float Alpha
+        {
+            get => canvasGroup.alpha;
+            set => canvasGroup.alpha = value;
+        }
+
         #endregion
 
         #region overrides
@@ -72,7 +79,8 @@ namespace HitboxViewer.UI
         public static void InitializeUI()
         {
             UIBase uiBase = UniversalUI.RegisterUI(PluginInfo.GUID, null);
-            uiBase.Canvas.gameObject.AddComponent<CanvasGroup>().alpha = HitboxViewerConfig.MenuAlpha;
+            canvasGroup = uiBase.Canvas.gameObject.AddComponent<CanvasGroup>();
+            Alpha = HitboxViewerConfig.MenuAlpha;
             CreateMainUI(uiBase);
 
             Instance.AddButtonsUnderPanel();
@@ -81,6 +89,8 @@ namespace HitboxViewer.UI
             for (int i = 0; i < HitboxType.all.Count; i++)
                 Instance.AddButton(HitboxType.all[i]);
 
+            if (HitboxViewerConfig.HideOnStart)
+                ShowMenu = false;
         }
 
         private static void CreateMainUI(UIBase uIBase)
