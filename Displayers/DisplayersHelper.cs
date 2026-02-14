@@ -10,7 +10,7 @@ namespace HitboxViewer.Displayers
 {
     public static class DisplayersHelper
     {
-        public static Vector3[] DrawFibonacciSphere(Vector3 center, float worldRadius, float pointsPerUnitArea = 1)
+        public static Vector3[] DrawFibonacciSphere(Vector3 center, float worldRadius, float pointsPerUnitArea = 0.1f)
         {
             if (worldRadius <= 0)
                 throw new ArgumentOutOfRangeException("Radius should be positive");
@@ -36,5 +36,30 @@ namespace HitboxViewer.Displayers
 
             return points;
         }
+        public static Vector3[] DrawLatitudeLongitudeSphere(Vector3 center, float worldRadius, float pointsPerRadius = 10f)
+        {
+            int pointsCount = Mathf.RoundToInt(worldRadius * pointsPerRadius);
+            List<Vector3> points = new List<Vector3>();
+
+            float latStep = Mathf.PI / pointsCount;      // step for latitude
+            float lonStep = 2 * Mathf.PI / pointsCount; // step for longitude
+
+            for (float a = 0; a <= Mathf.PI; a += latStep)
+            {
+                float sin = Mathf.Sin(a);
+                float cos = Mathf.Cos(a);
+                for (float b = 0; b <= 2 * Mathf.PI; b += lonStep)
+                {
+                    points.Add(center + new Vector3(
+                        worldRadius * sin * Mathf.Cos(b),
+                        worldRadius * sin * Mathf.Sin(b),
+                        worldRadius * cos));
+                }
+            }
+
+            BasePlugin.Logger.LogInfo(points.Count);
+            return points.ToArray();
+        }
+
     }
 }

@@ -9,13 +9,24 @@ namespace HitboxViewer.Displayers.Colliders
 {
     class SphereColliderDisplayer : ColliderDisplayer<SphereCollider>
     {
+        private Vector3 savedCenter = BasePlugin.NaNVector;
+        private Vector3 savedScale = BasePlugin.NaNVector;
+        private float savedRadius = float.NaN;
         protected override void _Visualize()
         {
             Vector3 worldScale = target.transform.lossyScale;
             Vector3 worldCenter = target.transform.TransformPoint(GenericTarget.center);
             float worldRadius = GenericTarget.radius * Mathf.Max(Mathf.Abs(worldScale.x), Mathf.Abs(worldScale.y), Mathf.Abs(worldScale.z));
 
-            SetPositions(DisplayersHelper.DrawFibonacciSphere(worldCenter, worldRadius));
+            savedCenter = worldCenter;
+            savedScale = worldScale;
+            savedRadius = GenericTarget.radius;
+
+            SetPositions(DisplayersHelper.DrawLatitudeLongitudeSphere(worldCenter, worldRadius));
+        }
+        public override bool _ShouldBeUpdated()
+        {
+            return savedRadius != GenericTarget.radius || savedCenter != target.transform.TransformPoint(GenericTarget.center) || savedScale != target.transform.lossyScale;
         }
     }
 }
