@@ -10,13 +10,16 @@ namespace HitboxViewer.Displayers
 {
     public static class DisplayersHelper
     {
-        public static Vector3[] DrawFibonacciSphere(Vector3 center, float worldRadius, float pointsPerUnitArea = 0.1f)
+        public static Vector3[] DrawFibonacciSphere(Vector3 center, float worldRadius, float pointsPerRadius = 0.1f)
         {
             if (worldRadius <= 0)
-                throw new ArgumentOutOfRangeException("Radius should be positive");
+                throw new ArgumentOutOfRangeException(nameof(worldRadius), "Radius should be positive");
+
+            if (pointsPerRadius <= 0)
+                throw new ArgumentOutOfRangeException(nameof(pointsPerRadius), "Point per radius should be positive");
 
 
-            int pointsCount = Mathf.RoundToInt(pointsPerUnitArea * 4f * Mathf.PI * worldRadius * worldRadius);
+            int pointsCount = Mathf.RoundToInt(pointsPerRadius * worldRadius);
             float offset = 2f / pointsCount;
 
             Vector3[] points = new Vector3[pointsCount];
@@ -36,30 +39,38 @@ namespace HitboxViewer.Displayers
 
             return points;
         }
-        public static Vector3[] DrawLatitudeLongitudeSphere(Vector3 center, float worldRadius, float pointsPerRadius = 10f)
+
+        public static Vector3[] DrawLatitudeLongitudeSphere(Vector3 center, float worldRadius, float pointsPerRadius = 100f)
         {
-            int pointsCount = Mathf.RoundToInt(worldRadius * pointsPerRadius);
-            List<Vector3> points = new List<Vector3>();
+            int totalPoints = Mathf.RoundToInt(pointsPerRadius * worldRadius);
 
-            float latStep = Mathf.PI / pointsCount;      // step for latitude
-            float lonStep = 2 * Mathf.PI / pointsCount; // step for longitude
+            int latSteps = Mathf.Max(4, Mathf.RoundToInt(Mathf.Sqrt(totalPoints / 2f)));
+            int lonSteps = latSteps * 2;
 
-            for (float a = 0; a <= Mathf.PI; a += latStep)
+            Vector3[] points = new Vector3[(latSteps + 1) * lonSteps];
+
+            float latStep = Mathf.PI / latSteps;
+            float lonStep = 2f * Mathf.PI / lonSteps;
+
+            int index = 0;
+
+            for (int i = 0; i <= latSteps; i++)
             {
-                float sin = Mathf.Sin(a);
-                float cos = Mathf.Cos(a);
-                for (float b = 0; b <= 2 * Mathf.PI; b += lonStep)
+                float a = i * latStep;
+                float sinA = Mathf.Sin(a);
+                float cosA = Mathf.Cos(a);
+
+                for (int j = 0; j < lonSteps; j++)
                 {
-                    points.Add(center + new Vector3(
-                        worldRadius * sin * Mathf.Cos(b),
-                        worldRadius * sin * Mathf.Sin(b),
-                        worldRadius * cos));
+                    float b = j * lonStep;
+                    points[index++] = center + new Vector3(
+                        worldRadius * sinA * Mathf.Cos(b),
+                        worldRadius * sinA * Mathf.Sin(b),
+                        worldRadius * cosA);
                 }
             }
 
-            BasePlugin.Logger.LogInfo(points.Count);
-            return points.ToArray();
+            return points;
         }
-
     }
 }
