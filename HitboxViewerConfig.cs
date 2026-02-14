@@ -11,6 +11,7 @@ namespace HitboxViewer
 {
     static class HitboxViewerConfig
     {
+        #region general configs
 
         private static ConfigEntry<float> menuAlpha;
         public static float MenuAlpha => menuAlpha.Value;
@@ -29,37 +30,94 @@ namespace HitboxViewer
 
         private static ConfigEntry<bool> hideOnStart;
         public static bool HideOnStart => hideOnStart.Value;
+        #endregion
 
-        private static Dictionary<Type, HitboxType> hitboxes = new Dictionary<Type, HitboxType>()
+        private static Dictionary<Type, HitboxDefinition> hitboxes = new Dictionary<Type, HitboxDefinition>()
         {
-            [typeof(BoxCollider)] = new(KeyCode.None, HexToColor("#DB220D"), HexToColor("#DB220D"), HitboxesFlags.Trigger | HitboxesFlags.NotTrigger),
+            [typeof(BoxCollider)] = new(
+                nameof(BoxCollider),
+                new(KeyCode.None, HexToColor("#DB220D"), HexToColor("#DB220D")),
+                HitboxesFlags.Trigger | HitboxesFlags.NotTrigger
+            ),
 
-            [typeof(SphereCollider)] = new(KeyCode.None, HexToColor("#0D2FDB"), HexToColor("#0D2FDB"), HitboxesFlags.Trigger | HitboxesFlags.NotTrigger),
+            [typeof(SphereCollider)] = new(
+                nameof(SphereCollider),
+                new(KeyCode.None, HexToColor("#0D2FDB"), HexToColor("#0D2FDB")),
+                HitboxesFlags.Trigger | HitboxesFlags.NotTrigger
+            ),
+            [typeof(CapsuleCollider)] = new(
+                nameof(CapsuleCollider),
+                new(KeyCode.None, HexToColor("#28DB0D"), HexToColor("#28DB0D")),
+                HitboxesFlags.Trigger | HitboxesFlags.NotTrigger
+            ),
 
-            [typeof(CapsuleCollider)] = new(KeyCode.None, HexToColor("#28DB0D"), HexToColor("#28DB0D"), HitboxesFlags.Trigger | HitboxesFlags.NotTrigger),
+            [typeof(MeshCollider)] = new(
+                nameof(MeshCollider),
+                new(KeyCode.None, HexToColor("#DBDB0D"), HexToColor("#DBDB0D")),
+                HitboxesFlags.Trigger | HitboxesFlags.NotTrigger
+            ),
 
-            [typeof(MeshCollider)] = new(KeyCode.None, HexToColor("#DBDB0D"), HexToColor("#DBDB0D"), HitboxesFlags.Trigger | HitboxesFlags.NotTrigger),
+            [typeof(WheelCollider)] = new(
+                nameof(WheelCollider),
+                new(KeyCode.None, HexToColor("#DB7B0D"), HexToColor("#DB7B0D")),
+                HitboxesFlags.Trigger | HitboxesFlags.NotTrigger
+            ),
 
-            [typeof(WheelCollider)] = new(KeyCode.None, HexToColor("#DB7B0D"), HexToColor("#DB7B0D"), HitboxesFlags.Trigger | HitboxesFlags.NotTrigger),
+            [typeof(TerrainCollider)] = new(
+                nameof(TerrainCollider),
+                new(KeyCode.None, HexToColor("#A020F0"), HexToColor("#A020F0")),
+                HitboxesFlags.Trigger | HitboxesFlags.NotTrigger
+            ),
 
-            [typeof(TerrainCollider)] = new(KeyCode.None, HexToColor("#A020F0"), HexToColor("#A020F0"), HitboxesFlags.Trigger | HitboxesFlags.NotTrigger),
+            [typeof(BoxCollider2D)] = new(
+                nameof(BoxCollider2D),
+                new(KeyCode.None, HexToColor("#FF19AF"), HexToColor("#FF19AF")),
+                HitboxesFlags.Trigger | HitboxesFlags.NotTrigger
+            ),
 
-            [typeof(BoxCollider2D)] = new(KeyCode.None, HexToColor("#FF19AF"), HexToColor("#FF19AF"), HitboxesFlags.Trigger | HitboxesFlags.NotTrigger),
+            [typeof(CircleCollider2D)] = new(
+                nameof(CircleCollider2D),
+                new(KeyCode.None, HexToColor("#039AFF"), HexToColor("#039AFF")),
+                HitboxesFlags.Trigger | HitboxesFlags.NotTrigger
+            ),
 
-            [typeof(CircleCollider2D)] = new(KeyCode.None, HexToColor("#039AFF"), HexToColor("#039AFF"), HitboxesFlags.Trigger | HitboxesFlags.NotTrigger),
+            [typeof(CapsuleCollider2D)] = new(
+                nameof(CapsuleCollider2D),
+                new(KeyCode.None, HexToColor("#633310"), HexToColor("#633310")),
+                HitboxesFlags.Trigger | HitboxesFlags.NotTrigger
+            ),
 
-            [typeof(CapsuleCollider2D)] = new(KeyCode.None, HexToColor("#633310"), HexToColor("#633310"), HitboxesFlags.Trigger | HitboxesFlags.NotTrigger),
+            [typeof(CharacterController)] = new(
+                nameof(CharacterController),
+                new(KeyCode.None, HexToColor("#8A2BE2"), HexToColor("#8A2BE2")),
+                HitboxesFlags.Trigger | HitboxesFlags.NotTrigger
+            ),
 
-            [typeof(CharacterController)] = new(KeyCode.None, HexToColor("#8A2BE2"), HexToColor("#8A2BE2"), HitboxesFlags.Trigger | HitboxesFlags.NotTrigger),
+            [typeof(PolygonCollider2D)] = new(
+                nameof(PolygonCollider2D),
+                new(KeyCode.None, HexToColor("#000000"), HexToColor("#000000")),
+                HitboxesFlags.Trigger | HitboxesFlags.NotTrigger
+            ),
 
-            [typeof(PolygonCollider2D)] = new(KeyCode.None, HexToColor("#000000"), HexToColor("#000000"), HitboxesFlags.Trigger | HitboxesFlags.NotTrigger),
+            [typeof(EdgeCollider2D)] = new(
+                nameof(EdgeCollider2D),
+                new(KeyCode.None, HexToColor("#FFFFFF"), HexToColor("#FFFFFF")),
+                HitboxesFlags.Trigger | HitboxesFlags.NotTrigger
+            ),
 
-            [typeof(EdgeCollider2D)] = new(KeyCode.None, HexToColor("#FFFFFF"), HexToColor("#FFFFFF"), HitboxesFlags.Trigger | HitboxesFlags.NotTrigger),
+            [typeof(CompositeCollider2D)] = new(
+                nameof(CompositeCollider2D),
+                new(KeyCode.None, HexToColor("#363636"), HexToColor("#363636")),
+                HitboxesFlags.Trigger | HitboxesFlags.NotTrigger
+            ),
 
-            [typeof(CompositeCollider2D)] = new(KeyCode.None, HexToColor("#363636"), HexToColor("#363636"), HitboxesFlags.Trigger | HitboxesFlags.NotTrigger),
-
-            [typeof(NavMeshObstacle)] = new(KeyCode.None, HexToColor("#008080"), HexToColor("#008080"), HitboxesFlags.BoxNavMeshObstacle | HitboxesFlags.SphereNavMeshObstacle),
-        };  
+            [typeof(NavMeshObstacle)] = new(
+                nameof(NavMeshObstacle),
+                new(KeyCode.None, HexToColor("#008080"), HexToColor("#008080")),
+                HitboxesFlags.BoxNavMeshObstacle | HitboxesFlags.SphereNavMeshObstacle
+            ),
+        };
+            
 
         private static Color HexToColor(string hex)
         {
@@ -69,8 +127,8 @@ namespace HitboxViewer
             throw new ArgumentException($"Invalid hex color string: {hex}");
         }
 
-        public static HitboxType InfoOf<T>() => InfoOf(typeof(T));
-        public static HitboxType InfoOf(Type type) => hitboxes[type];
+        public static HitboxDefinition InfoOf<T>() => InfoOf(typeof(T));
+        public static HitboxDefinition InfoOf(Type type) => hitboxes[type];
 
 
         public static void Initialize()
@@ -125,7 +183,7 @@ namespace HitboxViewer
             );
 
             foreach (var kvp in hitboxes)
-                kvp.Value.Initialize(kvp.Key.Name);
+                kvp.Value.Config.Initialize();
         }
     }
 }

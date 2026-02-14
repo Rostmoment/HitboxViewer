@@ -86,8 +86,8 @@ namespace HitboxViewer.UI
             Instance.AddButtonsUnderPanel();
 
             Instance.CreateScrollView();
-            for (int i = 0; i < HitboxType.all.Count; i++)
-                Instance.AddButton(HitboxType.all[i]);
+            for (int i = 0; i < HitboxDefinition.all.Count; i++)
+                Instance.AddButton(HitboxDefinition.all[i]);
 
             if (HitboxViewerConfig.HideOnStart)
                 ShowMenu = false;
@@ -114,9 +114,9 @@ namespace HitboxViewer.UI
             UIFactory.SetLayoutElement(editor, flexibleWidth: 9999);
         }
 
-        private ButtonRef AddButton(HitboxType type)
+        private ButtonRef AddButton(HitboxDefinition type)
         {
-            ButtonRef btn = UIFactory.CreateButton(hitboxesButtons, $"Button{type.Category}", type.Category);
+            ButtonRef btn = UIFactory.CreateButton(hitboxesButtons, $"Button{type.Name}", type.Name);
             UIFactory.SetLayoutElement(btn.Component.gameObject, flexibleWidth: 9999, minHeight: 40, flexibleHeight: 0);
             GameObject myCategory = type.UI.BuildCategory(editorContent);
 

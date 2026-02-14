@@ -7,16 +7,15 @@ using System.Threading.Tasks;
 
 namespace HitboxViewer.HitboxesDefinition
 {
-    class HitboxTypeFlags
+    public class HitboxTypeFlags
     {
-
         public HitboxTypeFlags(HitboxesFlags potential)
         {
             Enabled = HitboxesFlags.None;
             Potentional = potential;
         }
 
-        public HitboxType hitboxType;
+        public HitboxDefinition hitboxType;
 
         public HitboxesFlags Potentional { get; }
         public HitboxesFlags Enabled { get; private set; }

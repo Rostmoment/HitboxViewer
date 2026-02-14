@@ -104,7 +104,7 @@ namespace HitboxViewer.Displayers
         {
             get
             {
-                HitboxType type = HitboxViewerConfig.InfoOf<T>();
+                HitboxDefinition type = HitboxViewerConfig.InfoOf<T>();
                 foreach (HitboxesFlags flag in FlagsExtensions.all)
                 {
                     if (type.Flags.IsEnabled(flag) && HitboxFlags.HasFlag(flag))
@@ -130,7 +130,7 @@ namespace HitboxViewer.Displayers
             if (!lineRenderer.IsNullOrDestroyed())
                 return;
 
-            HitboxType config = HitboxViewerConfig.InfoOf<T>();
+            HitboxDefinition definition = HitboxViewerConfig.InfoOf<T>();
             lineRenderer = gameObject.AddComponent<LineRenderer>();
 
             lineRenderer.material = new Material(Shader.Find(HitboxViewerConfig.ShaderName))
@@ -139,15 +139,15 @@ namespace HitboxViewer.Displayers
             };
 
             Gradient gradient = new Gradient();
-            gradient.SetKeys([new GradientColorKey(config.StartColor, 0), new GradientColorKey(config.EndColor, 1)],  [new GradientAlphaKey(1, 0), new GradientAlphaKey(1, 1)]);
+            gradient.SetKeys([new GradientColorKey(definition.Config.StartColor, 0), new GradientColorKey(definition.Config.EndColor, 1)],  [new GradientAlphaKey(1, 0), new GradientAlphaKey(1, 1)]);
 
             lineRenderer.colorGradient = gradient;
-            lineRenderer.startColor = config.StartColor;
-            lineRenderer.endColor = config.EndColor;
+            lineRenderer.startColor = definition.Config.StartColor;
+            lineRenderer.endColor = definition.Config.EndColor;
 
-            lineRenderer.startWidth = config.StartWidth;
+            lineRenderer.startWidth = definition.Config.StartWidth;
 
-            lineRenderer.endWidth = config.EndWidth;
+            lineRenderer.endWidth = definition.Config.EndWidth;
             lineRenderer.loop = false;
             lineRenderer.useWorldSpace = true;
 

@@ -72,5 +72,6 @@ namespace HitboxViewer.Displayers
 
             return points;
         }
+
     }
 }

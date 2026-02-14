@@ -12,13 +12,14 @@ namespace HitboxViewer.Displayers.Colliders
         private Vector3 savedCenter = BasePlugin.NaNVector;
         private Vector3 savedScale = BasePlugin.NaNVector;
         private float savedRadius = float.NaN;
+
         protected override void _Visualize()
         {
             Vector3 worldScale = target.transform.lossyScale;
             Vector3 worldCenter = target.transform.TransformPoint(GenericTarget.center);
             float worldRadius = GenericTarget.radius * Mathf.Max(Mathf.Abs(worldScale.x), Mathf.Abs(worldScale.y), Mathf.Abs(worldScale.z));
 
-            savedCenter = worldCenter;
+            savedCenter = worldCenter; // transform.position is stored there, so no point of storing position as other variable 
             savedScale = worldScale;
             savedRadius = GenericTarget.radius;
 
