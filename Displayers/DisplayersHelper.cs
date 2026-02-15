@@ -1,5 +1,6 @@
 ﻿using HitboxViewer.Configs;
 using HitboxViewer.Enums;
+using HitboxViewer.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -84,15 +85,25 @@ namespace HitboxViewer.Displayers
 
         public static Vector3[] DrawTwoAxisSphere(Vector3 center, float worldRadius, float pointsPerRadius = RoundedHitboxConfig.DEFAULT_POINTS_PER_UNIT)
         {
-            Vector3[] first = DrawCircle(center, worldRadius, Enums.Plane.XZ, pointsPerRadius);
-            Vector3[] second = DrawCircle(center, worldRadius, Enums.Plane.XY, pointsPerRadius);
-            Vector3[] merged = new Vector3[first.Length + second.Length];
+            Vector3[] xz = DrawCircle(center, worldRadius, Enums.Plane.XZ, pointsPerRadius);
+            Vector3[] xy = DrawCircle(center, worldRadius, Enums.Plane.XY, pointsPerRadius);
 
-            Array.Copy(first, 0, merged, 0, first.Length);
-            Array.Copy(second, 0, merged, first.Length, second.Length);
-
-            return merged; 
+            return ArrayExtensions.Merge(xz, xy);
         }
+
+        public static Vector3[] DrawThreeAxisSphere(Vector3 center, float worldRadius, float pointsPerRadius = RoundedHitboxConfig.DEFAULT_POINTS_PER_UNIT)
+        {
+            Vector3[] xz = DrawCircle(center, worldRadius, Enums.Plane.XZ, pointsPerRadius);
+            Vector3[] yz = DrawCircle(center, worldRadius, Enums.Plane.YZ, pointsPerRadius);
+
+            Vector3[] xyFirst = DrawCircleQuarter(center, worldRadius, Quadrant.First, Enums.Plane.XY, pointsPerRadius);
+            Vector3[] xySecond = DrawCircleQuarter(center, worldRadius, Quadrant.Second, Enums.Plane.XY, pointsPerRadius);
+            Vector3[] xyThird = DrawCircleQuarter(center, worldRadius, Quadrant.Third, Enums.Plane.XY, pointsPerRadius);
+            Vector3[] xyFourth = DrawCircleQuarter(center, worldRadius, Quadrant.Fourth, Enums.Plane.XY, pointsPerRadius);
+
+            return ArrayExtensions.Merge(xz, xyFirst, yz, xySecond, xyThird, xyFourth);
+        }
+
         #endregion
 
         #region capsules

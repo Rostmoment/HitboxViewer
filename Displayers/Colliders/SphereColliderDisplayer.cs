@@ -26,7 +26,7 @@ namespace HitboxViewer.Displayers.Colliders
 
             RoundedHitboxConfig config = (RoundedHitboxConfig)HitboxViewerConfig.DefinitionOf<SphereCollider>().Config;
 
-            Vector3[] points = new Vector3[0];
+            Vector3[] points;
 
             switch (config.Algorithm)
             {
@@ -37,12 +37,13 @@ namespace HitboxViewer.Displayers.Colliders
                     points = DisplayersHelper.DrawFibonacciSphere(worldCenter, worldRadius, config.PointsPerUnit);
                     break;
                 case Enums.RoundedHitboxAlgorithm.ThreeAxis:
+                    points = DisplayersHelper.DrawThreeAxisSphere(worldCenter, worldRadius, config.PointsPerUnit);
                     break;
                 case Enums.RoundedHitboxAlgorithm.TwoAxis:
                     points = DisplayersHelper.DrawTwoAxisSphere(worldCenter, worldRadius, config.PointsPerUnit);
                     break;
                 default:
-                    break;
+                    throw new ArgumentException($"Unknown algorithm {config.Algorithm}");
             }
 
             SetPositions(points);
