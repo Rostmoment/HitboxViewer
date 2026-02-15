@@ -1,4 +1,5 @@
 ﻿using HitboxViewer.Configs;
+using HitboxViewer.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,35 +12,39 @@ using UniverseLib.UI.Models;
 
 namespace HitboxViewer.UI
 {
-    class SphereHitboxUI : BaseHitboxUI
+    class RoundedHitboxUI : BaseHitboxUI
     {
         public override void BuildConfigs()
         {
             base.BuildConfigs();
 
-            #region Fibonacci toggle
-            GameObject fibonacciBg = UIFactory.CreateVerticalGroup(content, "FibonacciToggleBg", false, true, true, true, 0, default, new Color(0.07f, 0.07f, 0.07f));
-            GameObject toggle = UIFactory.CreateToggle(fibonacciBg, "FibonacciToggle", out Toggle fibonacciToggle, out Text fibonacciText, new Color(0.1f, 0.1f, 0.1f));
-            fibonacciText.text = "Use Fibonacci algorithm";
-            fibonacciToggle.isOn = ((SphereHitboxConfig)hitboxType.Config).UseFibonacci;
+            #region Algorithm dropdown
+            GameObject algorithmBg = UIFactory.CreateVerticalGroup(content, "AlgorithmBG", false, true, true, true, 0, default, new Color(0.07f, 0.07f, 0.07f));
 
-            Text description = UIFactory.CreateLabel(fibonacciBg, $"FibonacciDescription", "If true, Fibonacci algorithm will be used instead of latitude-longitude algorithm for sphere. It is less accurate, but faster");
+            GameObject drop = UIFactory.CreateDropdown(algorithmBg, "AlgorithmDropdown", out Dropdown dropdown, "Algorithm", 14, (x) => { });
+            UIFactory.SetLayoutElement(drop, minHeight: 25, minWidth: 110, flexibleWidth: 999);
+
+            foreach (RoundedHitboxAlgorithms algorithm in RoundedHitboxAlgorithmExtensions.all)
+                dropdown.options.Add(new Dropdown.OptionData($"{algorithm} ({algorithm.GetDescription()})"));
+
+            Text description = UIFactory.CreateLabel(algorithmBg, $"AlgorithmDescription", "Defines what algorithm will be used for drawing rounded hitboxes");
             UIFactory.SetLayoutElement(description.gameObject, flexibleWidth: 1);
 
-            GameObject fibonacciButtonsBg = UIFactory.CreateHorizontalGroup(fibonacciBg, "StartWidthButtonsBG", false, true, true, true, 0, default, new Color(0.07f, 0.07f, 0.07f));
 
-            ButtonRef applyFibonacci = UIFactory.CreateButton(fibonacciButtonsBg, $"ApplyFibonacci", "Apply", new Color(0, 0.39f, 0f));
+            GameObject algorithmsButtonsBg = UIFactory.CreateHorizontalGroup(algorithmBg, "AlgoritgmButtonsBG", false, true, true, true, 0, default, new Color(0.07f, 0.07f, 0.07f));
+
+            ButtonRef applyFibonacci = UIFactory.CreateButton(algorithmsButtonsBg, $"ApplyAlgorithm", "Apply", new Color(0, 0.39f, 0f));
             applyFibonacci.OnClick += () =>
             {
-                ((SphereHitboxConfig)hitboxType.Config).UseFibonacci = fibonacciToggle.isOn;
+                ((RoundedHitboxConfig)hitboxType.Config).Algorithm = (RoundedHitboxAlgorithms)dropdown.value;
             };
             UIFactory.SetLayoutElement(applyFibonacci.Component.gameObject, 100, 25, 100, 25, 100, 25);
 
-            ButtonRef resetFibonacci = UIFactory.CreateButton(fibonacciButtonsBg, $"ResetFibonacci", "Reset", new Color(0.39f, 0f, 0f));
+            ButtonRef resetFibonacci = UIFactory.CreateButton(algorithmsButtonsBg, $"ResetAlgorithm", "Reset", new Color(0.39f, 0f, 0f));
             resetFibonacci.OnClick += () =>
             {
-                fibonacciToggle.isOn = SphereHitboxConfig.DEFAULT_USE_FIBONACCI_ALGORITHM;
-                ((SphereHitboxConfig)hitboxType.Config).UseFibonacci = SphereHitboxConfig.DEFAULT_USE_FIBONACCI_ALGORITHM;
+                dropdown.value = (int)RoundedHitboxConfig.DEFAULT_ALGORITHM;
+                ((RoundedHitboxConfig)hitboxType.Config).Algorithm = RoundedHitboxConfig.DEFAULT_ALGORITHM;
             };
             UIFactory.SetLayoutElement(resetFibonacci.Component.gameObject, 100, 25, 100, 25, 100, 25);
             #endregion
@@ -48,7 +53,7 @@ namespace HitboxViewer.UI
             GameObject pointsPerUnitBg = UIFactory.CreateVerticalGroup(content, "PointsPerUnitBg", false, true, true, true, 0, default, new Color(0.07f, 0.07f, 0.07f));
 
             InputFieldRef pointsPerUnitInput = UIFactory.CreateInputField(pointsPerUnitBg, "PointsPerUnitInput", "Points per unit");
-            pointsPerUnitInput.Text = ((SphereHitboxConfig)hitboxType.Config).PointsPerUnit.ToString();
+            pointsPerUnitInput.Text = ((RoundedHitboxConfig)hitboxType.Config).PointsPerUnit.ToString();
             UIFactory.SetLayoutElement(pointsPerUnitInput.Component.gameObject, flexibleWidth: 9999, minHeight: 25);
 
             Text pointsPerUnitDescription = UIFactory.CreateLabel(
@@ -56,8 +61,8 @@ namespace HitboxViewer.UI
                 "PointsPerUnitDescription",
                 $"Defines amount of points per unit for rounded hitboxes\n" +
                 $"For Fibonacci algorithm unit is surface area of hitbox\n" +
-                $"For latitude-longitude algorithm unit is radius\n" +
-                $"Default: {SphereHitboxConfig.DEFAULT_POINTS_PER_UNIT}"
+                $"For other unit is radius\n" +
+                $"Default: {RoundedHitboxConfig.DEFAULT_POINTS_PER_UNIT}"
             );
             UIFactory.SetLayoutElement(pointsPerUnitDescription.gameObject, flexibleWidth: 1);
 
@@ -68,19 +73,19 @@ namespace HitboxViewer.UI
             {
                 if (!float.TryParse(pointsPerUnitInput.Text, out float value))
                 {
-                    value = SphereHitboxConfig.DEFAULT_POINTS_PER_UNIT;
-                    pointsPerUnitInput.Text = SphereHitboxConfig.DEFAULT_POINTS_PER_UNIT.ToString();
+                    value = RoundedHitboxConfig.DEFAULT_POINTS_PER_UNIT;
+                    pointsPerUnitInput.Text = RoundedHitboxConfig.DEFAULT_POINTS_PER_UNIT.ToString();
                 }
 
-                ((SphereHitboxConfig)hitboxType.Config).PointsPerUnit = value;
+                ((RoundedHitboxConfig)hitboxType.Config).PointsPerUnit = value;
             };
             UIFactory.SetLayoutElement(applyPointsPerUnit.Component.gameObject, 100, 25, 100, 25, 100, 25);
 
             ButtonRef resetPointsPerUnit = UIFactory.CreateButton(pointsPerUnitButtonsBg, "ResetPointsPerUnit", "Reset", new Color(0.39f, 0f, 0f));
             resetPointsPerUnit.OnClick += () =>
             {
-                pointsPerUnitInput.Text = SphereHitboxConfig.DEFAULT_POINTS_PER_UNIT.ToString();
-                ((SphereHitboxConfig)hitboxType.Config).PointsPerUnit = SphereHitboxConfig.DEFAULT_POINTS_PER_UNIT;
+                pointsPerUnitInput.Text = RoundedHitboxConfig.DEFAULT_POINTS_PER_UNIT.ToString();
+                ((RoundedHitboxConfig)hitboxType.Config).PointsPerUnit = RoundedHitboxConfig.DEFAULT_POINTS_PER_UNIT;
             };
             UIFactory.SetLayoutElement(resetPointsPerUnit.Component.gameObject, 100, 25, 100, 25, 100, 25);
             #endregion

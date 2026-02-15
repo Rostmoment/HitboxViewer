@@ -41,8 +41,8 @@ namespace HitboxViewer.Configs
 
             [typeof(SphereCollider)] = new(
                 nameof(SphereCollider),
-                new SphereHitboxConfig(KeyCode.None, HexToColor("#0D2FDB"), HexToColor("#0D2FDB")),
-                new SphereHitboxUI(),
+                new RoundedHitboxConfig(KeyCode.None, HexToColor("#0D2FDB"), HexToColor("#0D2FDB")),
+                new RoundedHitboxUI(),
                 HitboxesFlags.Trigger | HitboxesFlags.NotTrigger
             ),
             [typeof(CapsuleCollider)] = new(
@@ -113,8 +113,8 @@ namespace HitboxViewer.Configs
 
             [typeof(NavMeshObstacle)] = new(
                 nameof(NavMeshObstacle),
-                new SphereHitboxConfig(KeyCode.None, HexToColor("#008080"), HexToColor("#008080")),
-                new SphereHitboxUI(),
+                new RoundedHitboxConfig(KeyCode.None, HexToColor("#008080"), HexToColor("#008080")),
+                new RoundedHitboxUI(),
                 HitboxesFlags.BoxNavMeshObstacle | HitboxesFlags.CapsuleNavMeshObstacle
             ),
         };

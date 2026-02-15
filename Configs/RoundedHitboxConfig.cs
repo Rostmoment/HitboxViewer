@@ -1,4 +1,5 @@
 ﻿using BepInEx.Configuration;
+using HitboxViewer.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,12 +9,12 @@ using UnityEngine;
 
 namespace HitboxViewer.Configs
 {
-    class SphereHitboxConfig : BaseHitboxConfig
+    class RoundedHitboxConfig : BaseHitboxConfig
     {
         public const float DEFAULT_POINTS_PER_UNIT = 100f;
-        public const bool DEFAULT_USE_FIBONACCI_ALGORITHM = false;
+        public const RoundedHitboxAlgorithms DEFAULT_ALGORITHM = RoundedHitboxAlgorithms.LatitudeLongitude;
 
-        public SphereHitboxConfig(KeyCode defaultKey, Color defaultStartColor, Color defaultEndColor) : base(defaultKey, defaultStartColor, defaultEndColor)
+        public RoundedHitboxConfig(KeyCode defaultKey, Color defaultStartColor, Color defaultEndColor) : base(defaultKey, defaultStartColor, defaultEndColor)
         {
         }
 
@@ -25,11 +26,11 @@ namespace HitboxViewer.Configs
             set => pointsPerUnit.Value = value;
         }
 
-        private ConfigEntry<bool> useFibonacci;
-        public bool UseFibonacci
+        private ConfigEntry<RoundedHitboxAlgorithms> algorithm;
+        public RoundedHitboxAlgorithms Algorithm
         {
-            get => useFibonacci.Value;
-            set => useFibonacci.Value = value;
+            get => algorithm.Value;
+            set => algorithm.Value = value;
         }
         #endregion
 
@@ -40,14 +41,14 @@ namespace HitboxViewer.Configs
                 hitboxType.Name,
                 "Points per unit",
                 DEFAULT_POINTS_PER_UNIT,
-                "Defines amount of points per unit for rounded hitboxes\nFor Fibonacci algorithm unit is surface area of hitbox\nFor latitude-longitude algorithm unit is radius"
+                "Defines amount of points per unit for rounded hitboxes\nFor Fibonacci algorithm unit is surface area of hitbox\nFor other unit is radius"
             );
 
-            useFibonacci = BasePlugin.Instance.Config.Bind<bool>(
+            algorithm = BasePlugin.Instance.Config.Bind<RoundedHitboxAlgorithms>(
                 hitboxType.Name,
                 "Use Fibonacci algorithm",
-                DEFAULT_USE_FIBONACCI_ALGORITHM,
-                "If true, Fibonacci algorithm will be used instead of latitude-longitude algorithm for sphere. It is less accurate, but faster"
+                DEFAULT_ALGORITHM,
+                "Defines what algorithm will be used for drawing rounded hitboxes"
             );
         }
     }

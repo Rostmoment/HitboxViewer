@@ -24,14 +24,25 @@ namespace HitboxViewer.Displayers.Colliders
             savedScale = worldScale;
             savedRadius = GenericTarget.radius;
 
-            SphereHitboxConfig config = (SphereHitboxConfig)HitboxViewerConfig.DefinitionOf<SphereCollider>().Config;
+            RoundedHitboxConfig config = (RoundedHitboxConfig)HitboxViewerConfig.DefinitionOf<SphereCollider>().Config;
 
-            Vector3[] points;
+            Vector3[] points = new Vector3[0];
 
-            if (config.UseFibonacci)
-                points = DisplayersHelper.DrawFibonacciSphere(worldCenter, worldRadius, config.PointsPerUnit);
-            else
-                points = DisplayersHelper.DrawLatitudeLongitudeSphere(worldCenter, worldRadius, config.PointsPerUnit);
+            switch (config.Algorithm)
+            {
+                case Enums.RoundedHitboxAlgorithms.LatitudeLongitude:
+                    points = DisplayersHelper.DrawLatitudeLongitudeSphere(worldCenter, worldRadius, config.PointsPerUnit);
+                    break;
+                case Enums.RoundedHitboxAlgorithms.Fibonacci:
+                    points = DisplayersHelper.DrawFibonacciSphere(worldCenter, worldRadius, config.PointsPerUnit);
+                    break;
+                case Enums.RoundedHitboxAlgorithms.ThreeAxis:
+                    break;
+                case Enums.RoundedHitboxAlgorithms.TwoAxis:
+                    break;
+                default:
+                    break;
+            }
 
             SetPositions(points);
         }
