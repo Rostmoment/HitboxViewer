@@ -12,7 +12,7 @@ namespace HitboxViewer.Configs
     class RoundedHitboxConfig : BaseHitboxConfig
     {
         public const float DEFAULT_POINTS_PER_UNIT = 100f;
-        public const RoundedHitboxAlgorithms DEFAULT_ALGORITHM = RoundedHitboxAlgorithms.LatitudeLongitude;
+        public const RoundedHitboxAlgorithm DEFAULT_ALGORITHM = RoundedHitboxAlgorithm.LatitudeLongitude;
 
         public RoundedHitboxConfig(KeyCode defaultKey, Color defaultStartColor, Color defaultEndColor) : base(defaultKey, defaultStartColor, defaultEndColor)
         {
@@ -26,8 +26,8 @@ namespace HitboxViewer.Configs
             set => pointsPerUnit.Value = value;
         }
 
-        private ConfigEntry<RoundedHitboxAlgorithms> algorithm;
-        public RoundedHitboxAlgorithms Algorithm
+        private ConfigEntry<RoundedHitboxAlgorithm> algorithm;
+        public RoundedHitboxAlgorithm Algorithm
         {
             get => algorithm.Value;
             set => algorithm.Value = value;
@@ -41,12 +41,12 @@ namespace HitboxViewer.Configs
                 hitboxType.Name,
                 "Points per unit",
                 DEFAULT_POINTS_PER_UNIT,
-                "Defines amount of points per unit for rounded hitboxes\nFor Fibonacci algorithm unit is surface area of hitbox\nFor other unit is radius"
+                "Defines amount of points per unit, radius (and height for capsules) for rounded hitboxes"
             );
 
-            algorithm = BasePlugin.Instance.Config.Bind<RoundedHitboxAlgorithms>(
+            algorithm = BasePlugin.Instance.Config.Bind<RoundedHitboxAlgorithm>(
                 hitboxType.Name,
-                "Use Fibonacci algorithm",
+                "Sphere draw algorithm",
                 DEFAULT_ALGORITHM,
                 "Defines what algorithm will be used for drawing rounded hitboxes"
             );

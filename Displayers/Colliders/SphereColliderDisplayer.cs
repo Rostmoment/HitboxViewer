@@ -30,15 +30,16 @@ namespace HitboxViewer.Displayers.Colliders
 
             switch (config.Algorithm)
             {
-                case Enums.RoundedHitboxAlgorithms.LatitudeLongitude:
+                case Enums.RoundedHitboxAlgorithm.LatitudeLongitude:
                     points = DisplayersHelper.DrawLatitudeLongitudeSphere(worldCenter, worldRadius, config.PointsPerUnit);
                     break;
-                case Enums.RoundedHitboxAlgorithms.Fibonacci:
+                case Enums.RoundedHitboxAlgorithm.Fibonacci:
                     points = DisplayersHelper.DrawFibonacciSphere(worldCenter, worldRadius, config.PointsPerUnit);
                     break;
-                case Enums.RoundedHitboxAlgorithms.ThreeAxis:
+                case Enums.RoundedHitboxAlgorithm.ThreeAxis:
                     break;
-                case Enums.RoundedHitboxAlgorithms.TwoAxis:
+                case Enums.RoundedHitboxAlgorithm.TwoAxis:
+                    points = DisplayersHelper.DrawTwoAxisSphere(worldCenter, worldRadius, config.PointsPerUnit);
                     break;
                 default:
                     break;

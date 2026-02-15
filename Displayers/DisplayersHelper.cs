@@ -1,4 +1,6 @@
-﻿using System;
+﻿using HitboxViewer.Configs;
+using HitboxViewer.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,7 +12,8 @@ namespace HitboxViewer.Displayers
 {
     public static class DisplayersHelper
     {
-        public static Vector3[] DrawFibonacciSphere(Vector3 center, float worldRadius, float pointsPerRadius = 100f)
+        #region spheres
+        public static Vector3[] DrawFibonacciSphere(Vector3 center, float worldRadius, float pointsPerRadius = RoundedHitboxConfig.DEFAULT_POINTS_PER_UNIT)
         {
             if (worldRadius <= 0)
                 throw new ArgumentOutOfRangeException(nameof(worldRadius), "Radius should be positive");
@@ -40,8 +43,14 @@ namespace HitboxViewer.Displayers
             return points;
         }
 
-        public static Vector3[] DrawLatitudeLongitudeSphere(Vector3 center, float worldRadius, float pointsPerRadius = 100f)
+        public static Vector3[] DrawLatitudeLongitudeSphere(Vector3 center, float worldRadius, float pointsPerRadius = RoundedHitboxConfig.DEFAULT_POINTS_PER_UNIT)
         {
+            if (worldRadius <= 0)
+                throw new ArgumentOutOfRangeException(nameof(worldRadius), "Radius should be positive");
+
+            if (pointsPerRadius <= 0)
+                throw new ArgumentOutOfRangeException(nameof(pointsPerRadius), "Point per radius should be positive");
+
             int totalPoints = Mathf.RoundToInt(pointsPerRadius * worldRadius);
 
             int latSteps = Mathf.Max(4, Mathf.RoundToInt(Mathf.Sqrt(totalPoints / 2f)));
@@ -73,19 +82,33 @@ namespace HitboxViewer.Displayers
             return points;
         }
 
-        public static Vector3[] DrawFibonacciCapsule(Vector3 center, float radius, float height, float pointsPerUnit = 100f)
+        public static Vector3[] DrawTwoAxisSphere(Vector3 center, float worldRadius, float pointsPerRadius = RoundedHitboxConfig.DEFAULT_POINTS_PER_UNIT)
         {
-            if (radius <= 0)
-                throw new ArgumentOutOfRangeException(nameof(radius));
+            Vector3[] first = DrawCircle(center, worldRadius, Enums.Plane.XZ, pointsPerRadius);
+            Vector3[] second = DrawCircle(center, worldRadius, Enums.Plane.XY, pointsPerRadius);
+            Vector3[] merged = new Vector3[first.Length + second.Length];
 
-            if (height < 0)
-                throw new ArgumentOutOfRangeException(nameof(height));
+            Array.Copy(first, 0, merged, 0, first.Length);
+            Array.Copy(second, 0, merged, first.Length, second.Length);
+
+            return merged; 
+        }
+        #endregion
+
+        #region capsules
+        public static Vector3[] DrawFibonacciCapsule(Vector3 center, float worldRadius, float worldHeight, float pointsPerUnit = RoundedHitboxConfig.DEFAULT_POINTS_PER_UNIT)
+        {
+            if (worldRadius <= 0)
+                throw new ArgumentOutOfRangeException(nameof(worldRadius), "Radius should be positive");
+
+            if (worldHeight < 0)
+                throw new ArgumentOutOfRangeException(nameof(worldHeight), "Height should be positive");
 
             if (pointsPerUnit <= 0)
-                throw new ArgumentOutOfRangeException(nameof(pointsPerUnit));
+                throw new ArgumentOutOfRangeException(nameof(pointsPerUnit), "Points per unit should be positive");
 
-            float cylinderHeight = Mathf.Max(0f, height - 2f * radius);
-            int spherePoints = Mathf.RoundToInt(pointsPerUnit * radius);
+            float cylinderHeight = Mathf.Max(0f, worldHeight - 2f * worldRadius);
+            int spherePoints = Mathf.RoundToInt(pointsPerUnit * worldRadius);
             int cylinderPoints = Mathf.RoundToInt(pointsPerUnit * cylinderHeight);
 
             List<Vector3> points = new List<Vector3>(spherePoints * 2 + cylinderPoints);
@@ -108,12 +131,12 @@ namespace HitboxViewer.Displayers
                 if (y >= 0f) // top one
                 {
                     Vector3 sphereCenter = center + Vector3.up * (cylinderHeight / 2f);
-                    points.Add(sphereCenter + dir * radius);
+                    points.Add(sphereCenter + dir * worldRadius);
                 }
                 else // bottom one
                 {
                     Vector3 sphereCenter = center - Vector3.up * (cylinderHeight / 2f);
-                    points.Add(sphereCenter + dir * radius);
+                    points.Add(sphereCenter + dir * worldRadius);
                 }
             }
 
@@ -127,26 +150,26 @@ namespace HitboxViewer.Displayers
                 float x = Mathf.Cos(phi);
                 float z = Mathf.Sin(phi);
 
-                points.Add(center + new Vector3(x * radius, y, z * radius));
+                points.Add(center + new Vector3(x * worldRadius, y, z * worldRadius));
             }
 
             return points.ToArray();
         }
 
-        public static Vector3[] DrawLatitudeLongitudeCapsule(Vector3 center, float radius, float height, float pointsPerUnit = 100f)
+        public static Vector3[] DrawLatitudeLongitudeCapsule(Vector3 center, float worldRadius, float worldHeight, float pointsPerUnit = RoundedHitboxConfig.DEFAULT_POINTS_PER_UNIT)
         {
-            if (radius <= 0)
-                throw new ArgumentOutOfRangeException(nameof(radius));
+            if (worldRadius <= 0)
+                throw new ArgumentOutOfRangeException(nameof(worldRadius), "Radius should be positive");
 
-            if (height < 0)
-                throw new ArgumentOutOfRangeException(nameof(height));
+            if (worldHeight < 0)
+                throw new ArgumentOutOfRangeException(nameof(worldHeight), "Height should be positive");
 
             if (pointsPerUnit <= 0)
-                throw new ArgumentOutOfRangeException(nameof(pointsPerUnit));
+                throw new ArgumentOutOfRangeException(nameof(pointsPerUnit), "Points per unit should be positive");
 
-            float cylinderHeight = Mathf.Max(0f, height - 2f * radius);
+            float cylinderHeight = Mathf.Max(0f, worldHeight - 2f * worldRadius);
 
-            int totalPoints = Mathf.RoundToInt(pointsPerUnit * (radius + cylinderHeight));
+            int totalPoints = Mathf.RoundToInt(pointsPerUnit * (worldRadius + cylinderHeight));
             int latSteps = Mathf.Max(4, Mathf.RoundToInt(Mathf.Sqrt(totalPoints / 2f)));
             int lonSteps = latSteps * 2;
 
@@ -157,7 +180,7 @@ namespace HitboxViewer.Displayers
             
             // Top hemisphere
             int hemiLatSteps = latSteps / 2;
-            float latStep = (Mathf.PI / 2f) / hemiLatSteps;
+            float latStep = MathConstants.HALF_PI / hemiLatSteps;
 
             Vector3 topCenter = center + Vector3.up * (cylinderHeight / 2f);
 
@@ -173,9 +196,9 @@ namespace HitboxViewer.Displayers
 
                     points.Add(
                         topCenter + new Vector3(
-                            radius * sinA * Mathf.Cos(b),
-                            radius * cosA,
-                            radius * sinA * Mathf.Sin(b)
+                            worldRadius * sinA * Mathf.Cos(b),
+                            worldRadius * cosA,
+                            worldRadius * sinA * Mathf.Sin(b)
                         )
                     );
                 }
@@ -184,7 +207,7 @@ namespace HitboxViewer.Displayers
            
 
             // Cyllinder
-            int cylinderSteps = Mathf.Max(1, Mathf.RoundToInt(pointsPerUnit * cylinderHeight / radius));
+            int cylinderSteps = Mathf.Max(1, Mathf.RoundToInt(pointsPerUnit * cylinderHeight / worldRadius));
             float yStep = cylinderHeight / cylinderSteps;
 
             for (int i = 1; i < cylinderSteps; i++)
@@ -197,9 +220,9 @@ namespace HitboxViewer.Displayers
 
                     points.Add(
                         center + new Vector3(
-                            radius * Mathf.Cos(b),
+                            worldRadius * Mathf.Cos(b),
                             y,
-                            radius * Mathf.Sin(b)
+                            worldRadius * Mathf.Sin(b)
                         )
                     );
                 }
@@ -220,9 +243,9 @@ namespace HitboxViewer.Displayers
 
                     points.Add(
                         bottomCenter + new Vector3(
-                            radius * sinA * Mathf.Cos(b),
-                            -radius * cosA,
-                            radius * sinA * Mathf.Sin(b)
+                            worldRadius * sinA * Mathf.Cos(b),
+                            -worldRadius * cosA,
+                            worldRadius * sinA * Mathf.Sin(b)
                         )
                     );
                 }
@@ -230,6 +253,58 @@ namespace HitboxViewer.Displayers
 
             return points.ToArray();
         }
+        #endregion
 
+        #region circles
+        public static Vector3[] DrawCircleQuarter(Vector3 center, float worldRadius, Quadrant quadrant, Enums.Plane plane, float pointsPerRadius = RoundedHitboxConfig.DEFAULT_POINTS_PER_UNIT)
+        {
+            int pointsCount = Mathf.RoundToInt(pointsPerRadius * worldRadius);
+            Vector3[] points = new Vector3[pointsCount];
+            float step = MathConstants.HALF_PI / pointsCount;
+
+            quadrant.GetMinMax(out float min, out float max);
+            int index = 0;
+
+            for (float f = min; f <= max; f += step)
+            {
+                if (index >= pointsCount)
+                    break;
+                
+                Vector3 vector = plane switch
+                {
+                    Enums.Plane.XY => new Vector3(center.x + worldRadius * Mathf.Cos(f), center.y + worldRadius * Mathf.Sin(f), center.z),
+                    Enums.Plane.XZ => new Vector3(center.x + worldRadius * Mathf.Cos(f), center.y, center.z + worldRadius * Mathf.Sin(f)),
+                    Enums.Plane.YZ => new Vector3(center.x, center.y + worldRadius * Mathf.Cos(f), center.z + worldRadius * Mathf.Sin(f)),
+                    _ => throw new ArgumentException($"Unknown plane! {plane}"),
+                };
+                points[index++] = vector;
+            }
+
+            return points;
+        }
+
+        public static Vector3[] DrawCircle(Vector3 center, float worldRadius, Enums.Plane plane, float pointsPerRadius = RoundedHitboxConfig.DEFAULT_POINTS_PER_UNIT)
+        {
+            int pointsCount = Mathf.RoundToInt(pointsPerRadius * worldRadius);
+            Vector3[] points = new Vector3[pointsCount];
+            float step = MathConstants.TWO_PI / pointsCount;
+
+            for (int i = 0; i < pointsCount; i++)
+            {
+                float f = i * step;
+                Vector3 vector = plane switch
+                {
+                    Enums.Plane.XY => new Vector3(center.x + worldRadius * Mathf.Cos(f), center.y + worldRadius * Mathf.Sin(f), center.z),
+                    Enums.Plane.XZ => new Vector3(center.x + worldRadius * Mathf.Cos(f), center.y, center.z + worldRadius * Mathf.Sin(f)),
+                    Enums.Plane.YZ => new Vector3(center.x, center.y + worldRadius * Mathf.Cos(f), center.z + worldRadius * Mathf.Sin(f)),
+                    _ => throw new ArgumentException($"Unknown plane! {plane}"),
+                };
+
+                points[i] = vector;
+            }
+
+            return points;
+        }
+        #endregion
     }
 }
