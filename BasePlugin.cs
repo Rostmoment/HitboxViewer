@@ -1,12 +1,14 @@
 ﻿using BepInEx;
 using BepInEx.Logging;
 using HarmonyLib;
+using HitboxViewer.Configs;
 using HitboxViewer.Displayers;
 using HitboxViewer.Displayers.Colliders;
 using HitboxViewer.UI;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace HitboxViewer
 {
@@ -79,6 +81,12 @@ namespace HitboxViewer
                     BaseDisplayer displayer = BaseDisplayer.GetOrAdd(collider, displayerType);
                     displayer.Visualize();
                 }
+            }
+
+            foreach (NavMeshObstacle nav in GameObject.FindObjectsOfType<NavMeshObstacle>())
+            {
+                NavMeshObstacleDisplayer displayer = BaseDisplayer.GetOrAdd<NavMeshObstacleDisplayer>(nav);
+                displayer.Visualize();
             }
         }
     }

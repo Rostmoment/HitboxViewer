@@ -73,5 +73,163 @@ namespace HitboxViewer.Displayers
             return points;
         }
 
+        public static Vector3[] DrawFibonacciCapsule(Vector3 center, float radius, float height, float pointsPerUnit = 100f)
+        {
+            if (radius <= 0)
+                throw new ArgumentOutOfRangeException(nameof(radius));
+
+            if (height < 0)
+                throw new ArgumentOutOfRangeException(nameof(height));
+
+            if (pointsPerUnit <= 0)
+                throw new ArgumentOutOfRangeException(nameof(pointsPerUnit));
+
+            float cylinderHeight = Mathf.Max(0f, height - 2f * radius);
+            int spherePoints = Mathf.RoundToInt(pointsPerUnit * radius);
+            int cylinderPoints = Mathf.RoundToInt(pointsPerUnit * cylinderHeight);
+
+            List<Vector3> points = new List<Vector3>(spherePoints * 2 + cylinderPoints);
+
+            float offset = 2f / spherePoints;
+
+
+            // Hemispheres
+            for (int i = 0; i < spherePoints; i++)
+            {
+                float y = ((i * offset) - 1) + (offset / 2);
+                float r = Mathf.Sqrt(1 - y * y);
+                float phi = i * MathConstants.GOLDEN_ANGLE;
+
+                float x = Mathf.Cos(phi) * r;
+                float z = Mathf.Sin(phi) * r;
+
+                Vector3 dir = new Vector3(x, y, z);
+
+                if (y >= 0f) // top one
+                {
+                    Vector3 sphereCenter = center + Vector3.up * (cylinderHeight / 2f);
+                    points.Add(sphereCenter + dir * radius);
+                }
+                else // bottom one
+                {
+                    Vector3 sphereCenter = center - Vector3.up * (cylinderHeight / 2f);
+                    points.Add(sphereCenter + dir * radius);
+                }
+            }
+
+            // Cyllinder
+            for (int i = 0; i < cylinderPoints; i++)
+            {
+                float t = (float)i / cylinderPoints;
+                float y = Mathf.Lerp(-cylinderHeight / 2f, cylinderHeight / 2f, t);
+
+                float phi = i * MathConstants.GOLDEN_ANGLE;
+                float x = Mathf.Cos(phi);
+                float z = Mathf.Sin(phi);
+
+                points.Add(center + new Vector3(x * radius, y, z * radius));
+            }
+
+            return points.ToArray();
+        }
+
+        public static Vector3[] DrawLatitudeLongitudeCapsule(Vector3 center, float radius, float height, float pointsPerUnit = 100f)
+        {
+            if (radius <= 0)
+                throw new ArgumentOutOfRangeException(nameof(radius));
+
+            if (height < 0)
+                throw new ArgumentOutOfRangeException(nameof(height));
+
+            if (pointsPerUnit <= 0)
+                throw new ArgumentOutOfRangeException(nameof(pointsPerUnit));
+
+            float cylinderHeight = Mathf.Max(0f, height - 2f * radius);
+
+            int totalPoints = Mathf.RoundToInt(pointsPerUnit * (radius + cylinderHeight));
+            int latSteps = Mathf.Max(4, Mathf.RoundToInt(Mathf.Sqrt(totalPoints / 2f)));
+            int lonSteps = latSteps * 2;
+
+            List<Vector3> points = new List<Vector3>();
+
+            float lonStep = 2f * Mathf.PI / lonSteps;
+
+            
+            // Top hemisphere
+            int hemiLatSteps = latSteps / 2;
+            float latStep = (Mathf.PI / 2f) / hemiLatSteps;
+
+            Vector3 topCenter = center + Vector3.up * (cylinderHeight / 2f);
+
+            for (int i = 0; i <= hemiLatSteps; i++)
+            {
+                float a = i * latStep; // 0 to pi/2
+                float sinA = Mathf.Sin(a);
+                float cosA = Mathf.Cos(a);
+
+                for (int j = 0; j < lonSteps; j++)
+                {
+                    float b = j * lonStep;
+
+                    points.Add(
+                        topCenter + new Vector3(
+                            radius * sinA * Mathf.Cos(b),
+                            radius * cosA,
+                            radius * sinA * Mathf.Sin(b)
+                        )
+                    );
+                }
+            }
+
+           
+
+            // Cyllinder
+            int cylinderSteps = Mathf.Max(1, Mathf.RoundToInt(pointsPerUnit * cylinderHeight / radius));
+            float yStep = cylinderHeight / cylinderSteps;
+
+            for (int i = 1; i < cylinderSteps; i++)
+            {
+                float y = -cylinderHeight / 2f + i * yStep;
+
+                for (int j = 0; j < lonSteps; j++)
+                {
+                    float b = j * lonStep;
+
+                    points.Add(
+                        center + new Vector3(
+                            radius * Mathf.Cos(b),
+                            y,
+                            radius * Mathf.Sin(b)
+                        )
+                    );
+                }
+            }
+
+            // Bottom hemisphere
+            Vector3 bottomCenter = center - Vector3.up * (cylinderHeight / 2f);
+
+            for (int i = 0; i <= hemiLatSteps; i++)
+            {
+                float a = i * latStep; // 0 to pi/2
+                float sinA = Mathf.Sin(a);
+                float cosA = Mathf.Cos(a);
+
+                for (int j = 0; j < lonSteps; j++)
+                {
+                    float b = j * lonStep;
+
+                    points.Add(
+                        bottomCenter + new Vector3(
+                            radius * sinA * Mathf.Cos(b),
+                            -radius * cosA,
+                            radius * sinA * Mathf.Sin(b)
+                        )
+                    );
+                }
+            }
+
+            return points.ToArray();
+        }
+
     }
 }

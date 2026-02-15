@@ -1,5 +1,4 @@
 ﻿using BepInEx.Configuration;
-using HitboxViewer.Configs;
 using HitboxViewer.Flags;
 using HitboxViewer.UI;
 using System;
@@ -7,7 +6,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace HitboxViewer
+namespace HitboxViewer.Configs
 {
     static class HitboxViewerConfig
     {
@@ -114,8 +113,9 @@ namespace HitboxViewer
 
             [typeof(NavMeshObstacle)] = new(
                 nameof(NavMeshObstacle),
-                new(KeyCode.None, HexToColor("#008080"), HexToColor("#008080")),
-                HitboxesFlags.BoxNavMeshObstacle | HitboxesFlags.SphereNavMeshObstacle
+                new SphereHitboxConfig(KeyCode.None, HexToColor("#008080"), HexToColor("#008080")),
+                new SphereHitboxUI(),
+                HitboxesFlags.BoxNavMeshObstacle | HitboxesFlags.CapsuleNavMeshObstacle
             ),
         };
             

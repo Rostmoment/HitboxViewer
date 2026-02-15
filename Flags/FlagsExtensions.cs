@@ -13,7 +13,7 @@ namespace HitboxViewer.Flags
             [HitboxesFlags.Trigger] = "Show where isTrigger equals to true",
             [HitboxesFlags.NotTrigger] = "Show where isTrigger equals to false",
             [HitboxesFlags.BoxNavMeshObstacle] = "Show boxes",
-            [HitboxesFlags.SphereNavMeshObstacle] = "Show spheres",
+            [HitboxesFlags.CapsuleNavMeshObstacle] = "Show capsules",
         };
         public static readonly HitboxesFlags[] all = Enum.GetValues(typeof(HitboxesFlags)).Cast<HitboxesFlags>().Where(f => f != HitboxesFlags.None).ToArray();
 

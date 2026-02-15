@@ -1,4 +1,5 @@
-﻿using HitboxViewer.Flags;
+﻿using HitboxViewer.Configs;
+using HitboxViewer.Flags;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,6 +20,7 @@ namespace HitboxViewer.Displayers
         #region creation of line renderer and instance management
         protected static Dictionary<Component, BaseDisplayer> displayers = new Dictionary<Component, BaseDisplayer>();
 
+        public static T GetOrAdd<T>(Component component) where T : BaseDisplayer => (T)GetOrAdd(component, typeof(T));
         public static BaseDisplayer GetOrAdd(Component component, Type displayerType)
         {
             if (displayers.TryGetValue(component, out BaseDisplayer diplayer))
