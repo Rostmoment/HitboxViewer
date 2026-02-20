@@ -33,6 +33,7 @@ namespace HitboxViewer
         {
             [typeof(BoxCollider)] = typeof(BoxColliderDisplayer),
             [typeof(SphereCollider)] = typeof(SphereColliderDisplayer),
+            [typeof(CapsuleCollider)] = typeof(CapsuleColliderDisplayer),
             [typeof(MeshCollider)] = typeof(MeshColliderDisplayer),
         };
 

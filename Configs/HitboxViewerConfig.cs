@@ -48,7 +48,8 @@ namespace HitboxViewer.Configs
             ),
             [typeof(CapsuleCollider)] = new(
                 nameof(CapsuleCollider),
-                new(KeyCode.None, HexToColor("#28DB0D"), HexToColor("#28DB0D")),
+                new RoundedHitboxConfig(KeyCode.None, HexToColor("#28DB0D"), HexToColor("#28DB0D"), RoundedHitboxAlgorithm.ThreeAxis),
+                new RoundedHitboxUI(),
                 HitboxesFlags.Trigger | HitboxesFlags.NotTrigger
             ),
 

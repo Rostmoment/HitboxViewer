@@ -100,12 +100,13 @@ namespace HitboxViewer.Displayers
     }
     public abstract class BaseDisplayer<T> : BaseDisplayer where T : Component
     {
+        protected HitboxDefinition Definition => HitboxViewerConfig.DefinitionOf<T>();
         protected T GenericTarget => (T)target;
         public bool AnyFlagEnabled
         {
             get
             {
-                HitboxDefinition type = HitboxViewerConfig.DefinitionOf<T>();
+                HitboxDefinition type = Definition;
                 foreach (HitboxesFlags flag in FlagsExtensions.all)
                 {
                     if (type.Flags.IsEnabled(flag) && HitboxFlags.HasFlag(flag))
@@ -131,7 +132,7 @@ namespace HitboxViewer.Displayers
             if (!lineRenderer.IsNullOrDestroyed())
                 return;
 
-            HitboxDefinition definition = HitboxViewerConfig.DefinitionOf<T>();
+            HitboxDefinition definition = Definition;
             lineRenderer = gameObject.AddComponent<LineRenderer>();
 
             lineRenderer.material = new Material(Shader.Find(HitboxViewerConfig.ShaderName))

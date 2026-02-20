@@ -58,7 +58,7 @@ namespace HitboxViewer.Displayers.Helpers
                 }
             }
 
-            // Cyllinder
+            // Cylinder
             for (int i = 0; i < cylinderPoints; i++)
             {
                 float t = (float)i / cylinderPoints;
@@ -124,7 +124,7 @@ namespace HitboxViewer.Displayers.Helpers
 
            
 
-            // Cyllinder
+            // Cylinder
             int cylinderSteps = Mathf.Max(1, Mathf.RoundToInt(pointsPerUnit * cylinderHeight / worldRadius));
             float yStep = cylinderHeight / cylinderSteps;
 
@@ -184,19 +184,51 @@ namespace HitboxViewer.Displayers.Helpers
                 throw new ArgumentOutOfRangeException(nameof(pointsPerUnit), "Points per unit should be positive");
 
             float centerOffset = Mathf.Abs((worldHeight - 2 * worldRadius) / 2);
-            Vector3 topSphereCetner = center + Vector3.up * centerOffset;
-            Vector3 bottomSphereCetner = center - Vector3.up * centerOffset;
+            Vector3 topSphereCenter = center + Vector3.up * centerOffset;
+            Vector3 bottomSphereCenter = center - Vector3.up * centerOffset;
 
-            Vector3[] topCircle = CircleDisplayerHelper.DrawCircle(topSphereCetner, worldRadius, Enums.Plane.XZ, pointsPerUnit);
-            Vector3[] bottomCircle = CircleDisplayerHelper.DrawCircle(bottomSphereCetner, worldRadius, Enums.Plane.XZ, Quadrant.Third, pointsPerUnit);
+            Vector3[] topCircle = CircleDisplayerHelper.DrawCircle(topSphereCenter, worldRadius, Enums.Plane.XZ, pointsPerUnit);
+            Vector3[] bottomCircle = CircleDisplayerHelper.DrawCircle(bottomSphereCenter, worldRadius, Enums.Plane.XZ, Quadrant.Third, pointsPerUnit);
 
-            Vector3[] xyFirstTop = CircleDisplayerHelper.DrawCircleQuarter(topSphereCetner, worldRadius, Quadrant.First, Enums.Plane.XY, pointsPerUnit);
-            Vector3[] xySecondTop = CircleDisplayerHelper.DrawCircleQuarter(topSphereCetner, worldRadius, Quadrant.Second, Enums.Plane.XY, pointsPerUnit);
-            Vector3[] xyFirstBottom = CircleDisplayerHelper.DrawCircleQuarter(bottomSphereCetner, worldRadius, Quadrant.Third, Enums.Plane.XY, pointsPerUnit); // actually third quadrant because previous is second
-            Vector3[] xySecondBottom = CircleDisplayerHelper.DrawCircleQuarter(bottomSphereCetner, worldRadius, Quadrant.Fourth, Enums.Plane.XY, pointsPerUnit);
+            Vector3[] xyFirst = CircleDisplayerHelper.DrawCircleQuarter(topSphereCenter, worldRadius, Quadrant.First, Enums.Plane.XY, pointsPerUnit);
+            Vector3[] xySecond = CircleDisplayerHelper.DrawCircleQuarter(topSphereCenter, worldRadius, Quadrant.Second, Enums.Plane.XY, pointsPerUnit);
+            Vector3[] xyThird = CircleDisplayerHelper.DrawCircleQuarter(bottomSphereCenter, worldRadius, Quadrant.Third, Enums.Plane.XY, pointsPerUnit);
+            Vector3[] xyFourth = CircleDisplayerHelper.DrawCircleQuarter(bottomSphereCenter, worldRadius, Quadrant.Fourth, Enums.Plane.XY, pointsPerUnit);
 
-            return ArrayExtensions.Merge(topCircle, xyFirstTop, xySecondTop, bottomCircle, xyFirstBottom, xySecondBottom, [topCircle[0]]);
+            // Adding last point manually to close LineRenderer, not using loop property because it would make code harder to extend 
+            return ArrayExtensions.Merge(topCircle, xyFirst, xySecond, bottomCircle, xyThird, xyFourth, [topCircle[0]]);
         }
 
+        public static Vector3[] DrawThreeAxisCapsule(Vector3 center, float worldRadius, float worldHeight, float pointsPerUnit = RoundedHitboxConfig.DEFAULT_POINTS_PER_UNIT)
+        {
+
+            if (worldRadius <= 0)
+                throw new ArgumentOutOfRangeException(nameof(worldRadius), "Radius should be positive");
+
+            if (worldHeight < 0)
+                throw new ArgumentOutOfRangeException(nameof(worldHeight), "Height should be positive");
+
+            if (pointsPerUnit <= 0)
+                throw new ArgumentOutOfRangeException(nameof(pointsPerUnit), "Points per unit should be positive");
+
+            float centerOffset = Mathf.Abs((worldHeight - 2 * worldRadius) / 2);
+            Vector3 topSphereCenter = center + Vector3.up * centerOffset;
+            Vector3 bottomSphereCenter = center - Vector3.up * centerOffset;
+
+            Vector3[] topCircle = CircleDisplayerHelper.DrawCircle(topSphereCenter, worldRadius, Enums.Plane.XZ, pointsPerUnit);
+            Vector3[] bottomCircle = CircleDisplayerHelper.DrawCircle(bottomSphereCenter, worldRadius, Enums.Plane.XZ, Quadrant.Third, pointsPerUnit);
+
+            Vector3[] xyFirst = CircleDisplayerHelper.DrawCircleQuarter(topSphereCenter, worldRadius, Quadrant.First, Enums.Plane.XY, pointsPerUnit);
+            Vector3[] xySecond = CircleDisplayerHelper.DrawCircleQuarter(topSphereCenter, worldRadius, Quadrant.Second, Enums.Plane.XY, pointsPerUnit);
+            Vector3[] xyThird = CircleDisplayerHelper.DrawCircleQuarter(bottomSphereCenter, worldRadius, Quadrant.Third, Enums.Plane.XY, pointsPerUnit); // actually third quadrant because previous is second
+            Vector3[] xyFourth = CircleDisplayerHelper.DrawCircleQuarter(bottomSphereCenter, worldRadius, Quadrant.Fourth, Enums.Plane.XY, pointsPerUnit);
+
+            Vector3[] yzFirst = CircleDisplayerHelper.DrawCircleQuarter(topSphereCenter, worldRadius, Quadrant.First, Enums.Plane.YZ, pointsPerUnit);
+            Vector3[] yzSecond = CircleDisplayerHelper.DrawCircleQuarter(bottomSphereCenter, worldRadius, Quadrant.Second, Enums.Plane.YZ, pointsPerUnit);
+            Vector3[] yzThird = CircleDisplayerHelper.DrawCircleQuarter(bottomSphereCenter, worldRadius, Quadrant.Third, Enums.Plane.YZ, pointsPerUnit);
+            Vector3[] yzFourth = CircleDisplayerHelper.DrawCircleQuarter(topSphereCenter, worldRadius, Quadrant.Fourth, Enums.Plane.YZ, pointsPerUnit);
+
+            return ArrayExtensions.Merge(topCircle, xyFirst, yzFirst, yzSecond, yzThird, yzFourth, xySecond,bottomCircle, xyThird, xyFourth, [topCircle[0]]);
+        }
     }
 }

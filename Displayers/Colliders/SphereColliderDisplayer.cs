@@ -25,28 +25,15 @@ namespace HitboxViewer.Displayers.Colliders
             savedScale = worldScale;
             savedRadius = GenericTarget.radius;
 
-            RoundedHitboxConfig config = (RoundedHitboxConfig)HitboxViewerConfig.DefinitionOf<SphereCollider>().Config;
-
-            Vector3[] points;
-
-            switch (config.Algorithm)
+            RoundedHitboxConfig config = (RoundedHitboxConfig)Definition.Config;
+            Vector3[] points = config.Algorithm switch
             {
-                case Enums.RoundedHitboxAlgorithm.LatitudeLongitude:
-                    points = SphereDisplayerHelper.DrawLatitudeLongitudeSphere(worldCenter, worldRadius, config.PointsPerUnit);
-                    break;
-                case Enums.RoundedHitboxAlgorithm.Fibonacci:
-                    points = SphereDisplayerHelper.DrawFibonacciSphere(worldCenter, worldRadius, config.PointsPerUnit);
-                    break;
-                case Enums.RoundedHitboxAlgorithm.ThreeAxis:
-                    points = SphereDisplayerHelper.DrawThreeAxisSphere(worldCenter, worldRadius, config.PointsPerUnit);
-                    break;
-                case Enums.RoundedHitboxAlgorithm.TwoAxis:
-                    points = SphereDisplayerHelper.DrawTwoAxisSphere(worldCenter, worldRadius, config.PointsPerUnit);
-                    break;
-                default:
-                    throw new ArgumentException($"Unknown algorithm {config.Algorithm}");
-            }
-
+                Enums.RoundedHitboxAlgorithm.LatitudeLongitude => SphereDisplayerHelper.DrawLatitudeLongitudeSphere(worldCenter, worldRadius, config.PointsPerUnit),
+                Enums.RoundedHitboxAlgorithm.Fibonacci => SphereDisplayerHelper.DrawFibonacciSphere(worldCenter, worldRadius, config.PointsPerUnit),
+                Enums.RoundedHitboxAlgorithm.ThreeAxis => SphereDisplayerHelper.DrawThreeAxisSphere(worldCenter, worldRadius, config.PointsPerUnit),
+                Enums.RoundedHitboxAlgorithm.TwoAxis => SphereDisplayerHelper.DrawTwoAxisSphere(worldCenter, worldRadius, config.PointsPerUnit),
+                _ => throw new ArgumentException($"Unknown algorithm {config.Algorithm}"),
+            };
             SetPositions(points);
         }
         public override bool _ShouldBeUpdated()

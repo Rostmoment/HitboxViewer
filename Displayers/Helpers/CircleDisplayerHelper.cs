@@ -38,12 +38,12 @@ namespace HitboxViewer.Displayers.Helpers
             return points;
         }
 
-        public static void DrawAllCircleQuarters(Vector3 center, float worldRadius, Enums.Plane plane, out Vector3[] first, out Vector3[] second, out Vector3[] third, out Vector3[] fouth, float pointsPerRadius = RoundedHitboxConfig.DEFAULT_POINTS_PER_UNIT)
+        public static void DrawAllCircleQuarters(Vector3 center, float worldRadius, Enums.Plane plane, out Vector3[] first, out Vector3[] second, out Vector3[] third, out Vector3[] fourth, float pointsPerRadius = RoundedHitboxConfig.DEFAULT_POINTS_PER_UNIT)
         {
             first = DrawCircleQuarter(center, worldRadius, Quadrant.First, plane, pointsPerRadius);
             second = DrawCircleQuarter(center, worldRadius, Quadrant.Second, plane, pointsPerRadius);
             third = DrawCircleQuarter(center, worldRadius, Quadrant.Third, plane, pointsPerRadius);
-            fouth = DrawCircleQuarter(center, worldRadius, Quadrant.Fourth, plane, pointsPerRadius);
+            fourth = DrawCircleQuarter(center, worldRadius, Quadrant.Fourth, plane, pointsPerRadius);
         }
 
         public static Vector3[] DrawCircle(Vector3 center, float worldRadius, Enums.Plane plane, float pointsPerRadius = RoundedHitboxConfig.DEFAULT_POINTS_PER_UNIT)

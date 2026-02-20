@@ -13,8 +13,8 @@ namespace HitboxViewer.Enums
         {
             [Quadrant.First] = new Vector2(0, MathConstants.HALF_PI),
             [Quadrant.Second] = new Vector2(MathConstants.HALF_PI, Mathf.PI),
-            [Quadrant.Third] = new Vector2(Mathf.PI, Mathf.PI * 3 / 2),
-            [Quadrant.Fourth] = new Vector2(Mathf.PI * 3 / 2, MathConstants.TWO_PI),
+            [Quadrant.Third] = new Vector2(Mathf.PI, MathConstants.ONE_AND_HALF_PI),
+            [Quadrant.Fourth] = new Vector2(MathConstants.ONE_AND_HALF_PI, MathConstants.TWO_PI),
         };
         public static (float min, float max) GetMinMax(this Quadrant quadrant)
         {
