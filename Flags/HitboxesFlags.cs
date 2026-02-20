@@ -13,6 +13,7 @@ namespace HitboxViewer.Flags
         Trigger = 1 << 0,
         NotTrigger = 1 << 1,
         BoxNavMeshObstacle = 1 << 2,
-        CapsuleNavMeshObstacle = 1 << 3
+        CapsuleNavMeshObstacle = 1 << 3,
+        All = Trigger | NotTrigger | BoxNavMeshObstacle | CapsuleNavMeshObstacle
     }
 }

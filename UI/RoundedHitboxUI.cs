@@ -46,8 +46,8 @@ namespace HitboxViewer.UI
             ButtonRef resetFibonacci = UIFactory.CreateButton(algorithmsButtonsBg, $"ResetAlgorithm", "Reset", new Color(0.39f, 0f, 0f));
             resetFibonacci.OnClick += () =>
             {
-                dropdown.value = (int)RoundedHitboxConfig.DEFAULT_ALGORITHM;
-                config.Algorithm = RoundedHitboxConfig.DEFAULT_ALGORITHM;
+                dropdown.value = (int)config.DefaultAlgorithm;
+                config.Algorithm = config.DefaultAlgorithm;
             };
             UIFactory.SetLayoutElement(resetFibonacci.Component.gameObject, 100, 25, 100, 25, 100, 25);
             #endregion

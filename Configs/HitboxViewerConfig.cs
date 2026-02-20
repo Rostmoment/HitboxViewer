@@ -1,4 +1,5 @@
 ﻿using BepInEx.Configuration;
+using HitboxViewer.Enums;
 using HitboxViewer.Flags;
 using HitboxViewer.UI;
 using System;
@@ -41,7 +42,7 @@ namespace HitboxViewer.Configs
 
             [typeof(SphereCollider)] = new(
                 nameof(SphereCollider),
-                new RoundedHitboxConfig(KeyCode.None, HexToColor("#0D2FDB"), HexToColor("#0D2FDB")),
+                new RoundedHitboxConfig(KeyCode.None, HexToColor("#0D2FDB"), HexToColor("#0D2FDB"), RoundedHitboxAlgorithm.LatitudeLongitude),
                 new RoundedHitboxUI(),
                 HitboxesFlags.Trigger | HitboxesFlags.NotTrigger
             ),
@@ -113,7 +114,7 @@ namespace HitboxViewer.Configs
 
             [typeof(NavMeshObstacle)] = new(
                 nameof(NavMeshObstacle),
-                new RoundedHitboxConfig(KeyCode.None, HexToColor("#008080"), HexToColor("#008080")),
+                new RoundedHitboxConfig(KeyCode.None, HexToColor("#008080"), HexToColor("#008080"), RoundedHitboxAlgorithm.ThreeAxis),
                 new RoundedHitboxUI(),
                 HitboxesFlags.BoxNavMeshObstacle | HitboxesFlags.CapsuleNavMeshObstacle
             ),

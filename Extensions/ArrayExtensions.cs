@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace HitboxViewer.Extensions
 {
@@ -22,6 +24,16 @@ namespace HitboxViewer.Extensions
             }
 
             return result;
+        }
+
+        public static void RotatePoints(this Vector3[] points, Vector3 center, Vector3 euler) => points.RotatePoints(center, Quaternion.Euler(euler));
+        public static void RotatePoints(this Vector3[] points, Vector3 center, Quaternion rotation)
+        {
+            if (points == null)
+                return;
+
+            for (int i = 0; i < points.Length; i++)
+                points[i] = rotation * (points[i] - center) + center;
         }
     }
 }

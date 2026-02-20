@@ -12,10 +12,11 @@ namespace HitboxViewer.Configs
     class RoundedHitboxConfig : BaseHitboxConfig
     {
         public const float DEFAULT_POINTS_PER_UNIT = 100f;
-        public const RoundedHitboxAlgorithm DEFAULT_ALGORITHM = RoundedHitboxAlgorithm.LatitudeLongitude;
+        public RoundedHitboxAlgorithm DefaultAlgorithm { get; }
 
-        public RoundedHitboxConfig(KeyCode defaultKey, Color defaultStartColor, Color defaultEndColor) : base(defaultKey, defaultStartColor, defaultEndColor)
+        public RoundedHitboxConfig(KeyCode defaultKey, Color defaultStartColor, Color defaultEndColor, RoundedHitboxAlgorithm defaultAlgorithm) : base(defaultKey, defaultStartColor, defaultEndColor)
         {
+            DefaultAlgorithm = defaultAlgorithm;
         }
 
         #region configs
@@ -47,7 +48,7 @@ namespace HitboxViewer.Configs
             algorithm = BasePlugin.Instance.Config.Bind<RoundedHitboxAlgorithm>(
                 hitboxType.Name,
                 "Sphere draw algorithm",
-                DEFAULT_ALGORITHM,
+                DefaultAlgorithm,
                 "Defines what algorithm will be used for drawing rounded hitboxes"
             );
         }

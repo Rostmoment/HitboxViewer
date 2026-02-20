@@ -1,4 +1,6 @@
-﻿using HitboxViewer.Flags;
+﻿using HitboxViewer.Displayers.Helpers;
+using HitboxViewer.Extensions;
+using HitboxViewer.Flags;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +9,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace HitboxViewer.Displayers.Colliders
+namespace HitboxViewer.Displayers
 {
     class NavMeshObstacleDisplayer : BaseDisplayer<NavMeshObstacle>
     {
@@ -57,8 +59,10 @@ namespace HitboxViewer.Displayers.Colliders
             float radius = GenericTarget.radius * Mathf.Max(Mathf.Abs(worldScale.x), Mathf.Abs(worldScale.y), Mathf.Abs(worldScale.z));
             float height = GenericTarget.height * Mathf.Max(Mathf.Abs(worldScale.x), Mathf.Abs(worldScale.y), Mathf.Abs(worldScale.z));
 
+            Vector3[] points = CapsuleDisplayerHelper.DrawTwoAxisCapsule(center, radius, height);
+            points.RotatePoints(center, transform.rotation);
 
-            SetPositions(DisplayersHelper.DrawFibonacciCapsule(center, radius, height));
+            SetPositions(points);
         }
     }
 }

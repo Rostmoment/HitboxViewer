@@ -1,4 +1,5 @@
 ﻿using HitboxViewer.Configs;
+using HitboxViewer.Displayers.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,16 +32,16 @@ namespace HitboxViewer.Displayers.Colliders
             switch (config.Algorithm)
             {
                 case Enums.RoundedHitboxAlgorithm.LatitudeLongitude:
-                    points = DisplayersHelper.DrawLatitudeLongitudeSphere(worldCenter, worldRadius, config.PointsPerUnit);
+                    points = SphereDisplayerHelper.DrawLatitudeLongitudeSphere(worldCenter, worldRadius, config.PointsPerUnit);
                     break;
                 case Enums.RoundedHitboxAlgorithm.Fibonacci:
-                    points = DisplayersHelper.DrawFibonacciSphere(worldCenter, worldRadius, config.PointsPerUnit);
+                    points = SphereDisplayerHelper.DrawFibonacciSphere(worldCenter, worldRadius, config.PointsPerUnit);
                     break;
                 case Enums.RoundedHitboxAlgorithm.ThreeAxis:
-                    points = DisplayersHelper.DrawThreeAxisSphere(worldCenter, worldRadius, config.PointsPerUnit);
+                    points = SphereDisplayerHelper.DrawThreeAxisSphere(worldCenter, worldRadius, config.PointsPerUnit);
                     break;
                 case Enums.RoundedHitboxAlgorithm.TwoAxis:
-                    points = DisplayersHelper.DrawTwoAxisSphere(worldCenter, worldRadius, config.PointsPerUnit);
+                    points = SphereDisplayerHelper.DrawTwoAxisSphere(worldCenter, worldRadius, config.PointsPerUnit);
                     break;
                 default:
                     throw new ArgumentException($"Unknown algorithm {config.Algorithm}");

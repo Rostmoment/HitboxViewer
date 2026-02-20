@@ -53,8 +53,7 @@ namespace HitboxViewer.UI
 
                 GameObject bg = UIFactory.CreateVerticalGroup(content, "BG", false, true, true, true, 0, default, new Color(0.07f, 0.07f, 0.07f));
 
-                GameObject toggleObject = UIFactory.CreateToggle(bg, $"Toggle{flag}", out Toggle toggle, out Text toggleText, new Color(0.1f, 0.1f, 0.1f));
-                toggleText.text = "Enabled/Disabled";
+                GameObject toggleObject = UIFactory.CreateToggle(bg, $"Toggle{flag}", out Toggle toggle, out _, new Color(0.1f, 0.1f, 0.1f));
                 toggle.isOn = false;
                 UIFactory.SetLayoutElement(toggleObject, 1, 25);
 
