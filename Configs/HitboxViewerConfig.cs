@@ -91,7 +91,8 @@ namespace HitboxViewer.Configs
 
             [typeof(CharacterController)] = new(
                 nameof(CharacterController),
-                new(KeyCode.None, HexToColor("#8A2BE2"), HexToColor("#8A2BE2")),
+                new RoundedHitboxConfig(KeyCode.None, HexToColor("#8A2BE2"), HexToColor("#8A2BE2"), RoundedHitboxAlgorithm.ThreeAxis),
+                new RoundedHitboxUI(),
                 HitboxesFlags.Trigger | HitboxesFlags.NotTrigger
             ),
 

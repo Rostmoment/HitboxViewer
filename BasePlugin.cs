@@ -29,28 +29,24 @@ namespace HitboxViewer
     [BepInPlugin(PluginInfo.GUID, PluginInfo.NAME, PluginInfo.VERSION)]
     public class BasePlugin : BaseUnityPlugin
     {
-        private static Dictionary<Type, Type> types = new Dictionary<Type, Type>()
-        {
-            [typeof(BoxCollider)] = typeof(BoxColliderDisplayer),
-            [typeof(SphereCollider)] = typeof(SphereColliderDisplayer),
-            [typeof(CapsuleCollider)] = typeof(CapsuleColliderDisplayer),
-            [typeof(MeshCollider)] = typeof(MeshColliderDisplayer),
-        };
 
         public readonly static Vector3 NaNVector = new Vector3(float.NaN, float.NaN, float.NaN);
         public readonly static Quaternion NaNQuaternion = new Quaternion(float.NaN, float.NaN, float.NaN, float.NaN);
 
-        public static Harmony HarmonyInstance { private set; get; }
+        private static Harmony HarmonyInstance { set; get; }
         public static BasePlugin Instance { private set; get; }
         public static new ManualLogSource Logger { private set; get; }
+        public static GameObject MainObject { private set; get; }
 
-        private int updateCounter;
 
         private void Awake()
         {
             Logger = base.Logger;
             Instance = this;
             HarmonyInstance = new Harmony(PluginInfo.GUID);
+            MainObject = new GameObject("HitboxViewerMainObject");
+            MainObject.AddComponent<HitboxUpdater>();
+            DontDestroyOnLoad(MainObject);
             HitboxViewerConfig.Initialize();
 
             UniverseLib.Universe.Init(HitboxViewerConfig.StartupDelay, MainUI.InitializeUI, (x, y) => { }, new UniverseLib.Config.UniverseLibConfig()
@@ -63,32 +59,6 @@ namespace HitboxViewer
         {
             if (Input.GetKeyDown(HitboxViewerConfig.KeyCode))
                 MainUI.ShowMenu = !MainUI.ShowMenu;
-
-            if (updateCounter < 0)
-                return;
-
-            if (updateCounter > 0)
-            {
-                updateCounter--;
-                return;
-            }
-
-            updateCounter = HitboxViewerConfig.UpdateRate;
-
-            foreach (Collider collider in GameObject.FindObjectsOfType<Collider>())
-            {
-                if (types.TryGetValue(collider.GetType(), out Type displayerType))
-                {
-                    BaseDisplayer displayer = BaseDisplayer.GetOrAdd(collider, displayerType);
-                    displayer.Visualize();
-                }
-            }
-
-            foreach (NavMeshObstacle nav in GameObject.FindObjectsOfType<NavMeshObstacle>())
-            {
-                NavMeshObstacleDisplayer displayer = BaseDisplayer.GetOrAdd<NavMeshObstacleDisplayer>(nav);
-                displayer.Visualize();
-            }
         }
     }
 }

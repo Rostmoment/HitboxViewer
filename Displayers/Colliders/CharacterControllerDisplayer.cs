@@ -2,18 +2,22 @@
 using HitboxViewer.Displayers.Helpers;
 using HitboxViewer.Extensions;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace HitboxViewer.Displayers.Colliders
 {
-    public class CapsuleColliderDisplayer : ColliderDisplayer<CapsuleCollider>
+    class CharacterControllerDisplayer : ColliderDisplayer<CharacterController>
     {
+
         private Vector3 savedCenter = BasePlugin.NaNVector;
         private Vector3 savedScale = BasePlugin.NaNVector;
-        private Quaternion savedRotation = BasePlugin.NaNQuaternion;
+        private Quaternion savedRotation = Quaternion.identity;
         private float savedRadius = float.NaN;
         private float savedHeight = float.NaN;
-        private int savedDirection = -1;
 
         protected override void _Visualize()
         {
@@ -30,10 +34,9 @@ namespace HitboxViewer.Displayers.Colliders
 
             savedCenter = center;
             savedScale = worldScale;
-            savedRotation = transform.rotation;
+            savedRotation = target.transform.rotation;
             savedRadius = GenericTarget.radius;
             savedHeight = GenericTarget.height;
-            savedDirection = GenericTarget.direction;
 
             RoundedHitboxConfig config = (RoundedHitboxConfig)Definition.Config;
 
@@ -46,7 +49,7 @@ namespace HitboxViewer.Displayers.Colliders
                 _ => throw new ArgumentException($"Unknown algorithm {config.Algorithm}"),
             };
 
-            points.RotatePoints(center, GenericTarget.GetActualRotation());
+            points.RotatePoints(center, target.transform.rotation);
 
             SetPositions(points);
         }
@@ -59,7 +62,6 @@ namespace HitboxViewer.Displayers.Colliders
             return savedRadius != GenericTarget.radius
                    || savedHeight != GenericTarget.height
                    || savedRotation != target.transform.rotation
-                   || savedDirection != GenericTarget.direction
                    || savedCenter != center
                    || savedScale != worldScale;
         }
