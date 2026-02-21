@@ -1,5 +1,6 @@
 ﻿using BepInEx.Configuration;
 using HitboxViewer.Enums;
+using HitboxViewer.Extensions;
 using HitboxViewer.Flags;
 using HitboxViewer.UI;
 using System;
@@ -36,100 +37,93 @@ namespace HitboxViewer.Configs
         {
             [typeof(BoxCollider)] = new(
                 nameof(BoxCollider),
-                new(KeyCode.None, HexToColor("#DB220D"), HexToColor("#DB220D")),
+                new(KeyCode.None, ColorExtensions.HexToColor("#DB220D"), ColorExtensions.HexToColor("#DB220D")),
                 HitboxesFlags.Trigger | HitboxesFlags.NotTrigger
             ),
 
             [typeof(SphereCollider)] = new(
                 nameof(SphereCollider),
-                new RoundedHitboxConfig(KeyCode.None, HexToColor("#0D2FDB"), HexToColor("#0D2FDB"), RoundedHitboxAlgorithm.LatitudeLongitude),
+                new RoundedHitboxConfig(KeyCode.None, ColorExtensions.HexToColor("#0D2FDB"), ColorExtensions.HexToColor("#0D2FDB"), RoundedHitboxAlgorithm.LatitudeLongitude),
                 new RoundedHitboxUI(),
                 HitboxesFlags.Trigger | HitboxesFlags.NotTrigger
             ),
             [typeof(CapsuleCollider)] = new(
                 nameof(CapsuleCollider),
-                new RoundedHitboxConfig(KeyCode.None, HexToColor("#28DB0D"), HexToColor("#28DB0D"), RoundedHitboxAlgorithm.ThreeAxis),
+                new RoundedHitboxConfig(KeyCode.None, ColorExtensions.HexToColor("#28DB0D"), ColorExtensions.HexToColor("#28DB0D"), RoundedHitboxAlgorithm.ThreeAxis),
                 new RoundedHitboxUI(),
                 HitboxesFlags.Trigger | HitboxesFlags.NotTrigger
             ),
 
             [typeof(MeshCollider)] = new(
                 nameof(MeshCollider),
-                new(KeyCode.None, HexToColor("#DBDB0D"), HexToColor("#DBDB0D")),
+                new(KeyCode.None, ColorExtensions.HexToColor("#DBDB0D"), ColorExtensions.HexToColor("#DBDB0D")),
                 HitboxesFlags.Trigger | HitboxesFlags.NotTrigger
             ),
 
             [typeof(WheelCollider)] = new(
                 nameof(WheelCollider),
-                new(KeyCode.None, HexToColor("#DB7B0D"), HexToColor("#DB7B0D")),
+                new(KeyCode.None, ColorExtensions.HexToColor("#DB7B0D"), ColorExtensions.HexToColor("#DB7B0D")),
                 HitboxesFlags.Trigger | HitboxesFlags.NotTrigger
             ),
 
             [typeof(TerrainCollider)] = new(
                 nameof(TerrainCollider),
-                new(KeyCode.None, HexToColor("#A020F0"), HexToColor("#A020F0")),
+                new(KeyCode.None, ColorExtensions.HexToColor("#A020F0"), ColorExtensions.HexToColor("#A020F0")),
                 HitboxesFlags.Trigger | HitboxesFlags.NotTrigger
             ),
 
             [typeof(BoxCollider2D)] = new(
                 nameof(BoxCollider2D),
-                new(KeyCode.None, HexToColor("#FF19AF"), HexToColor("#FF19AF")),
+                new(KeyCode.None, ColorExtensions.HexToColor("#FF19AF"), ColorExtensions.HexToColor("#FF19AF")),
                 HitboxesFlags.Trigger | HitboxesFlags.NotTrigger
             ),
 
             [typeof(CircleCollider2D)] = new(
                 nameof(CircleCollider2D),
-                new(KeyCode.None, HexToColor("#039AFF"), HexToColor("#039AFF")),
+                new(KeyCode.None, ColorExtensions.HexToColor("#039AFF"), ColorExtensions.HexToColor("#039AFF")),
                 HitboxesFlags.Trigger | HitboxesFlags.NotTrigger
             ),
 
             [typeof(CapsuleCollider2D)] = new(
                 nameof(CapsuleCollider2D),
-                new(KeyCode.None, HexToColor("#633310"), HexToColor("#633310")),
+                new(KeyCode.None, ColorExtensions.HexToColor("#633310"), ColorExtensions.HexToColor("#633310")),
                 HitboxesFlags.Trigger | HitboxesFlags.NotTrigger
             ),
 
             [typeof(CharacterController)] = new(
                 nameof(CharacterController),
-                new RoundedHitboxConfig(KeyCode.None, HexToColor("#8A2BE2"), HexToColor("#8A2BE2"), RoundedHitboxAlgorithm.ThreeAxis),
+                new RoundedHitboxConfig(KeyCode.None, ColorExtensions.HexToColor("#8A2BE2"), ColorExtensions.HexToColor("#8A2BE2"), RoundedHitboxAlgorithm.ThreeAxis),
                 new RoundedHitboxUI(),
                 HitboxesFlags.Trigger | HitboxesFlags.NotTrigger
             ),
 
             [typeof(PolygonCollider2D)] = new(
                 nameof(PolygonCollider2D),
-                new(KeyCode.None, HexToColor("#000000"), HexToColor("#000000")),
+                new(KeyCode.None, ColorExtensions.HexToColor("#000000"), ColorExtensions.HexToColor("#000000")),
                 HitboxesFlags.Trigger | HitboxesFlags.NotTrigger
             ),
 
             [typeof(EdgeCollider2D)] = new(
                 nameof(EdgeCollider2D),
-                new(KeyCode.None, HexToColor("#FFFFFF"), HexToColor("#FFFFFF")),
+                new(KeyCode.None, ColorExtensions.HexToColor("#FFFFFF"), ColorExtensions.HexToColor("#FFFFFF")),
                 HitboxesFlags.Trigger | HitboxesFlags.NotTrigger
             ),
 
             [typeof(CompositeCollider2D)] = new(
                 nameof(CompositeCollider2D),
-                new(KeyCode.None, HexToColor("#363636"), HexToColor("#363636")),
+                new(KeyCode.None, ColorExtensions.HexToColor("#363636"), ColorExtensions.HexToColor("#363636")),
                 HitboxesFlags.Trigger | HitboxesFlags.NotTrigger
             ),
 
             [typeof(NavMeshObstacle)] = new(
                 nameof(NavMeshObstacle),
-                new RoundedHitboxConfig(KeyCode.None, HexToColor("#008080"), HexToColor("#008080"), RoundedHitboxAlgorithm.ThreeAxis),
+                new RoundedHitboxConfig(KeyCode.None, ColorExtensions.HexToColor("#008080"), ColorExtensions.HexToColor("#008080"), RoundedHitboxAlgorithm.ThreeAxis),
                 new RoundedHitboxUI(),
                 HitboxesFlags.BoxNavMeshObstacle | HitboxesFlags.CapsuleNavMeshObstacle
             ),
         };
             
 
-        private static Color HexToColor(string hex)
-        {
-            if (ColorUtility.TryParseHtmlString(hex, out var color))
-                return color;
-
-            throw new ArgumentException($"Invalid hex color string: {hex}");
-        }
 
         public static HitboxDefinition DefinitionOf<T>() => DefinitionOf(typeof(T));
         public static HitboxDefinition DefinitionOf(Type type) => hitboxes[type];

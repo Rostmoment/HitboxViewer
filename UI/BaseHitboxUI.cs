@@ -1,4 +1,5 @@
 ﻿using HitboxViewer.Configs;
+using HitboxViewer.Extensions;
 using HitboxViewer.Flags;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ using UnityEngine.Networking.Types;
 using UnityEngine.UI;
 using UniverseLib.UI;
 using UniverseLib.UI.Models;
+using UniverseLib.Utility;
 
 namespace HitboxViewer.UI
 {
@@ -144,6 +146,103 @@ namespace HitboxViewer.UI
             UIFactory.SetLayoutElement(resetEndLineWidth.Component.gameObject, 100, 25, 100, 25, 100, 25);
             #endregion
 
+            #region start line color
+            GameObject startColorBg = UIFactory.CreateVerticalGroup(content, "StartColorBG", false, true, true, true, 0, default, new Color(0.07f, 0.07f, 0.07f));
+            GameObject imageStartColorBg = UIFactory.CreateHorizontalGroup(startColorBg, "StartColorImageBG", false, false, false, false, 0, default, new Color(0.07f, 0.07f, 0.07f));
+
+            // I don't know why, but simple startColorBg doesn't work, but imageStartColorBg does
+            Image startColorImage = UIFactory.CreateUIObject("StartColorImage", imageStartColorBg, new Vector2(100, 25)).AddComponent<Image>();
+            UIFactory.SetLayoutElement(startColorImage.gameObject, flexibleWidth: 1);
+
+            InputFieldRef startColorInput = UIFactory.CreateInputField(startColorBg, "StartColorInput", config.StartColor.ToRGBHex());
+            UIFactory.SetLayoutElement(startColorInput.Component.gameObject, flexibleWidth: 1);
+
+            Text startColorDescription = UIFactory.CreateLabel(startColorBg, "DescriptionStartColor", "Start color of the hitbox outline");
+            UIFactory.SetLayoutElement(startColorDescription.gameObject, flexibleWidth: 1);
+
+            startColorImage.color = config.StartColor;
+
+            GameObject startColorButtonsBg = UIFactory.CreateHorizontalGroup(content, "StartColorButtonsBG", false, true, true, true, 0, default, new Color(0.07f, 0.07f, 0.07f));
+            ButtonRef applyStartColor = UIFactory.CreateButton(startColorButtonsBg, $"StartColorApply", "Apply", new Color(0f, 0.39f, 0f));
+            UIFactory.SetLayoutElement(applyStartColor.Component.gameObject, 100, 25, 100, 25, 100, 25);
+            applyStartColor.OnClick += () =>
+            {
+                string hex = startColorInput.Text;
+
+                if (!hex.StartsWith("#"))
+                    hex = "#" + hex;
+
+                if (ColorUtility.TryParseHtmlString(hex, out Color color))
+                {
+                    startColorImage.color = color;
+                    config.StartColor = color;
+                }
+                else
+                {
+                    startColorImage.color = config.DefaultStartColor;
+                    config.StartColor = config.DefaultStartColor;
+                    startColorInput.Text = config.DefaultStartColor.ToRGBHex();
+                }
+            };
+
+            ButtonRef resetStartColor = UIFactory.CreateButton(startColorButtonsBg, $"StartColorReset", "Reset", new Color(0.39f, 0f, 0f));
+            UIFactory.SetLayoutElement(resetStartColor.Component.gameObject, 100, 25, 100, 25, 100, 25);
+            resetStartColor.OnClick += () =>
+            {
+                startColorImage.color = config.DefaultStartColor;
+                config.StartColor = config.DefaultStartColor;
+                startColorInput.Text = config.DefaultStartColor.ToRGBHex();
+            };
+            #endregion
+
+            #region end line color
+            GameObject endColorBg = UIFactory.CreateVerticalGroup(content, "EndColorBG", false, true, true, true, 0, default, new Color(0.07f, 0.07f, 0.07f));
+            GameObject imageEndColorBg = UIFactory.CreateHorizontalGroup(endColorBg, "EndColorImageBG", false, false, false, false, 0, default, new Color(0.07f, 0.07f, 0.07f));
+
+            Image endColorImage = UIFactory.CreateUIObject("EndColorImage", imageEndColorBg, new Vector2(100, 25)).AddComponent<Image>();
+            UIFactory.SetLayoutElement(endColorImage.gameObject, flexibleWidth: 1);
+
+            InputFieldRef endColorInput = UIFactory.CreateInputField(endColorBg, "EndColorInput", config.EndColor.ToRGBHex());
+            UIFactory.SetLayoutElement(endColorInput.Component.gameObject, flexibleWidth: 1);
+
+            Text endColorDescription = UIFactory.CreateLabel(endColorBg, "DescriptionEndColor", "End color of the hitbox outline");
+            UIFactory.SetLayoutElement(endColorDescription.gameObject, flexibleWidth: 1);
+
+            endColorImage.color = config.EndColor;
+
+            GameObject endColorButtonsBg = UIFactory.CreateHorizontalGroup(content, "EndColorButtonsBG", false, true, true, true, 0, default, new Color(0.07f, 0.07f, 0.07f));
+
+            ButtonRef applyEndColor = UIFactory.CreateButton(endColorButtonsBg, "EndColorApply", "Apply", new Color(0f, 0.39f, 0f));
+            UIFactory.SetLayoutElement(applyEndColor.Component.gameObject, 100, 25, 100, 25, 100, 25);
+            applyEndColor.OnClick += () =>
+            {
+                string hex = startColorInput.Text;
+
+                if (!hex.StartsWith("#"))
+                    hex = "#" + hex;
+
+                if (ColorUtility.TryParseHtmlString(hex, out Color color))
+                {
+                    endColorImage.color = color;
+                    config.EndColor = color;
+                }
+                else
+                {
+                    endColorImage.color = config.DefaultEndColor;
+                    config.EndColor = config.DefaultEndColor;
+                    endColorInput.Text = config.DefaultEndColor.ToRGBHex();
+                }
+            };
+
+            ButtonRef resetEndColor = UIFactory.CreateButton(endColorButtonsBg, "EndColorReset", "Reset", new Color(0.39f, 0f, 0f));
+            UIFactory.SetLayoutElement(resetEndColor.Component.gameObject, 100, 25, 100, 25, 100, 25);
+            resetEndColor.OnClick += () =>
+            {
+                endColorImage.color = config.DefaultEndColor;
+                config.EndColor = config.DefaultEndColor;
+                endColorInput.Text = config.DefaultEndColor.ToRGBHex();
+            };
+            #endregion
         }
     }
 }
