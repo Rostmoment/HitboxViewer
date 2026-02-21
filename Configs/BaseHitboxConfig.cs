@@ -37,12 +37,12 @@ namespace HitboxViewer.Configs
         public float DefaultStartWidth { get; }
         public float DefaultEndWidth { get; }
 
-        public KeyCode KeyBind
+        public KeyboardShortcut KeyboardShortcut
         {
-            get => keyBindEntry.Value;
-            set => keyBindEntry.Value = value;
+            get => keyboardShortcut.Value;
+            set => keyboardShortcut.Value = value;
         }
-        private ConfigEntry<KeyCode> keyBindEntry;
+        private ConfigEntry<KeyboardShortcut> keyboardShortcut;
 
         public Color StartColor
         {
@@ -92,10 +92,10 @@ namespace HitboxViewer.Configs
                 $"End color of the {hitboxType.Name} hitbox outline"
             );
 
-            keyBindEntry = BasePlugin.Instance.Config.Bind(
+            keyboardShortcut = BasePlugin.Instance.Config.Bind(
                 hitboxType.Name,
                 "Key Bind",
-                DefaultKeyBind,
+                new KeyboardShortcut(DefaultKeyBind),
                 $"Key bind to toggle the {hitboxType.Name} hitbox outline"
             );
 

@@ -16,8 +16,8 @@ namespace HitboxViewer.Configs
         private static ConfigEntry<float> menuAlpha;
         public static float MenuAlpha => menuAlpha.Value;
 
-        private static ConfigEntry<KeyCode> keyCode;
-        public static KeyCode KeyCode => keyCode.Value;
+        private static ConfigEntry<KeyboardShortcut> keyboardShortcut;
+        public static KeyboardShortcut KeyboardShortcut => keyboardShortcut.Value;
 
         private static ConfigEntry<float> startupDelay;
         public static float StartupDelay => startupDelay.Value;
@@ -150,10 +150,10 @@ namespace HitboxViewer.Configs
             };
             menuAlpha.Value = Mathf.Clamp01(menuAlpha.Value);
 
-            keyCode = BasePlugin.Instance.Config.Bind<KeyCode>(
+            keyboardShortcut = BasePlugin.Instance.Config.Bind<KeyboardShortcut>(
                 "General",
                 "Toggle Key",
-                KeyCode.F4,
+                new KeyboardShortcut(KeyCode.F4),
                 "Toggle for opening menu"
             );
 

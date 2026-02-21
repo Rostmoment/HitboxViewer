@@ -57,7 +57,7 @@ namespace HitboxViewer
 
         private void Update()
         {
-            if (Input.GetKeyDown(HitboxViewerConfig.KeyCode))
+            if (HitboxViewerConfig.KeyboardShortcut.IsDown())
                 MainUI.ShowMenu = !MainUI.ShowMenu;
         }
     }
