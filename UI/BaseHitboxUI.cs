@@ -55,8 +55,23 @@ namespace HitboxViewer.UI
 
                 GameObject bg = UIFactory.CreateVerticalGroup(content, "BG", false, true, true, true, 0, default, new Color(0.07f, 0.07f, 0.07f));
 
-                GameObject toggleObject = UIFactory.CreateToggle(bg, $"Toggle{flag}", out Toggle toggle, out _, new Color(0.1f, 0.1f, 0.1f));
+                GameObject toggleObject = UIFactory.CreateToggle(bg, $"Toggle{flag}", out Toggle toggle, out Text text, new Color(0.1f, 0.1f, 0.1f));
+                text.color = Color.red;
+                text.text = "Disabled";
                 toggle.isOn = false;
+                toggle.onValueChanged.AddListener((x) =>
+                {
+                    if (x)
+                    {
+                        text.color = Color.green;
+                        text.text = "Enabled";
+                    }
+                    else
+                    {
+                        text.color = Color.red;
+                        text.text = "Disabled";
+                    }
+                });
                 UIFactory.SetLayoutElement(toggleObject, 1, 25);
 
                 Text description = UIFactory.CreateLabel(bg, $"Description{flag}", flag.GetDescription());
