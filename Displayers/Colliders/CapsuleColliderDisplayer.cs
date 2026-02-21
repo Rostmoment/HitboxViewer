@@ -35,7 +35,7 @@ namespace HitboxViewer.Displayers.Colliders
             savedHeight = GenericTarget.height;
             savedDirection = GenericTarget.direction;
 
-            RoundedHitboxConfig config = (RoundedHitboxConfig)Definition.Config;
+            RoundedHitboxConfig3D config = (RoundedHitboxConfig3D)Definition.Config;
 
             Vector3[] points = config.Algorithm switch
             {

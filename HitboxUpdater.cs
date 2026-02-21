@@ -27,7 +27,8 @@ namespace HitboxViewer
 
         private static Dictionary<Type, Type> colliders2d = new Dictionary<Type, Type>()
         {
-            [typeof(BoxCollider2D)] = typeof(BoxCollider2DDisplayer)
+            [typeof(BoxCollider2D)] = typeof(BoxCollider2DDisplayer),
+            [typeof(CircleCollider2D)] = typeof(CircleCollider2DDisplayer)
         };
 
         private int updateCounter;

@@ -76,7 +76,7 @@ namespace HitboxViewer.Displayers
             savedRadius = GenericTarget.radius;
             savedHeight = GenericTarget.height;
 
-            RoundedHitboxConfig config = (RoundedHitboxConfig)Definition.Config;
+            RoundedHitboxConfig3D config = (RoundedHitboxConfig3D)Definition.Config;
 
             Vector3[] points = config.Algorithm switch
             {

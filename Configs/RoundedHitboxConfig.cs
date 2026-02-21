@@ -9,14 +9,11 @@ using UnityEngine;
 
 namespace HitboxViewer.Configs
 {
-    class RoundedHitboxConfig : BaseHitboxConfig
+    public class RoundedHitboxConfig : BaseHitboxConfig
     {
         public const float DEFAULT_POINTS_PER_UNIT = 100f;
-        public RoundedHitboxAlgorithm DefaultAlgorithm { get; }
-
-        public RoundedHitboxConfig(KeyCode defaultKey, Color defaultStartColor, Color defaultEndColor, RoundedHitboxAlgorithm defaultAlgorithm) : base(defaultKey, defaultStartColor, defaultEndColor)
+        public RoundedHitboxConfig(KeyCode defaultKey, Color defaultStartColor, Color defaultEndColor) : base(defaultKey, defaultStartColor, defaultEndColor)
         {
-            DefaultAlgorithm = defaultAlgorithm;
         }
 
         #region configs
@@ -27,12 +24,6 @@ namespace HitboxViewer.Configs
             set => pointsPerUnit.Value = value;
         }
 
-        private ConfigEntry<RoundedHitboxAlgorithm> algorithm;
-        public RoundedHitboxAlgorithm Algorithm
-        {
-            get => algorithm.Value;
-            set => algorithm.Value = value;
-        }
         #endregion
 
         public override void Initialize()
@@ -45,12 +36,6 @@ namespace HitboxViewer.Configs
                 "Defines amount of points per unit, radius (and height for capsules) for rounded hitboxes"
             );
 
-            algorithm = BasePlugin.Instance.Config.Bind<RoundedHitboxAlgorithm>(
-                hitboxType.Name,
-                "Sphere draw algorithm",
-                DefaultAlgorithm,
-                "Defines what algorithm will be used for drawing rounded hitboxes"
-            );
         }
     }
 }

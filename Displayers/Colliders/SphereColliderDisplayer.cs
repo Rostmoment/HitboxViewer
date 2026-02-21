@@ -25,7 +25,7 @@ namespace HitboxViewer.Displayers.Colliders
             savedScale = worldScale;
             savedRadius = GenericTarget.radius;
 
-            RoundedHitboxConfig config = (RoundedHitboxConfig)Definition.Config;
+            RoundedHitboxConfig3D config = (RoundedHitboxConfig3D)Definition.Config;
             Vector3[] points = config.Algorithm switch
             {
                 Enums.RoundedHitboxAlgorithm.LatitudeLongitude => SphereDisplayerHelper.DrawLatitudeLongitudeSphere(worldCenter, worldRadius, config.PointsPerUnit),

@@ -15,23 +15,25 @@ namespace HitboxViewer.Displayers.Colliders
 
         protected override void _Visualize()
         {
+            Transform t = target.transform;
+
             savedSize = GenericTarget.size;
             savedCenter = GenericTarget.center;
-            savedPosition = target.transform.position;
-            savedRotation = target.transform.rotation;
-            savedScale = target.transform.lossyScale;
+            savedPosition = t.position;
+            savedRotation = t.rotation;
+            savedScale = t.lossyScale;
 
             Vector3 center = GenericTarget.center;
             Vector3 size = GenericTarget.size * 0.5f;
 
-            corners[0] = target.transform.TransformPoint(center + new Vector3(-size.x, -size.y, -size.z));
-            corners[1] = target.transform.TransformPoint(center + new Vector3(-size.x, -size.y, size.z));
-            corners[2] = target.transform.TransformPoint(center + new Vector3(-size.x, size.y, -size.z));
-            corners[3] = target.transform.TransformPoint(center + new Vector3(-size.x, size.y, size.z));
-            corners[4] = target.transform.TransformPoint(center + new Vector3(size.x, -size.y, -size.z));
-            corners[5] = target.transform.TransformPoint(center + new Vector3(size.x, -size.y, size.z));
-            corners[6] = target.transform.TransformPoint(center + new Vector3(size.x, size.y, -size.z));
-            corners[7] = target.transform.TransformPoint(center + new Vector3(size.x, size.y, size.z));
+            corners[0] = t.TransformPoint(center + new Vector3(-size.x, -size.y, -size.z));
+            corners[1] = t.TransformPoint(center + new Vector3(-size.x, -size.y, size.z));
+            corners[2] = t.TransformPoint(center + new Vector3(-size.x, size.y, -size.z));
+            corners[3] = t.TransformPoint(center + new Vector3(-size.x, size.y, size.z));
+            corners[4] = t.TransformPoint(center + new Vector3(size.x, -size.y, -size.z));
+            corners[5] = t.TransformPoint(center + new Vector3(size.x, -size.y, size.z));
+            corners[6] = t.TransformPoint(center + new Vector3(size.x, size.y, -size.z));
+            corners[7] = t.TransformPoint(center + new Vector3(size.x, size.y, size.z));
 
             SetPositions(corners[0], corners[1], corners[5], corners[4], corners[0], corners[2], corners[3], corners[7],
                 corners[5], corners[4], corners[6], corners[7], corners[6], corners[2], corners[3], corners[1]);

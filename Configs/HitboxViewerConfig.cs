@@ -43,14 +43,14 @@ namespace HitboxViewer.Configs
 
             [typeof(SphereCollider)] = new(
                 nameof(SphereCollider),
-                new RoundedHitboxConfig(KeyCode.None, ColorExtensions.HexToColor("#0D2FDB"), ColorExtensions.HexToColor("#0D2FDB"), RoundedHitboxAlgorithm.LatitudeLongitude),
-                new RoundedHitboxUI(),
+                new RoundedHitboxConfig3D(KeyCode.None, ColorExtensions.HexToColor("#0D2FDB"), ColorExtensions.HexToColor("#0D2FDB"), RoundedHitboxAlgorithm.LatitudeLongitude),
+                new RoundedHitbox3DUI(),
                 HitboxesFlags.Trigger | HitboxesFlags.NotTrigger
             ),
             [typeof(CapsuleCollider)] = new(
                 nameof(CapsuleCollider),
-                new RoundedHitboxConfig(KeyCode.None, ColorExtensions.HexToColor("#28DB0D"), ColorExtensions.HexToColor("#28DB0D"), RoundedHitboxAlgorithm.ThreeAxis),
-                new RoundedHitboxUI(),
+                new RoundedHitboxConfig3D(KeyCode.None, ColorExtensions.HexToColor("#28DB0D"), ColorExtensions.HexToColor("#28DB0D"), RoundedHitboxAlgorithm.ThreeAxis),
+                new RoundedHitbox3DUI(),
                 HitboxesFlags.Trigger | HitboxesFlags.NotTrigger
             ),
 
@@ -80,7 +80,8 @@ namespace HitboxViewer.Configs
 
             [typeof(CircleCollider2D)] = new(
                 nameof(CircleCollider2D),
-                new(KeyCode.None, ColorExtensions.HexToColor("#039AFF"), ColorExtensions.HexToColor("#039AFF")),
+                new RoundedHitboxConfig(KeyCode.None, ColorExtensions.HexToColor("#039AFF"), ColorExtensions.HexToColor("#039AFF")),
+                new RoundedHitboxUI(),
                 HitboxesFlags.Trigger | HitboxesFlags.NotTrigger
             ),
 
@@ -92,8 +93,8 @@ namespace HitboxViewer.Configs
 
             [typeof(CharacterController)] = new(
                 nameof(CharacterController),
-                new RoundedHitboxConfig(KeyCode.None, ColorExtensions.HexToColor("#8A2BE2"), ColorExtensions.HexToColor("#8A2BE2"), RoundedHitboxAlgorithm.ThreeAxis),
-                new RoundedHitboxUI(),
+                new RoundedHitboxConfig3D(KeyCode.None, ColorExtensions.HexToColor("#8A2BE2"), ColorExtensions.HexToColor("#8A2BE2"), RoundedHitboxAlgorithm.ThreeAxis),
+                new RoundedHitbox3DUI(),
                 HitboxesFlags.Trigger | HitboxesFlags.NotTrigger
             ),
 
@@ -117,8 +118,8 @@ namespace HitboxViewer.Configs
 
             [typeof(NavMeshObstacle)] = new(
                 nameof(NavMeshObstacle),
-                new RoundedHitboxConfig(KeyCode.None, ColorExtensions.HexToColor("#008080"), ColorExtensions.HexToColor("#008080"), RoundedHitboxAlgorithm.ThreeAxis),
-                new RoundedHitboxUI(),
+                new RoundedHitboxConfig3D(KeyCode.None, ColorExtensions.HexToColor("#008080"), ColorExtensions.HexToColor("#008080"), RoundedHitboxAlgorithm.ThreeAxis),
+                new RoundedHitbox3DUI(),
                 HitboxesFlags.BoxNavMeshObstacle | HitboxesFlags.CapsuleNavMeshObstacle
             ),
         };
