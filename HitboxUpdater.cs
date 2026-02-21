@@ -1,6 +1,7 @@
 ﻿using HitboxViewer.Configs;
 using HitboxViewer.Displayers;
 using HitboxViewer.Displayers.Colliders;
+using HitboxViewer.Displayers.Colliders2D;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,6 +25,11 @@ namespace HitboxViewer
             [typeof(CharacterController)] = typeof(CharacterControllerDisplayer) 
         };
 
+        private static Dictionary<Type, Type> colliders2d = new Dictionary<Type, Type>()
+        {
+            [typeof(BoxCollider2D)] = typeof(BoxCollider2DDisplayer)
+        };
+
         private int updateCounter;
 
         private void UpdateColliders()
@@ -31,6 +37,17 @@ namespace HitboxViewer
             foreach (Collider collider in GameObject.FindObjectsOfType<Collider>())
             {
                 if (colliders.TryGetValue(collider.GetType(), out Type displayerType))
+                {
+                    BaseDisplayer displayer = BaseDisplayer.GetOrAdd(collider, displayerType);
+                    displayer.Visualize();
+                }
+            }
+        }
+        private void UpdateColliders2D()
+        {
+            foreach (Collider2D collider in GameObject.FindObjectsOfType<Collider2D>())
+            {
+                if (colliders2d.TryGetValue(collider.GetType(), out Type displayerType))
                 {
                     BaseDisplayer displayer = BaseDisplayer.GetOrAdd(collider, displayerType);
                     displayer.Visualize();
@@ -61,6 +78,7 @@ namespace HitboxViewer
             updateCounter = HitboxViewerConfig.UpdateRate;
 
             UpdateColliders();
+            UpdateColliders2D();
             UpdateNavMeshObstacles();
 
             OnUpdate?.Invoke();

@@ -37,7 +37,7 @@ namespace HitboxViewer.Displayers.Colliders
                 corners[5], corners[4], corners[6], corners[7], corners[6], corners[2], corners[3], corners[1]);
         }
 
-        public override bool _ShouldBeUpdated()
+        protected override bool _ShouldBeUpdated()
         {
             return (savedCenter != GenericTarget.center || savedSize != GenericTarget.size || savedPosition != target.transform.position ||
                    savedRotation != target.transform.rotation || savedScale != target.transform.lossyScale) && base._ShouldBeUpdated();

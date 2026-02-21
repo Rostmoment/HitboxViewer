@@ -36,9 +36,11 @@ namespace HitboxViewer.Displayers.Colliders
             };
             SetPositions(points);
         }
-        public override bool _ShouldBeUpdated()
+        protected override bool _ShouldBeUpdated()
         {
-            return savedRadius != GenericTarget.radius || savedCenter != target.transform.TransformPoint(GenericTarget.center) || savedScale != target.transform.lossyScale;
+            return savedRadius != GenericTarget.radius 
+                || savedCenter != target.transform.TransformPoint(GenericTarget.center) 
+                || savedScale != target.transform.lossyScale;
         }
     }
 }

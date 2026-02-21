@@ -91,7 +91,7 @@ namespace HitboxViewer.Displayers
             SetPositions(points);
         }
 
-        public override bool _ShouldBeUpdated()
+        protected override bool _ShouldBeUpdated()
         {
             if (GenericTarget.shape == NavMeshObstacleShape.Box)
             {

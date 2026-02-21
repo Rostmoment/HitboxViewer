@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HitboxViewer.Displayers
+namespace HitboxViewer.Displayers.Colliders2D
 {
     public abstract class Collider2DDisplayer<T> : BaseDisplayer<T> where T : UnityEngine.Collider2D
     {

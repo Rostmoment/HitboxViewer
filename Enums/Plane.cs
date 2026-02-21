@@ -7,6 +7,10 @@ using UnityEngine;
 
 namespace HitboxViewer.Enums
 {
+    public static class PlaneExtensions
+    {
+        public const Plane DEFAULT_2D_PLANE = Plane.XY;
+    }
     public enum Plane
     {
         XY,

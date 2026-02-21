@@ -94,8 +94,8 @@ namespace HitboxViewer.Displayers
         }
 
         protected abstract bool ShouldBeDisplayed();
-        public bool ShouldBeUpdated() => _ShouldBeUpdated() || points == null || points.Length == 0;
-        public virtual bool _ShouldBeUpdated() => true;
+        private bool ShouldBeUpdated() => _ShouldBeUpdated() || points == null || points.Length == 0;
+        protected virtual bool _ShouldBeUpdated() => true;
         #endregion
     }
     public abstract class BaseDisplayer<T> : BaseDisplayer where T : Component

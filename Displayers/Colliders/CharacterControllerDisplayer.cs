@@ -54,7 +54,7 @@ namespace HitboxViewer.Displayers.Colliders
             SetPositions(points);
         }
 
-        public override bool _ShouldBeUpdated()
+        protected override bool _ShouldBeUpdated()
         {
             Vector3 worldScale = target.transform.lossyScale;
             Vector3 center = target.transform.TransformPoint(GenericTarget.center);
