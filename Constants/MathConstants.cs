@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace HitboxViewer
+namespace HitboxViewer.Constants
 {
     public static class MathConstants
     {

@@ -1,4 +1,5 @@
 ﻿using HitboxViewer.Configs;
+using HitboxViewer.Constants;
 using HitboxViewer.Displayers.Helpers;
 using HitboxViewer.Enums;
 using HitboxViewer.Extensions;
@@ -8,9 +9,9 @@ namespace HitboxViewer.Displayers.Colliders2D
 {
     public class CircleCollider2DDisplayer : Collider2DDisplayer<CircleCollider2D>
     {
-        private Vector3 savedCenter = BasePlugin.NaNVector;
-        private Vector3 savedScale = BasePlugin.NaNVector;
-        private Quaternion savedRotation = BasePlugin.NaNQuaternion;
+        private Vector3 savedCenter = UnityConstants.NaNVector;
+        private Vector3 savedScale = UnityConstants.NaNVector;
+        private Quaternion savedRotation = UnityConstants.NaNQuaternion;
         private float savedRadius = float.NaN;
 
         protected override void _Visualize()

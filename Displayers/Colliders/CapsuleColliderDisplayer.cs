@@ -1,4 +1,5 @@
 ﻿using HitboxViewer.Configs;
+using HitboxViewer.Constants;
 using HitboxViewer.Displayers.Helpers;
 using HitboxViewer.Extensions;
 using System;
@@ -8,9 +9,9 @@ namespace HitboxViewer.Displayers.Colliders
 {
     public class CapsuleColliderDisplayer : ColliderDisplayer<CapsuleCollider>
     {
-        private Vector3 savedCenter = BasePlugin.NaNVector;
-        private Vector3 savedScale = BasePlugin.NaNVector;
-        private Quaternion savedRotation = BasePlugin.NaNQuaternion;
+        private Vector3 savedCenter = UnityConstants.NaNVector;
+        private Vector3 savedScale = UnityConstants.NaNVector;
+        private Quaternion savedRotation = UnityConstants.NaNQuaternion;
         private float savedRadius = float.NaN;
         private float savedHeight = float.NaN;
         private int savedDirection = -1;

@@ -1,4 +1,5 @@
 ﻿using HitboxViewer.Configs;
+using HitboxViewer.Constants;
 using HitboxViewer.Enums;
 using System;
 using System.Collections.Generic;

@@ -1,4 +1,5 @@
 ﻿using HitboxViewer.Configs;
+using HitboxViewer.Constants;
 using HitboxViewer.Displayers.Helpers;
 using HitboxViewer.Extensions;
 using System;
@@ -13,8 +14,8 @@ namespace HitboxViewer.Displayers.Colliders
     class CharacterControllerDisplayer : ColliderDisplayer<CharacterController>
     {
 
-        private Vector3 savedCenter = BasePlugin.NaNVector;
-        private Vector3 savedScale = BasePlugin.NaNVector;
+        private Vector3 savedCenter = UnityConstants.NaNVector;
+        private Vector3 savedScale = UnityConstants.NaNVector;
         private Quaternion savedRotation = Quaternion.identity;
         private float savedRadius = float.NaN;
         private float savedHeight = float.NaN;

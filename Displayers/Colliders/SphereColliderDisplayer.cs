@@ -1,4 +1,5 @@
 ﻿using HitboxViewer.Configs;
+using HitboxViewer.Constants;
 using HitboxViewer.Displayers.Helpers;
 using System;
 using System.Collections.Generic;
@@ -11,8 +12,8 @@ namespace HitboxViewer.Displayers.Colliders
 {
     class SphereColliderDisplayer : ColliderDisplayer<SphereCollider>
     {
-        private Vector3 savedCenter = BasePlugin.NaNVector;
-        private Vector3 savedScale = BasePlugin.NaNVector;
+        private Vector3 savedCenter = UnityConstants.NaNVector;
+        private Vector3 savedScale = UnityConstants.NaNVector;
         private float savedRadius = float.NaN;
 
         protected override void _Visualize()

@@ -30,9 +30,6 @@ namespace HitboxViewer
     public class BasePlugin : BaseUnityPlugin
     {
 
-        public readonly static Vector3 NaNVector = new Vector3(float.NaN, float.NaN, float.NaN);
-        public readonly static Quaternion NaNQuaternion = new Quaternion(float.NaN, float.NaN, float.NaN, float.NaN);
-
         private static Harmony HarmonyInstance { set; get; }
         public static BasePlugin Instance { private set; get; }
         public static new ManualLogSource Logger { private set; get; }

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using HitboxViewer.Constants;
+using UnityEngine;
 using UniverseLib.Utility;
 
 namespace HitboxViewer.Displayers.Colliders
@@ -7,11 +8,11 @@ namespace HitboxViewer.Displayers.Colliders
     {
         private static readonly Vector3[] corners = new Vector3[8];
 
-        private Vector3 savedCenter = BasePlugin.NaNVector;
-        private Vector3 savedSize = BasePlugin.NaNVector;
-        private Vector3 savedPosition = BasePlugin.NaNVector;
-        private Quaternion savedRotation = BasePlugin.NaNQuaternion;
-        private Vector3 savedScale = BasePlugin.NaNVector;
+        private Vector3 savedCenter = UnityConstants.NaNVector;
+        private Vector3 savedSize = UnityConstants.NaNVector;
+        private Vector3 savedPosition = UnityConstants.NaNVector;
+        private Quaternion savedRotation = UnityConstants.NaNQuaternion;
+        private Vector3 savedScale = UnityConstants.NaNVector;
 
         protected override void _Visualize()
         {

@@ -1,4 +1,5 @@
 ﻿using HitboxViewer.Configs;
+using HitboxViewer.Constants;
 using HitboxViewer.Displayers.Helpers;
 using HitboxViewer.Extensions;
 using HitboxViewer.Flags;
@@ -12,11 +13,11 @@ namespace HitboxViewer.Displayers
     {
         private static Vector3[] boxVertices = new Vector3[8];
 
-        private Vector3 savedCenter = BasePlugin.NaNVector;
-        private Vector3 savedSize = BasePlugin.NaNVector;
-        private Vector3 savedPosition = BasePlugin.NaNVector;
-        private Quaternion savedRotation = BasePlugin.NaNQuaternion;
-        private Vector3 savedScale = BasePlugin.NaNVector;
+        private Vector3 savedCenter = UnityConstants.NaNVector;
+        private Vector3 savedSize = UnityConstants.NaNVector;
+        private Vector3 savedPosition = UnityConstants.NaNVector;
+        private Quaternion savedRotation = UnityConstants.NaNQuaternion;
+        private Vector3 savedScale = UnityConstants.NaNVector;
         private float savedRadius = float.NaN;
         private float savedHeight = float.NaN;
 
