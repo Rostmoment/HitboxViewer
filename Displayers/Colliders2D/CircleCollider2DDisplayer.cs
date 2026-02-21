@@ -51,8 +51,7 @@ namespace HitboxViewer.Displayers.Colliders2D
             return savedRadius != GenericTarget.radius
                    || savedRotation != t.rotation
                    || savedCenter != worldCenter
-                   || savedScale != worldScale
-                   && base._ShouldBeUpdated();
+                   || savedScale != worldScale;
         }
     }
 }

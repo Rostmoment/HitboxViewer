@@ -46,8 +46,7 @@ namespace HitboxViewer.Displayers.Colliders2D
                     || savedOffset != GenericTarget.offset
                     || savedPosition != target.transform.position
                     || savedRotation != target.transform.rotation
-                    || savedScale != target.transform.lossyScale)
-                   && base._ShouldBeUpdated();
+                    || savedScale != target.transform.lossyScale);
         }
     }
 }
