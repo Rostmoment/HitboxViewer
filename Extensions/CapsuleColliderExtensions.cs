@@ -19,6 +19,6 @@ namespace HitboxViewer.Extensions
                 _ => Quaternion.identity
             };
         }
-        public static Quaternion GetActualRotation(this CapsuleCollider collider) => collider.GetDirectionRotation() * collider.transform.rotation;
+        public static Quaternion GetActualRotation(this CapsuleCollider collider) => collider.transform.rotation * collider.GetDirectionRotation();
     }
 }
