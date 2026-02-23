@@ -17,7 +17,7 @@ namespace HitboxViewer.Displayers
         protected virtual void VirtualAwake() { }
         #endregion
 
-        #region creation of line renderer and instance management
+        #region creation and instance management
         protected static Dictionary<Component, BaseDisplayer> displayers = new Dictionary<Component, BaseDisplayer>();
 
         public static T GetOrAdd<T>(Component component) where T : BaseDisplayer => (T)GetOrAdd(component, typeof(T));
@@ -35,6 +35,7 @@ namespace HitboxViewer.Displayers
 
             return diplayer;
         }
+        public static void Remove(Component component) => displayers.Remove(component);
         #endregion
 
         #region fields and properties
@@ -79,6 +80,7 @@ namespace HitboxViewer.Displayers
             if (target.IsNullOrDestroyed())
             {
                 Destroy(this);
+                displayers.Remove(target);
                 return;
             }
 
@@ -125,6 +127,13 @@ namespace HitboxViewer.Displayers
 
         protected override void VirtualUpdate()
         {
+            if (target.IsNullOrDestroyed())
+            {
+                Destroy(this);
+                displayers.Remove(target);
+                return;
+            }
+
         }
 
         protected void CreateLineRenderer()

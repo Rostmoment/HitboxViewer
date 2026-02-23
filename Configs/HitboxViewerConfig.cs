@@ -33,6 +33,7 @@ namespace HitboxViewer.Configs
         public static bool HideOnStart => hideOnStart.Value;
         #endregion
 
+        // All commented hitboxes are not implemented yet
         private static Dictionary<Type, HitboxDefinition> hitboxes = new Dictionary<Type, HitboxDefinition>()
         {
             [typeof(BoxCollider)] = new(
@@ -60,6 +61,7 @@ namespace HitboxViewer.Configs
                 HitboxesFlags.Trigger | HitboxesFlags.NotTrigger
             ),
 
+            /*
             [typeof(WheelCollider)] = new(
                 nameof(WheelCollider),
                 new(KeyCode.None, ColorExtensions.HexToColor("#DB7B0D"), ColorExtensions.HexToColor("#DB7B0D")),
@@ -70,7 +72,7 @@ namespace HitboxViewer.Configs
                 nameof(TerrainCollider),
                 new(KeyCode.None, ColorExtensions.HexToColor("#A020F0"), ColorExtensions.HexToColor("#A020F0")),
                 HitboxesFlags.Trigger | HitboxesFlags.NotTrigger
-            ),
+            ),*/
 
             [typeof(BoxCollider2D)] = new(
                 nameof(BoxCollider2D),
@@ -85,11 +87,12 @@ namespace HitboxViewer.Configs
                 HitboxesFlags.Trigger | HitboxesFlags.NotTrigger
             ),
 
+            /*
             [typeof(CapsuleCollider2D)] = new(
                 nameof(CapsuleCollider2D),
                 new(KeyCode.None, ColorExtensions.HexToColor("#633310"), ColorExtensions.HexToColor("#633310")),
                 HitboxesFlags.Trigger | HitboxesFlags.NotTrigger
-            ),
+            ),*/
 
             [typeof(CharacterController)] = new(
                 nameof(CharacterController),
@@ -98,6 +101,7 @@ namespace HitboxViewer.Configs
                 HitboxesFlags.Trigger | HitboxesFlags.NotTrigger
             ),
 
+            /*
             [typeof(PolygonCollider2D)] = new(
                 nameof(PolygonCollider2D),
                 new(KeyCode.None, ColorExtensions.HexToColor("#000000"), ColorExtensions.HexToColor("#000000")),
@@ -114,7 +118,7 @@ namespace HitboxViewer.Configs
                 nameof(CompositeCollider2D),
                 new(KeyCode.None, ColorExtensions.HexToColor("#363636"), ColorExtensions.HexToColor("#363636")),
                 HitboxesFlags.Trigger | HitboxesFlags.NotTrigger
-            ),
+            ),*/
 
             [typeof(NavMeshObstacle)] = new(
                 nameof(NavMeshObstacle),

@@ -22,7 +22,6 @@ namespace HitboxViewer.Flags
 
         public void Enable(HitboxesFlags flag)
         {
-            BasePlugin.Logger.LogInfo($"Flag {flag} is set to enable");
 
             if (!Enabled.HasFlag(flag) && HasFlag(flag))
                 Enabled |= flag;
@@ -30,19 +29,16 @@ namespace HitboxViewer.Flags
 
         public void Disable(HitboxesFlags flag)
         {
-            BasePlugin.Logger.LogInfo($"Flag {flag} is set to disable");
             if (Enabled.HasFlag(flag) && HasFlag(flag))
                 Enabled &= ~flag;
         }
 
         public void EnableAll()
         {
-            BasePlugin.Logger.LogInfo("Enabling all");
             Enabled = Potentional;
         }
         public void DisableAll()
         {
-            BasePlugin.Logger.LogInfo("Disabling all");
             Enabled = HitboxesFlags.None;
         }
 

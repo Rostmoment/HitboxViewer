@@ -12,12 +12,6 @@ using UnityEngine.AI;
 
 namespace HitboxViewer
 {
-    /*
-     * git add --all
-     * git commit -m "Message"
-     * git pull origin master --rebase
-     * git push origin master
-     */
     class PluginInfo
     {
         public const string GUID = "rost.moment.unity.hitboxviewer";
@@ -29,8 +23,6 @@ namespace HitboxViewer
     [BepInPlugin(PluginInfo.GUID, PluginInfo.NAME, PluginInfo.VERSION)]
     public class BasePlugin : BaseUnityPlugin
     {
-
-        private static Harmony HarmonyInstance { set; get; }
         public static BasePlugin Instance { private set; get; }
         public static new ManualLogSource Logger { private set; get; }
         public static GameObject MainObject { private set; get; }
@@ -40,10 +32,11 @@ namespace HitboxViewer
         {
             Logger = base.Logger;
             Instance = this;
-            HarmonyInstance = new Harmony(PluginInfo.GUID);
+
             MainObject = new GameObject("HitboxViewerMainObject");
             MainObject.AddComponent<HitboxUpdater>();
             DontDestroyOnLoad(MainObject);
+
             HitboxViewerConfig.Initialize();
 
             UniverseLib.Universe.Init(HitboxViewerConfig.StartupDelay, MainUI.InitializeUI, (x, y) => { }, new UniverseLib.Config.UniverseLibConfig()

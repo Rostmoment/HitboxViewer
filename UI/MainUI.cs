@@ -1,4 +1,5 @@
 ﻿using HitboxViewer.Configs;
+using HitboxViewer.Constants;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,7 +45,7 @@ namespace HitboxViewer.UI
         public override int MinHeight => 750;
 
         public override Vector2 DefaultAnchorMin => new Vector2(0.2f, 0.02f);
-        public override Vector2 DefaultAnchorMax => Vector2.one;
+        public override Vector2 DefaultAnchorMax => new Vector2(0.8f, 0.08f);
 
         public GameObject RootObject => Owner?.RootObject;
 
@@ -104,13 +105,13 @@ namespace HitboxViewer.UI
 
         private void CreateScrollView()
         {
-            GameObject horiGroup = UIFactory.CreateHorizontalGroup(ContentRoot, "Main", true, true, true, true, 2, default, new Color(0.08f, 0.08f, 0.08f));
-            GameObject ctgList = UIFactory.CreateScrollView(horiGroup, "CategoryList", out hitboxesButtons, out _, new Color(0.1f, 0.1f, 0.1f));
+            GameObject horiGroup = UIFactory.CreateHorizontalGroup(ContentRoot, "Main", true, true, true, true, 2, default, UIConstants.mainBackgroundColor);
+            GameObject ctgList = UIFactory.CreateScrollView(horiGroup, "CategoryList", out hitboxesButtons, out _, UIConstants.mainBackgroundColor);
 
             UIFactory.SetLayoutElement(ctgList, minWidth: 300, flexibleWidth: 0);
             UIFactory.SetLayoutGroup<VerticalLayoutGroup>(hitboxesButtons, spacing: 3);
 
-            GameObject editor = UIFactory.CreateScrollView(horiGroup, "HitboxEditor", out editorContent, out _, new Color(0.05f, 0.05f, 0.05f));
+            GameObject editor = UIFactory.CreateScrollView(horiGroup, "HitboxEditor", out editorContent, out _, UIConstants.mainBackgroundColor);
             UIFactory.SetLayoutElement(editor, flexibleWidth: 9999);
         }
 
@@ -145,7 +146,7 @@ namespace HitboxViewer.UI
 
             GameObject titleButtonsGroup = UIFactory.CreateHorizontalGroup(ContentRoot, "TitleBarGroup", true, true, true, true, 2, new Vector4(2, 2, 2, 2));
 
-            ButtonRef hitboxesButton = UIFactory.CreateButton(titleButtonsGroup, "HitboxesButton", "Hitboxes", new Color(0, 0.39f, 0f));
+            ButtonRef hitboxesButton = UIFactory.CreateButton(titleButtonsGroup, "HitboxesButton", "Hitboxes", UIConstants.greenButtonColor);
             UIFactory.SetLayoutElement(hitboxesButton.Component.gameObject, minHeight: 35, flexibleHeight: 0, flexibleWidth: 999);
             hitboxesButton.OnClick += () => { hitboxesButtons.SetActive(true); };
             /*
