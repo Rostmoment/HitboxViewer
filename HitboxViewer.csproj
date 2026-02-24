@@ -32,4 +32,8 @@
       <HintPath>lib\UnityEngine.UI (1).dll</HintPath>
     </Reference>
   </ItemGroup>
+  
+  <ItemGroup>
+    <Folder Include="Showcasing\" />
+  </ItemGroup>
 </Project>

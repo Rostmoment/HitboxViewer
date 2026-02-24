@@ -1,131 +1,81 @@
 # HitboxViewer
-# Main Information
- 
-## Tool for viewing hitboxes in ANY Unity game
 
-[BepInEx](https://github.com/BepInEx/BepInEx) plugin that works with any Unity game
+<p align="center">
+  ⚒️ Universal <a href="https://github.com/BepInEx/BepInEx">BepInEx 5</a> plugin for Unity games ⚒️
+</p>
+<p align="center">
+  Visualize hitboxes in real time  
+</p>
+<p align="center">
+  ⭐ UI powered by <a href="https://github.com/sinai-dev/UniverseLib">UniverseLib</a> ⭐
+</p>
 
-It uses LineRenderer for visualization hitboxes of most forms
 
-## 🎯 Supported Components
+## Showcasing
+![Menu](https://github.com/Rostmoment/HitboxViewer/blob/master/Showcasing/Menu.png?Raw=true)
+![Showcase Baldi's Basics Plus](https://github.com/Rostmoment/HitboxViewer/blob/master/Showcasing/bbplus1.png?Raw=true)
+![Showcase Baldi's Basics Plus](https://github.com/Rostmoment/HitboxViewer/blob/master/Showcasing/bbplus2.png?Raw=true)
+![Showcase Deltatraveler](https://github.com/Rostmoment/HitboxViewer/blob/master/Showcasing/deltatraveler1.png?Raw=true)
+![Showcase Deltatraveler](https://github.com/Rostmoment/HitboxViewer/blob/master/Showcasing/deltatraveler2.png?Raw=true)
+
+## Supported Components
 
 HitboxViewer supports the following Unity components:
-- `Collider` (3D)
-- `Collider2D`
-- `NavMeshObstacle`
+- `BoxCollider`
+- `SphereCollider`
+- `CapsuleCollider`
+- `MeshCollider`
+- `CharacterController`
+- `CircleCollider2D`
+- `BoxCollider2D`
+- `NavMeshObstacle` (box and capsule)
   
 The term **"hitbox"** refers to **any of these components** or its bound
 
----
-
-## ⚙️ Hitbox Display Modes
-
-HitboxViewer provides **separate display settings** for:
-- **Colliders** (`Collider` and `Collider2D`)
-- **NavMesh Obstacles** (`NavMeshObstacle`)
-
-Colliders and NavMeshObstacles have 4 different modes
-
----
-
-### 🔷 Collider Display Modes (`Collider` + `Collider2D`)
-
-| Mode       | Description                                                                 |
-|------------|-----------------------------------------------------------------------------|
-| `Hide`     | Hides all colliders                                                         |
-| `All`      | Shows all colliders (`isTrigger == true` or `false`)                        |
-| `Not Trigger` | Shows only colliders where `isTrigger == false`                             |
-| `Trigger`  | Shows only colliders where `isTrigger == true`                              |
-
-✅ Applies to both `Collider` and `Collider2D`.
-
----
-
-### 🟩 NavMeshObstacle Display Modes
-
-| Mode     | Description                                                                   |
-|----------|-------------------------------------------------------------------------------|
-| `Hide`   | Hides all `NavMeshObstacle` components                                        |
-| `All`    | Shows all `NavMeshObstacle` components                                        |
-| `Box`    | Shows only obstacles with a **box** shape                                     |
-| `Capsule ` | Shows only obstacles with a **capsule** shape  |
-
-❗ These modes apply **only to `NavMeshObstacle`**, not to colliders
-
----
-
-- There are **Two separate selection settings**: one for colliders, one for NavMesh obstacles.
-- Modes are **independent** — for example, `Trigger` affects only colliders, and `Box` affects only NavMesh obstacles.
-- This separation allows clear and flexible control over hitbox visualization.
-
-# Press F1 for changing colliders displaying mode
-# Press F2 for changing navmesh displaying mode
-
-Supported hitbox types:
-1. BoxCollider
-2. SphereCollider
-3. CapsuleCollider
-4. TerrainCollider (maybe, I didn't test this one)
-5. MeshCollider
-6. CharacterController
-7. CircleCollider2D
-8. PolygonCollider2D
-9. BoxCollider2D
-10. NavMeshObstacle Box
-11. NavMeshObstacle Capsule
-
-## If game throws exception (error) when it tries to display hitbox, try to change shader name in configs (see below for instructions on how to do this). Shader name can be found using [UnityExplorer](https://github.com/sinai-dev/UnityExplorer)
-# Showcasing
-There are few screenshots of testing this tools
-![Testing in Baldi's Basics Plus](https://github.com/Rostmoment/HitboxViewer/blob/master/Showcasing/baldiplus.png?Raw=true)
-![Testing in Baldi's Basics Plus](https://github.com/Rostmoment/HitboxViewer/blob/master/Showcasing/baldiplus2.png?Raw=true)
-![Testing in Baldi's Basics Plus](https://github.com/Rostmoment/HitboxViewer/blob/master/Showcasing/baldiplus3.png?Raw=true)
-![Testing in Deltatraveler](https://github.com/Rostmoment/HitboxViewer/blob/master/Showcasing/deltatraveler.png?Raw=true)
-![Testing in Deltatraveler](https://github.com/Rostmoment/HitboxViewer/blob/master/Showcasing/deltatraveler1.png?Raw=true)
-![Testing in Deltatraveler](https://github.com/Rostmoment/HitboxViewer/blob/master/Showcasing/deltatraveler2.png?Raw=true)
-✅ As you can see, hitboxes are displaying with LineRenderer
-
-# Configs
-⚙️ You can find and edit the configs of HitboxViewer at the following path:  
-`Your/Game/Folder/BepInEx/config/rost.moment.unity.hitboxviewer.cfg`  
-Open it as a text file using any text editor.
-
 ## Configuration
 
-| Config                                | Group         | Type      | Default   | Description |
-|---------------------------------------|---------------|-----------|-----------|-------------|
-| BoxCollider Color                     | Colors        | `string`  | `#DB220D` | RGBA hex color used to display hitboxes of **BoxCollider** |
-| SphereCollider Color                  | Colors        | `string`  | `#0D2FDB` | RGBA hex color used to display hitboxes of **SphereCollider** |
-| CapsuleCollider Color                 | Colors        | `string`  | `#28DB0D` | RGBA hex color used to display hitboxes of **CapsuleCollider** |
-| MeshCollider Color                    | Colors        | `string`  | `#DBDB0D` | RGBA hex color used to display hitboxes of **MeshCollider** |
-| WheelCollider Color                   | Colors        | `string`  | `#DB7B0D` | RGBA hex color used to display hitboxes of **WheelCollider** |
-| TerrainCollider Color                 | Colors        | `string`  | `#A020F0` | RGBA hex color used to display hitboxes of **TerrainCollider** |
-| BoxCollider2D Color                   | Colors        | `string`  | `#FF19AF` | RGBA hex color used to display hitboxes of **BoxCollider2D** |
-| CircleCollider2D Color                | Colors        | `string`  | `#039AFF` | RGBA hex color used to display hitboxes of **CircleCollider2D** |
-| CapsuleCollider2D Color               | Colors        | `string`  | `#633310` | RGBA hex color used to display hitboxes of **CapsuleCollider2D** |
-| CharacterController Color             | Colors        | `string`  | `#8A2BE2` | RGBA hex color used to display hitboxes of **CharacterController** |
-| PolygonCollider2D Color               | Colors        | `string`  | `#000000` | RGBA hex color used to display hitboxes of **PolygonCollider2D** |
-| EdgeCollider2D Color                  | Colors        | `string`  | `#FFFFFF` | RGBA hex color used to display hitboxes of **EdgeCollider2D** |
-| CompositeCollider2D Color             | Colors        | `string`  | `#363636` | RGBA hex color used to display hitboxes of **CompositeCollider2D** |
-| NavMeshObstacle Color                 | Colors        | `string`  | `#008080` | RGBA hex color used to display hitboxes of **NavMeshObstacle** |
-| Change Collider Visualization Mode    | Key Binds     | `KeyCode` | `F1`      | Key used to switch collider visualization mode |
-| Change NavMeshObstacle Visualization Mode | Key Binds  | `KeyCode` | `F2`      | Key used to switch NavMeshObstacle visualization mode |
-| Update Rate                           | Update        | `int`     | `60`      | Determines how often (in frames) hitbox outlines are recalculated. If `≤ 0`, automatic updates are disabled |
-| Points Per Radius                     | Visualization | `int`     | `100`     | Number of points used per unit of circle radius. Applies to all round colliders (Sphere, Circle2D, etc.) |
-| Hitbox Line Width                     | Visualization | `float`   | `0.1`     | Line width for hitbox outlines |
-| Shader Name                           | Visualization | `string`  | `Unlit/Color` | Shader name used to render hitbox outlines (added for compatibility across games) |
-| Sphere Collider Mode                  | Visualization | `SphereVisualizationMode`    | `Full`    | Determines how **SphereColliders** are rendered:<br/>• `Full` – full sphere surface<br/>• `TripleRings` – three axis rings<br/>• `DoubleRings` – two axis rings |
+Configuration file can be found by path `BepInEx\config\rost.moment.unity.hitboxviewer.cfg`
 
 
+General configuration:
+- `Menu Alpha` - No opacity of hitbox viewer menu
+- `Toggle Key` - Key to show/hide hitbox viewer menu, can be any [KeyCode]("https://docs.unity3d.com/6000.3/Documentation/ScriptReference/KeyCode.html")
+- `Startup Delay` - Number of seconds to wait before initializing hitbox viewer. Adjust it if you experience issues
+- `Shader Name` - Name of shader that will be used for coloring hitbox outlines. Try to change it if outline of hitboxes don't render
+- `Update Rate` - Frames between each hitbox update
+- `Hide On Startup` - Should menu be hidden on start?
 
-Configs can be easily changed using any text editor - just make sure to use the correct data types
+Hitboxes configuration:
+- `Start Color` - Start RGB color of hitbox gradient outline
+- `End Color` - End RGB color of hitbox gradient outline
+- `Key Bind` - Key bind to enable/disable all showcasing hitbox of this type (NOT IMPLEMENTED YET!)
+- `Start Width` - Start width of hitbox outline
+- `End Width` - End width of hitbox outline
 
+Some hitboxes types have unique for them configurations:
+- `Draw algorithm` - what algorithm will be used for drawing hitbox of this type? (for SphereCollider, CapsuleCollider, NavMeshObstacle and CharacterController)
+- `Points per unit` - Defines amount of points per unit, radius (and height for capsules) for rounded hitboxes. (for SphereCollider, CapsuleCollider, NavMeshObstacle, CharacterController and RoundedHitboxConfig)
 
-# How to install
-For installing you need [BepInEx](https://github.com/BepInEx/BepInEx)
+## Drawing rounded hitboxes algorithms
 
-Install it for game, check for «plugins» folder
+Hitbox viewer has 4 different algorithms to draw rounded hitboxes, some are more accurate, some are faster:
+- `Latitude Longitude` - most accurate, but the slowest
+- `Fibonacci` - faster than Latitude Longitude, but more noisy/scattered
+- `Three Axis` - fast and clean, draws 3 circle outlines giving a clear sense of shape
+- `Two Axis` - fastest, but only 2 circle outlines which may feel thin or incomplete for some shapes
 
-If it exists, put .dll file from [Releases Page](https://github.com/Rostmoment/HitboxViewer/releases) into it
+## How to use
+1. Press toggle key (F4 by default)
+2. In menu, select needed hitbox type
+3. Enable needed flags
+4. Done
 
-Done
+## How to install
+1. Install [BepInEx5]("https://github.com/BepInEx/BepInEx/releases/tag/v5.4.23.5")
+2. Launch game to generate folder
+3. Close game
+4. Download hitbox viewer archive from release 
+5. Drag `BepInEx` folder from it into game folder
+6. Launch game
+7. Done
+

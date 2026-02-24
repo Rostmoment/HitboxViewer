@@ -30,9 +30,9 @@ namespace HitboxViewer.Configs
 
             algorithm = BasePlugin.Instance.Config.Bind<RoundedHitboxAlgorithm>(
                 hitboxType.Name,
-                "Sphere draw algorithm",
+                "Draw algorithm",
                 DefaultAlgorithm,
-                "Defines what algorithm will be used for drawing rounded hitboxes"
+                "Defines what algorithm will be used for drawing hitbox"
             );
         }
 
