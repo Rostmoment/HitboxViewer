@@ -64,6 +64,17 @@ Hitbox viewer has 4 different algorithms to draw rounded hitboxes, some are more
 - `Three Axis` - fast and clean, draws 3 circle outlines giving a clear sense of shape
 - `Two Axis` - fastest, but only 2 circle outlines which may feel thin or incomplete for some shapes
 
+## Flags system
+Hitbox viewer uses a flags-based filtering system that allows you to enable or disable specific hitbox variations for each supported component type.
+
+Each hitbox type can be filtered using bitwise flags.
+
+Available Flags:
+- `Trigger` - for `Collider` and `Collider2D`, shows colliders where `isTrigger` equals true
+- `Not Trigger` - for `Collider` and `Collider2D`, shows colliders where `isTrigger` equals false
+- `Box` - for `NavMeshObstacle`, shows hitboxes where shape is box
+- `Capsule` - for `NavMeshObstacle`, shows hitboxes where shape is capsule
+
 ## How to use
 1. Press toggle key (F4 by default)
 2. In menu, select needed hitbox type
