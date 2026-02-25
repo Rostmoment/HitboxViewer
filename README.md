@@ -12,11 +12,26 @@
 
 
 ## Showcasing
-![Menu](https://github.com/Rostmoment/HitboxViewer/blob/master/Showcasing/Menu.png?Raw=true)
-![Showcase Baldi's Basics Plus](https://github.com/Rostmoment/HitboxViewer/blob/master/Showcasing/bbplus1.png?Raw=true)
-![Showcase Baldi's Basics Plus](https://github.com/Rostmoment/HitboxViewer/blob/master/Showcasing/bbplus2.png?Raw=true)
-![Showcase Deltatraveler](https://github.com/Rostmoment/HitboxViewer/blob/master/Showcasing/deltatraveler1.png?Raw=true)
-![Showcase Deltatraveler](https://github.com/Rostmoment/HitboxViewer/blob/master/Showcasing/deltatraveler2.png?Raw=true)
+
+<p align="center">
+  <img src="https://github.com/Rostmoment/HitboxViewer/blob/master/Showcasing/Menu.png?raw=true" width="700">
+</p>
+
+<p align="center">
+  <img src="https://github.com/Rostmoment/HitboxViewer/blob/master/Showcasing/bbplus1.png?raw=true" width="700">
+</p>
+
+<p align="center">
+  <img src="https://github.com/Rostmoment/HitboxViewer/blob/master/Showcasing/bbplus2.png?raw=true" width="700">
+</p>
+
+<p align="center">
+  <img src="https://github.com/Rostmoment/HitboxViewer/blob/master/Showcasing/deltatraveler1.png?raw=true" width="700">
+</p>
+
+<p align="center">
+  <img src="https://github.com/Rostmoment/HitboxViewer/blob/master/Showcasing/deltatraveler2.png?raw=true" width="700">
+</p>
 
 ## Supported Components
 
@@ -54,7 +69,7 @@ Hitboxes configuration:
 
 Some hitboxes types have unique for them configurations:
 - `Draw algorithm` - what algorithm will be used for drawing hitbox of this type? (for SphereCollider, CapsuleCollider, NavMeshObstacle and CharacterController)
-- `Points per unit` - Defines amount of points per unit, radius (and height for capsules) for rounded hitboxes. (for SphereCollider, CapsuleCollider, NavMeshObstacle, CharacterController and RoundedHitboxConfig)
+- `Points per unit` - Defines amount of points per unit, radius (and height for capsules) for rounded hitboxes. (for SphereCollider, CapsuleCollider, NavMeshObstacle, CharacterController and CircleCollider2D)
 
 ## Drawing rounded hitboxes algorithms
 
