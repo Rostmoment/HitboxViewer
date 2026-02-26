@@ -27,6 +27,7 @@ namespace HitboxViewer.Displayers.Colliders
             Vector3 center = GenericTarget.center;
             Vector3 size = GenericTarget.size * 0.5f;
 
+            // TransformPoint is matrix multiplication, so it's fast and includes rotation, scale, position, etc
             corners[0] = t.TransformPoint(center + new Vector3(-size.x, -size.y, -size.z));
             corners[1] = t.TransformPoint(center + new Vector3(-size.x, -size.y, size.z));
             corners[2] = t.TransformPoint(center + new Vector3(-size.x, size.y, -size.z));
@@ -36,6 +37,7 @@ namespace HitboxViewer.Displayers.Colliders
             corners[6] = t.TransformPoint(center + new Vector3(size.x, size.y, -size.z));
             corners[7] = t.TransformPoint(center + new Vector3(size.x, size.y, size.z));
 
+            // Order of vertices in array is fixed, so I can just connect them, doing it in less than 12 steps is impossible
             SetPositions(corners[0], corners[1], corners[5], corners[4], corners[0], corners[2], corners[3], corners[7],
                 corners[5], corners[4], corners[6], corners[7], corners[6], corners[2], corners[3], corners[1]);
         }

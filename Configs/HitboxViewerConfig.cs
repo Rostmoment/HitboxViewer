@@ -101,13 +101,14 @@ namespace HitboxViewer.Configs
                 HitboxesFlags.Trigger | HitboxesFlags.NotTrigger
             ),
 
-            /*
+            
             [typeof(PolygonCollider2D)] = new(
                 nameof(PolygonCollider2D),
                 new(KeyCode.None, ColorExtensions.HexToColor("#000000"), ColorExtensions.HexToColor("#000000")),
                 HitboxesFlags.Trigger | HitboxesFlags.NotTrigger
             ),
 
+            /*
             [typeof(EdgeCollider2D)] = new(
                 nameof(EdgeCollider2D),
                 new(KeyCode.None, ColorExtensions.HexToColor("#FFFFFF"), ColorExtensions.HexToColor("#FFFFFF")),
