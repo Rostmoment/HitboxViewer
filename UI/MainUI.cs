@@ -87,8 +87,8 @@ namespace HitboxViewer.UI
             Instance.AddButtonsUnderPanel();
 
             Instance.CreateScrollView();
-            for (int i = 0; i < HitboxDefinition.all.Count; i++)
-                Instance.AddButton(HitboxDefinition.all[i]);
+            foreach (var data in HitboxDefinition.definitions)
+                Instance.AddButton(data.Value);
 
             if (HitboxViewerConfig.HideOnStart)
                 ShowMenu = false;

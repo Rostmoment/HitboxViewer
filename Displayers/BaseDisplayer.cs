@@ -102,7 +102,7 @@ namespace HitboxViewer.Displayers
     }
     public abstract class BaseDisplayer<T> : BaseDisplayer where T : Component
     {
-        protected HitboxDefinition Definition => HitboxViewerConfig.DefinitionOf<T>();
+        protected HitboxDefinition Definition => HitboxDefinition.DefinitionOf<T>();
         protected T GenericTarget => (T)target;
         public bool AnyFlagEnabled
         {

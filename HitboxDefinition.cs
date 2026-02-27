@@ -16,8 +16,7 @@ namespace HitboxViewer
 {
     public class HitboxDefinition
     {
-
-        internal static List<HitboxDefinition> all = new List<HitboxDefinition>();
+        internal static Dictionary<Type, HitboxDefinition> definitions = new Dictionary<Type, HitboxDefinition>();
 
         #region constructor
         public HitboxDefinition(string name, BaseHitboxConfig config, HitboxesFlags flags) : this(name, config, new BaseHitboxUI(), flags) { }
@@ -34,7 +33,6 @@ namespace HitboxViewer
             Config = config;
             Config.hitboxType = this;
 
-            all.Add(this);
         }
         #endregion
 
@@ -46,5 +44,37 @@ namespace HitboxViewer
         public string Name { get; private set; }
         #endregion
 
+
+        #region definition methods
+        public static void Define<T>(string name, BaseHitboxConfig config, HitboxesFlags flags)
+        {
+            Define(typeof(T), name, config, new BaseHitboxUI(), flags);
+        }
+        public static void Define(Type hitboxType, string name, BaseHitboxConfig config, HitboxesFlags flags)
+        {
+            Define(hitboxType, name, config, new BaseHitboxUI(), flags);
+        }
+
+        public static void Define<T>(string name, BaseHitboxConfig config, BaseHitboxUI ui, HitboxesFlags flags)
+        {
+            Define(typeof(T), name, config, ui, flags);
+        }
+        public static void Define(Type hitboxType, string name, BaseHitboxConfig config, BaseHitboxUI ui, HitboxesFlags flags) 
+        { 
+            Define(hitboxType, new HitboxDefinition(name, config, ui, flags));
+        }
+
+        public static void Define<T>(HitboxDefinition definition)
+        {
+            Define(typeof(T), definition);
+        }
+        public static void Define(Type hitboxType, HitboxDefinition definition)
+        {
+            definitions[hitboxType] = definition;
+        }
+
+        public static HitboxDefinition DefinitionOf<T>() => definitions[typeof(T)];
+        public static HitboxDefinition DefinitionOf(Type type) => definitions[type]; 
+        #endregion
     }
 }
