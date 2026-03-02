@@ -45,8 +45,20 @@ namespace HitboxViewer.Displayers
 
         private bool Hidden
         {
-            set => lineRenderer.enabled = !value;
-            get => !lineRenderer.enabled;
+            set
+            {
+                if (lineRenderer.IsNullOrDestroyed())
+                    return;
+
+                lineRenderer.enabled = !value;
+            }
+            get
+            {
+                if (lineRenderer.IsNullOrDestroyed())
+                    return true;
+
+                return !lineRenderer.enabled;
+            }
         }
 
         public abstract HitboxesFlags HitboxFlags { get; }
@@ -56,6 +68,9 @@ namespace HitboxViewer.Displayers
         #region position setting
         public void SetPositions(params Vector3[] positions)
         {
+            if (lineRenderer.IsNullOrDestroyed())
+                return;
+
             lineRenderer.positionCount = positions.Length;
             lineRenderer.SetPositions(positions);
 
