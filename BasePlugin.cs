@@ -96,6 +96,19 @@ namespace HitboxViewer
                 HitboxesFlags.Trigger | HitboxesFlags.NotTrigger
             );
 
+
+            HitboxDefinition.Define<CharacterController>(
+                nameof(CharacterController),
+                new RoundedHitboxConfig3D(
+                    KeyCode.None,
+                    ColorExtensions.HexToColor("#8A2BE2"),
+                    ColorExtensions.HexToColor("#8A2BE2"),
+                    RoundedHitboxAlgorithm.ThreeAxis
+                ),
+                new RoundedHitbox3DUI(),
+                HitboxesFlags.Trigger | HitboxesFlags.NotTrigger
+            );
+
             HitboxDefinition.Define<MeshCollider>(
                 nameof(MeshCollider),
                 new BaseHitboxConfig(
@@ -160,18 +173,6 @@ namespace HitboxViewer
                 HitboxesFlags.Trigger | HitboxesFlags.NotTrigger
             );
             */
-
-            HitboxDefinition.Define<CharacterController>(
-                nameof(CharacterController),
-                new RoundedHitboxConfig3D(
-                    KeyCode.None,
-                    ColorExtensions.HexToColor("#8A2BE2"),
-                    ColorExtensions.HexToColor("#8A2BE2"),
-                    RoundedHitboxAlgorithm.ThreeAxis
-                ),
-                new RoundedHitbox3DUI(),
-                HitboxesFlags.Trigger | HitboxesFlags.NotTrigger
-            );
 
             HitboxDefinition.Define<PolygonCollider2D>(
                 nameof(PolygonCollider2D),
