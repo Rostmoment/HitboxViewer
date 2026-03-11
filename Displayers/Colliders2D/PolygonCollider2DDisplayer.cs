@@ -9,51 +9,32 @@ namespace HitboxViewer.Displayers.Colliders2D
         private Quaternion savedRotation = UnityConstants.NaNQuaternion;
         private Vector3 savedScale = UnityConstants.NaNVector;
         private int savedPathCount = -1;
-        private Vector2[] savedPoints = null;
 
         protected override void _Visualize()
         {
             Transform t = target.transform;
-
             savedPosition = t.position;
             savedRotation = t.rotation;
             savedScale = t.lossyScale;
-            savedPathCount = GenericTarget.pathCount;
 
+            int pathCount = GenericTarget.pathCount;
+            savedPathCount = pathCount;
 
-            int totalPoints = 0;
-            for (int i = 0; i < GenericTarget.pathCount; i++)
-                totalPoints += GenericTarget.GetPath(i).Length;
+            Vector2[][] paths = new Vector2[pathCount][];
+            for (int i = 0; i < pathCount; i++)
+                paths[i] = GenericTarget.GetPath(i);
 
-            savedPoints = new Vector2[totalPoints];
-
-            int index = 0;
-            for (int i = 0; i < GenericTarget.pathCount; i++)
+            for (int i = 0; i < pathCount; i++)
             {
-                Vector2[] path = GenericTarget.GetPath(i);
-                for (int j = 0; j < path.Length; j++)
-                {
-                    savedPoints[index++] = path[j];
-                }
-            }
+                Vector2[] path = paths[i];
+                int pathLen = path.Length;
+                if (pathLen < 2) continue;
 
-
-            for (int i = 0; i < GenericTarget.pathCount; i++)
-            {
-                Vector2[] path = GenericTarget.GetPath(i);
-
-                if (path.Length < 2)
-                    continue;
-
-                Vector3[] worldPoints = new Vector3[path.Length + 1];
-
-                for (int j = 0; j < path.Length; j++)
-                {
+                Vector3[] worldPoints = new Vector3[pathLen + 1];
+                for (int j = 0; j < pathLen; j++)
                     worldPoints[j] = t.TransformPoint(path[j]);
-                }
 
-                worldPoints[path.Length] = worldPoints[0];
-
+                worldPoints[pathLen] = worldPoints[0];
                 SetPositions(worldPoints);
             }
         }
@@ -61,7 +42,6 @@ namespace HitboxViewer.Displayers.Colliders2D
         protected override bool _ShouldBeUpdated()
         {
             Transform t = target.transform;
-
             if (savedPosition != t.position
                 || savedRotation != t.rotation
                 || savedScale != t.lossyScale
@@ -69,20 +49,24 @@ namespace HitboxViewer.Displayers.Colliders2D
                 return true;
 
             int index = 0;
-
-            for (int i = 0; i < GenericTarget.pathCount; i++)
+            int pathCount = GenericTarget.pathCount;
+            for (int i = 0; i < pathCount; i++)
             {
                 Vector2[] path = GenericTarget.GetPath(i);
+                int pathLen = path.Length;
+                if (pathLen < 2) continue;
 
-                for (int j = 0; j < path.Length; j++)
+                // +1 because SetPositions appends closing point
+                if (index + pathLen + 1 > points.Length)
+                    return true;
+
+                for (int j = 0; j < pathLen; j++)
                 {
-                    if (savedPoints == null || index >= savedPoints.Length || savedPoints[index] != path[j])
+                    if ((Vector2)points[index + j] != path[j])
                         return true;
-
-                    index++;
                 }
+                index += pathLen + 1;
             }
-
             return false;
         }
     }
