@@ -28,12 +28,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Reference Include="UnityEngine.UI">
-			<HintPath>lib\UnityEngine.UI (1).dll</HintPath>
-		</Reference>
+		<Folder Include="Showcasing\" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<Folder Include="Showcasing\" />
+	  <Reference Include="UnityEngine.UI">
+	    <HintPath>lib\UnityEngine.UI.dll</HintPath>
+	  </Reference>
 	</ItemGroup>
 </Project>
