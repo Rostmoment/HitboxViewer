@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+
 using UnityEngine;
 using UnityEngine.UI;
 using UniverseLib.UI;
@@ -32,7 +32,7 @@ namespace HitboxViewer.UI
             UIFactory.SetLayoutElement(drop, minHeight: 25, minWidth: 110, flexibleWidth: 999);
 
             foreach (RoundedHitboxAlgorithm algorithm in RoundedHitboxAlgorithmExtensions.all)
-                dropdown.options.Add(new Dropdown.OptionData($"{algorithm} ({algorithm.GetDescription()})"));
+                dropdown.options.Add(new Dropdown.OptionData($"{algorithm} ({algorithm.Description})"));
 
             dropdown.value = (int)config.Algorithm;
 

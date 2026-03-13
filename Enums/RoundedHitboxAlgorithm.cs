@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+
 
 namespace HitboxViewer.Enums
 {
@@ -17,11 +17,18 @@ namespace HitboxViewer.Enums
             [RoundedHitboxAlgorithm.TwoAxis] = "Just two rings, the fastest"
         };
 
-        public static string GetDescription(this RoundedHitboxAlgorithm algorithm)
+        extension (RoundedHitboxAlgorithm algorithm)
         {
-            if (descriptions.TryGetValue(algorithm, out string description))
-                return description;
-            return "";
+            public string Description
+            {
+                get
+                {
+                    if (descriptions.TryGetValue(algorithm, out string description))
+                        return description;
+                    
+                    return "";
+                }
+            }
         }
     }
     public enum RoundedHitboxAlgorithm

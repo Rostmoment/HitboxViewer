@@ -4,9 +4,6 @@ using HitboxViewer.Displayers.Colliders;
 using HitboxViewer.Displayers.Colliders2D;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AI;
 
