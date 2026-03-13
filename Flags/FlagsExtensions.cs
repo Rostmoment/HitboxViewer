@@ -24,14 +24,21 @@ namespace HitboxViewer.Flags
         };
         public static readonly HitboxesFlags[] all = Enum.GetValues(typeof(HitboxesFlags)).Cast<HitboxesFlags>().Where(f => f != HitboxesFlags.None).ToArray();
 
-
-        public static string GetDescription(this HitboxesFlags flag) => descriptions[flag];
-        public static string GetName(this HitboxesFlags flag)
+        extension(HitboxesFlags flag)
         {
-            if (names.TryGetValue(flag, out string name))
-                return name;
-            return flag.ToString();
-        }
+            public bool IsSingle => (flag != HitboxesFlags.None) && ((flag & (flag - 1)) == 0);
 
+            public string Description => descriptions[flag];
+            public string Name
+            {
+                get
+                {
+                    if (names.TryGetValue(flag, out string name))
+                        return name;
+
+                    return flag.ToString();
+                }
+            }
+        }
     }
 }

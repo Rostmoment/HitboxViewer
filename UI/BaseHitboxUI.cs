@@ -57,7 +57,7 @@ namespace HitboxViewer.UI
 
                 GameObject bg = UIFactory.CreateVerticalGroup(content, "BG", false, true, true, true, UIConstants.BLOCK_SPACING, default, UIConstants.flagBackgroundColor);
 
-                Text name = UIFactory.CreateLabel(bg, $"Name{flag}", flag.GetName());
+                Text name = UIFactory.CreateLabel(bg, $"Name{flag}", flag.Name);
                 UIFactory.SetLayoutElement(name.gameObject, flexibleWidth: 1);
 
                 GameObject toggleObject = UIFactory.CreateToggle(bg, $"Toggle{flag}", out Toggle toggle, out Text text);
@@ -79,7 +79,7 @@ namespace HitboxViewer.UI
                 });
                 UIFactory.SetLayoutElement(toggleObject, 1, 25);
 
-                Text description = UIFactory.CreateLabel(bg, $"Description{flag}", flag.GetDescription(), color: UIConstants.flagDescriptionColor);
+                Text description = UIFactory.CreateLabel(bg, $"Description{flag}", flag.Description, color: UIConstants.flagDescriptionColor);
                 UIFactory.SetLayoutElement(description.gameObject, flexibleWidth: 1);
 
                 ButtonRef apply = UIFactory.CreateButton(bg, $"Apply{flag}", "Apply", UIConstants.greenButtonColor);

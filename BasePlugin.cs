@@ -66,8 +66,8 @@ namespace HitboxViewer
                 nameof(BoxCollider),
                 new BaseHitboxConfig(
                     KeyCode.None,
-                    ColorExtensions.HexToColor("#DB220D"),
-                    ColorExtensions.HexToColor("#DB220D")
+                    Color.HexToColor("#DB220D"),
+                    Color.HexToColor("#DB220D")
                 ),
                 HitboxesFlags.Trigger | HitboxesFlags.NotTrigger
             );
@@ -76,8 +76,8 @@ namespace HitboxViewer
                 nameof(SphereCollider),
                 new RoundedHitboxConfig3D(
                     KeyCode.None,
-                    ColorExtensions.HexToColor("#0D2FDB"),
-                    ColorExtensions.HexToColor("#0D2FDB"),
+                    Color.HexToColor("#0D2FDB"),
+                    Color.HexToColor("#0D2FDB"),
                     RoundedHitboxAlgorithm.LatitudeLongitude
                 ),
                 new RoundedHitbox3DUI(),
@@ -88,8 +88,8 @@ namespace HitboxViewer
                 nameof(CapsuleCollider),
                 new RoundedHitboxConfig3D(
                     KeyCode.None,
-                    ColorExtensions.HexToColor("#28DB0D"),
-                    ColorExtensions.HexToColor("#28DB0D"),
+                    Color.HexToColor("#28DB0D"),
+                    Color.HexToColor("#28DB0D"),
                     RoundedHitboxAlgorithm.ThreeAxis
                 ),
                 new RoundedHitbox3DUI(),
@@ -101,8 +101,8 @@ namespace HitboxViewer
                 nameof(CharacterController),
                 new RoundedHitboxConfig3D(
                     KeyCode.None,
-                    ColorExtensions.HexToColor("#8A2BE2"),
-                    ColorExtensions.HexToColor("#8A2BE2"),
+                    Color.HexToColor("#8A2BE2"),
+                    Color.HexToColor("#8A2BE2"),
                     RoundedHitboxAlgorithm.ThreeAxis
                 ),
                 new RoundedHitbox3DUI(),
@@ -113,8 +113,8 @@ namespace HitboxViewer
                 nameof(MeshCollider),
                 new BaseHitboxConfig(
                     KeyCode.None,
-                    ColorExtensions.HexToColor("#DBDB0D"),
-                    ColorExtensions.HexToColor("#DBDB0D")
+                    Color.HexToColor("#DBDB0D"),
+                    Color.HexToColor("#DBDB0D")
                 ),
                 HitboxesFlags.Trigger | HitboxesFlags.NotTrigger
             );
@@ -124,8 +124,8 @@ namespace HitboxViewer
                 nameof(WheelCollider),
                 new BaseHitboxConfig(
                     KeyCode.None,
-                    ColorExtensions.HexToColor("#DB7B0D"),
-                    ColorExtensions.HexToColor("#DB7B0D")
+                    Color.HexToColor("#DB7B0D"),
+                    Color.HexToColor("#DB7B0D")
                 ),
                 HitboxesFlags.Trigger | HitboxesFlags.NotTrigger
             );
@@ -134,8 +134,8 @@ namespace HitboxViewer
                 nameof(TerrainCollider),
                 new BaseHitboxConfig(
                     KeyCode.None,
-                    ColorExtensions.HexToColor("#A020F0"),
-                    ColorExtensions.HexToColor("#A020F0")
+                    Color.HexToColor("#A020F0"),
+                    Color.HexToColor("#A020F0")
                 ),
                 HitboxesFlags.Trigger | HitboxesFlags.NotTrigger
             );
@@ -145,8 +145,8 @@ namespace HitboxViewer
                 nameof(BoxCollider2D),
                 new BaseHitboxConfig(
                     KeyCode.None,
-                    ColorExtensions.HexToColor("#FF19AF"),
-                    ColorExtensions.HexToColor("#FF19AF")
+                    Color.HexToColor("#FF19AF"),
+                    Color.HexToColor("#FF19AF")
                 ),
                 HitboxesFlags.Trigger | HitboxesFlags.NotTrigger
             );
@@ -155,8 +155,8 @@ namespace HitboxViewer
                 nameof(CircleCollider2D),
                 new RoundedHitboxConfig(
                     KeyCode.None,
-                    ColorExtensions.HexToColor("#039AFF"),
-                    ColorExtensions.HexToColor("#039AFF")
+                    Color.HexToColor("#039AFF"),
+                    Color.HexToColor("#039AFF")
                 ),
                 new RoundedHitboxUI(),
                 HitboxesFlags.Trigger | HitboxesFlags.NotTrigger
@@ -167,8 +167,8 @@ namespace HitboxViewer
                 nameof(CapsuleCollider2D),
                 new BaseHitboxConfig(
                     KeyCode.None,
-                    ColorExtensions.HexToColor("#633310"),
-                    ColorExtensions.HexToColor("#633310")
+                    Color.HexToColor("#633310"),
+                    Color.HexToColor("#633310")
                 ),
                 HitboxesFlags.Trigger | HitboxesFlags.NotTrigger
             );
@@ -178,8 +178,8 @@ namespace HitboxViewer
                 nameof(PolygonCollider2D),
                 new BaseHitboxConfig(
                     KeyCode.None,
-                    ColorExtensions.HexToColor("#000000"),
-                    ColorExtensions.HexToColor("#000000")
+                    Color.HexToColor("#000000"),
+                    Color.HexToColor("#000000")
                 ),
                 HitboxesFlags.Trigger | HitboxesFlags.NotTrigger
             );
@@ -189,8 +189,8 @@ namespace HitboxViewer
                 nameof(EdgeCollider2D),
                 new BaseHitboxConfig(
                     KeyCode.None,
-                    ColorExtensions.HexToColor("#FFFFFF"),
-                    ColorExtensions.HexToColor("#FFFFFF")
+                    Color.HexToColor("#FFFFFF"),
+                    Color.HexToColor("#FFFFFF")
                 ),
                 HitboxesFlags.Trigger | HitboxesFlags.NotTrigger
             );
@@ -199,8 +199,8 @@ namespace HitboxViewer
                 nameof(CompositeCollider2D),
                 new BaseHitboxConfig(
                     KeyCode.None,
-                    ColorExtensions.HexToColor("#363636"),
-                    ColorExtensions.HexToColor("#363636")
+                    Color.HexToColor("#363636"),
+                    Color.HexToColor("#363636")
                 ),
                 HitboxesFlags.Trigger | HitboxesFlags.NotTrigger
             );
@@ -210,8 +210,8 @@ namespace HitboxViewer
                 nameof(NavMeshObstacle),
                 new RoundedHitboxConfig3D(
                     KeyCode.None,
-                    ColorExtensions.HexToColor("#008080"),
-                    ColorExtensions.HexToColor("#008080"),
+                    Color.HexToColor("#008080"),
+                    Color.HexToColor("#008080"),
                     RoundedHitboxAlgorithm.ThreeAxis
                 ),
                 new RoundedHitbox3DUI(),

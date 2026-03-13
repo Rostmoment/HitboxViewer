@@ -9,14 +9,20 @@ namespace HitboxViewer.Extensions
 {
     public static class ColorExtensions
     {
-        public static Color HexToColor(string hex)
+        extension(Color)
         {
-            if (ColorUtility.TryParseHtmlString(hex, out var color))
-                return color;
+            public static Color HexToColor(string hex)
+            {
+                if (ColorUtility.TryParseHtmlString(hex, out var color))
+                    return color;
 
-            throw new ArgumentException($"Invalid hex color string: {hex}");
+                throw new ArgumentException($"Invalid hex color string: {hex}");
+            }
         }
-        public static string ToRGBAHex(this Color color) => ColorUtility.ToHtmlStringRGBA(color);
-        public static string ToRGBHex(this Color color) => ColorUtility.ToHtmlStringRGB(color);
+        extension(Color color)
+        {
+            public string ToRGBAHex() => ColorUtility.ToHtmlStringRGBA(color);
+            public string ToRGBHex() => ColorUtility.ToHtmlStringRGB(color);
+        }
     }
 }
