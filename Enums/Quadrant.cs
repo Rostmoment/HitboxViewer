@@ -12,7 +12,6 @@ namespace HitboxViewer.Enums
     {
         extension(Quadrant quadrant)
         {
-
             public void GetMinMax(out float min, out float max)
             {
                 min = quadrant switch

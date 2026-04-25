@@ -2,6 +2,7 @@
 using HitboxViewer.Flags;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UniverseLib.Utility;
 
@@ -35,7 +36,11 @@ namespace HitboxViewer.Displayers
 
             return diplayer;
         }
-        public static void Remove(Component component) => displayers.Remove(component);
+
+        protected static void ClearFromNulls()
+        {
+            displayers = displayers.Where(x => !x.Value.IsNullOrDestroyed() && !x.Key.IsNullOrDestroyed()).ToDictionary(x => x.Key, x => x.Value);
+        }
         #endregion
 
         #region fields and properties
@@ -95,7 +100,7 @@ namespace HitboxViewer.Displayers
             if (target.IsNullOrDestroyed())
             {
                 Destroy(this);
-                displayers.Remove(target);
+                ClearFromNulls();
                 return;
             }
 
@@ -145,7 +150,7 @@ namespace HitboxViewer.Displayers
             if (target.IsNullOrDestroyed())
             {
                 Destroy(this);
-                displayers.Remove(target);
+                ClearFromNulls();
                 return;
             }
 
@@ -158,6 +163,9 @@ namespace HitboxViewer.Displayers
 
             HitboxDefinition definition = Definition;
             lineRenderer = gameObject.AddComponent<LineRenderer>();
+
+            if (lineRenderer.IsNullOrDestroyed())
+                return; // Okay, but why?
 
             lineRenderer.material = new Material(Shader.Find(HitboxViewerConfig.ShaderName))
             {
@@ -172,11 +180,13 @@ namespace HitboxViewer.Displayers
             lineRenderer.endColor = definition.Config.EndColor;
 
             lineRenderer.startWidth = definition.Config.StartWidth;
-
             lineRenderer.endWidth = definition.Config.EndWidth;
+
             lineRenderer.loop = false;
             lineRenderer.useWorldSpace = true;
 
+            lineRenderer.sortingLayerName = "Default";
+            lineRenderer.sortingOrder = 32767;
             Hide();
         }
 

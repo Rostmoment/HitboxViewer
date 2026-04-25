@@ -19,7 +19,7 @@ namespace HitboxViewer
             [typeof(SphereCollider)] = typeof(SphereColliderDisplayer),
             [typeof(CapsuleCollider)] = typeof(CapsuleColliderDisplayer),
             [typeof(MeshCollider)] = typeof(MeshColliderDisplayer),
-            [typeof(CharacterController)] = typeof(CharacterControllerDisplayer) 
+            [typeof(CharacterController)] = typeof(CharacterControllerDisplayer)
         };
 
         private static Dictionary<Type, Type> colliders2d = new Dictionary<Type, Type>()
@@ -42,6 +42,7 @@ namespace HitboxViewer
                 }
             }
         }
+
         private void UpdateColliders2D()
         {
             foreach (Collider2D collider in GameObject.FindObjectsOfType<Collider2D>())
@@ -63,6 +64,15 @@ namespace HitboxViewer
             }
         }
 
+        private void UpdateRectTransforms()
+        {
+            foreach (RectTransform rect in GameObject.FindObjectsOfType<RectTransform>())
+            {
+                RectTransformDisplayer displayer = BaseDisplayer.GetOrAdd<RectTransformDisplayer>(rect);
+                displayer.Visualize();
+            }
+        }
+
         private void Update()
         {
             if (updateCounter < 0)
@@ -79,6 +89,7 @@ namespace HitboxViewer
             UpdateColliders();
             UpdateColliders2D();
             UpdateNavMeshObstacles();
+            UpdateRectTransforms();
 
             OnUpdate?.Invoke();
         }

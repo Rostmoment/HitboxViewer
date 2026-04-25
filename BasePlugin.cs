@@ -17,8 +17,8 @@ namespace HitboxViewer
 {
     class PluginInfo
     {
-        public const string GUID = "rost.moment.unity.hitboxviewer";
-        public const string VERSION = "0.1.0";
+        public const string GUID = "rost.moment.unity..hitboxviewer";
+        public const string VERSION = "0.1.1";
         public const string NAME = "Hitbox Viewer";
     }
    
@@ -216,6 +216,17 @@ namespace HitboxViewer
                 ),
                 new RoundedHitbox3DUI(),
                 HitboxesFlags.BoxNavMeshObstacle | HitboxesFlags.CapsuleNavMeshObstacle
+            );
+
+
+            HitboxDefinition.Define<RectTransform>(
+                nameof(RectTransform),
+                new BaseHitboxConfig(
+                    KeyCode.None,
+                    Color.HexToColor("#FF8C00"),
+                    Color.HexToColor("#FF8C00")
+                ),
+                HitboxesFlags.NotTrigger
             );
         }
     }

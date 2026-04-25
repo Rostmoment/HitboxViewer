@@ -47,7 +47,7 @@ namespace HitboxViewer.Displayers.Colliders
                 _ => throw new ArgumentException($"Unknown algorithm {config.Algorithm}"),
             };
 
-            points.RotatePoints(center, GenericTarget.GetActualRotation());
+            points.RotatePoints(center, GenericTarget.ActualRotation);
 
             SetPositions(points);
         }
