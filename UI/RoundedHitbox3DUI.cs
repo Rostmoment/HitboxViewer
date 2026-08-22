@@ -21,42 +21,17 @@ namespace HitboxViewer.UI
 
             RoundedHitboxConfig3D config = (RoundedHitboxConfig3D)hitboxType.Config;
 
-            #region Algorithm dropdown
-            GameObject algorithmBg = CreateConfigBlockBG("AlgorithmBG");
+            IEnumerable<string> algorithmOptions = RoundedHitboxAlgorithmExtensions.all
+                .Select(algorithm => $"{algorithm} ({algorithm.Description})");
 
-            Text title = UIFactory.CreateLabel(algorithmBg, "AlgorithmTitle", "Drawing algorithm");
-            UIFactory.SetLayoutElement(title.gameObject, minHeight: 25, minWidth: 110, flexibleWidth: 999);
-
-
-            GameObject drop = UIFactory.CreateDropdown(algorithmBg, "AlgorithmDropdown", out Dropdown dropdown, "Algorithm", 14, (x) => { });
-            UIFactory.SetLayoutElement(drop, minHeight: 25, minWidth: 110, flexibleWidth: 999);
-
-            foreach (RoundedHitboxAlgorithm algorithm in RoundedHitboxAlgorithmExtensions.all)
-                dropdown.options.Add(new Dropdown.OptionData($"{algorithm} ({algorithm.Description})"));
-
-            dropdown.value = (int)config.Algorithm;
-
-            Text description = UIFactory.CreateLabel(algorithmBg, $"AlgorithmDescription", "Defines what algorithm will be used for drawing rounded hitboxes", color: UIConstants.configDescriptionColor);
-            UIFactory.SetLayoutElement(description.gameObject, flexibleWidth: 1);
-
-
-            GameObject algorithmsButtonsBg = UIFactory.CreateHorizontalGroup(algorithmBg, "AlgoritgmButtonsBG", false, true, true, true, 0, default);
-
-            ButtonRef applyFibonacci = UIFactory.CreateButton(algorithmsButtonsBg, $"ApplyAlgorithm", "Apply", UIConstants.greenButtonColor);
-            applyFibonacci.OnClick += () =>
-            {
-                config.Algorithm = (RoundedHitboxAlgorithm)dropdown.value;
-            };
-            UIFactory.SetLayoutElement(applyFibonacci.Component.gameObject, 100, 25, 100, 25, 100, 25);
-
-            ButtonRef resetFibonacci = UIFactory.CreateButton(algorithmsButtonsBg, $"ResetAlgorithm", "Reset", UIConstants.redButtonColor);
-            resetFibonacci.OnClick += () =>
-            {
-                dropdown.value = (int)config.DefaultAlgorithm;
-                config.Algorithm = config.DefaultAlgorithm;
-            };
-            UIFactory.SetLayoutElement(resetFibonacci.Component.gameObject, 100, 25, 100, 25, 100, 25);
-            #endregion
+            CreateDropdownSetting(
+                "Algorithm",
+                "Drawing Algorithm",
+                "Defines what algorithm will be used for drawing rounded hitboxes",
+                algorithmOptions,
+                (int)config.Algorithm,
+                (int)config.DefaultAlgorithm,
+                value => config.Algorithm = (RoundedHitboxAlgorithm)value);
         }
     }
 }

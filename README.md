@@ -43,7 +43,9 @@ HitboxViewer supports the following Unity components:
 - `CharacterController`
 - `CircleCollider2D`
 - `BoxCollider2D`
+- `PolygonCollider2D`
 - `NavMeshObstacle` (box and capsule)
+- `RectTransform` (only in world, not in canvas)
   
 The term **"hitbox"** refers to **any of these components** or its bound
 

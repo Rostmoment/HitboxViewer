@@ -9,6 +9,7 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.Networking.Types;
 using UnityEngine.UI;
+using UniverseLib;
 using UniverseLib.UI;
 using UniverseLib.UI.Models;
 using UniverseLib.Utility;
@@ -28,17 +29,20 @@ namespace HitboxViewer.UI
 
             GameObject bg = UIFactory.CreateHorizontalGroup(content, "TitleBG", true, true, true, true, 0, default, UIConstants.titleBackgroundColor);
 
-            Text title = UIFactory.CreateLabel(bg, $"Title{hitboxType.Name}", hitboxType.Name, TextAnchor.MiddleCenter, default, true, 17);
-            UIFactory.SetLayoutElement(title.gameObject, minHeight: 30, minWidth: 200, flexibleWidth: 9999);
+            Text title = UIFactory.CreateLabel(bg, $"Title{hitboxType.Name}", hitboxType.Name, TextAnchor.MiddleCenter, default, true, 18);
+            title.color = UIConstants.textPrimaryColor;
+            UIFactory.SetLayoutElement(title.gameObject, minHeight: 36, minWidth: 200, flexibleWidth: 9999);
 
-            GameObject buttons = UIFactory.CreateHorizontalGroup(content, "Buttons", true, true, true, true, 0, default);
+            GameObject buttons = UIFactory.CreateHorizontalGroup(content, "Buttons", true, true, true, true, UIConstants.SPACING, default);
 
             ButtonRef enableAll = UIFactory.CreateButton(buttons, "EnableAllFlags", "Enable all flags", UIConstants.greenButtonColor);
             UIFactory.SetLayoutElement(enableAll.Component.gameObject, minHeight: 35, flexibleHeight: 0, flexibleWidth: 9999);
+            RuntimeHelper.SetColorBlock(enableAll.Component, UIConstants.greenButtonColor, UIConstants.greenButtonHoverColor, UIConstants.greenButtonPressedColor);
             enableAll.OnClick += hitboxType.Flags.EnableAll;
 
             ButtonRef disableAll = UIFactory.CreateButton(buttons, "DisableAllFlags", "Disable all flags", UIConstants.redButtonColor);
             UIFactory.SetLayoutElement(disableAll.Component.gameObject, minHeight: 35, flexibleHeight: 0, flexibleWidth: 9999);
+            RuntimeHelper.SetColorBlock(disableAll.Component, UIConstants.redButtonColor, UIConstants.redButtonHoverColor, UIConstants.redButtonPressedColor);
             disableAll.OnClick += hitboxType.Flags.DisableAll;
 
             BuildFlagsSettings();
@@ -54,14 +58,16 @@ namespace HitboxViewer.UI
                 if (!hitboxType.Flags.HasFlag(flag))
                     continue;
 
-                GameObject bg = UIFactory.CreateVerticalGroup(content, "BG", false, true, true, true, UIConstants.BLOCK_SPACING, default, UIConstants.flagBackgroundColor);
+                GameObject bg = UIFactory.CreateVerticalGroup(content, $"Flag{flag}BG", false, true, true, true, UIConstants.BLOCK_SPACING, default, UIConstants.flagBackgroundColor);
 
-                Text name = UIFactory.CreateLabel(bg, $"Name{flag}", flag.Name);
-                UIFactory.SetLayoutElement(name.gameObject, flexibleWidth: 1);
+                Text name = UIFactory.CreateLabel(bg, $"Name{flag}", flag.Name, TextAnchor.MiddleLeft, UIConstants.textPrimaryColor);
+                name.fontStyle = FontStyle.Bold;
+                UIFactory.SetLayoutElement(name.gameObject, flexibleWidth: 1, minHeight: 22);
 
                 GameObject toggleObject = UIFactory.CreateToggle(bg, $"Toggle{flag}", out Toggle toggle, out Text text);
                 text.color = UIConstants.disabledToggleTextColor;
                 text.text = "Disabled";
+                text.fontStyle = FontStyle.Bold;
                 toggle.isOn = false;
                 toggle.onValueChanged.AddListener((val) =>
                 {
@@ -81,7 +87,10 @@ namespace HitboxViewer.UI
                 Text description = UIFactory.CreateLabel(bg, $"Description{flag}", flag.Description, color: UIConstants.flagDescriptionColor);
                 UIFactory.SetLayoutElement(description.gameObject, flexibleWidth: 1);
 
-                ButtonRef apply = UIFactory.CreateButton(bg, $"Apply{flag}", "Apply", UIConstants.greenButtonColor);
+                GameObject flagButtonsBg = UIFactory.CreateHorizontalGroup(bg, $"Flag{flag}ButtonsBG", false, true, true, true, UIConstants.SPACING, default);
+
+                ButtonRef apply = UIFactory.CreateButton(flagButtonsBg, $"Apply{flag}", "Apply", UIConstants.greenButtonColor);
+                RuntimeHelper.SetColorBlock(apply.Component, UIConstants.greenButtonColor, UIConstants.greenButtonHoverColor, UIConstants.greenButtonPressedColor);
                 apply.OnClick += () =>
                 {
                     hitboxType.Flags.SetEnabled(toggle.isOn, flag);
@@ -95,191 +104,46 @@ namespace HitboxViewer.UI
             BaseHitboxConfig config = hitboxType.Config;
 
             #region title
-            GameObject titleBg = UIFactory.CreateHorizontalGroup(content, "TitgleBG", true, true, true, true, UIConstants.CONFIG_SPACING, default, UIConstants.titleBackgroundColor);
+            GameObject titleBg = UIFactory.CreateHorizontalGroup(content, "ConfigsTitleBG", true, true, true, true, UIConstants.CONFIG_SPACING, default, UIConstants.titleBackgroundColor);
 
             Text title = UIFactory.CreateLabel(titleBg, $"Config{hitboxType.Name}", $"Configs for {hitboxType.Name}", TextAnchor.MiddleCenter, default, true, 17);
-            UIFactory.SetLayoutElement(title.gameObject, minHeight: 30, minWidth: 200, flexibleWidth: 9999);
+            title.color = UIConstants.textPrimaryColor;
+            UIFactory.SetLayoutElement(title.gameObject, minHeight: 32, minWidth: 200, flexibleWidth: 9999);
             #endregion
 
             configBg = UIFactory.CreateVerticalGroup(content, "ConfigBG", true, true, true, true, UIConstants.CONFIG_SPACING, default, UIConstants.mainBackgroundColor);
 
-            #region start line width
-            GameObject startLineWidthBg = CreateConfigBlockBG("StartWidthBG");
+            CreateFloatSetting(
+                "StartLineWidth",
+                "Start Line Width",
+                "Defines the starting width of the LineRenderer used for this hitbox",
+                config.StartWidth,
+                config.DefaultStartWidth,
+                value => config.StartWidth = value);
 
-            Text startWidthTitle = UIFactory.CreateLabel(startLineWidthBg, $"StartWidthTitle{hitboxType.Name}", $"Start Line Width");
-            UIFactory.SetLayoutElement(startWidthTitle.gameObject, minHeight: 25, flexibleWidth: 9999);
+            CreateFloatSetting(
+                "EndLineWidth",
+                "End Line Width",
+                "Defines the ending width of the LineRenderer used for this hitbox",
+                config.EndWidth,
+                config.DefaultEndWidth,
+                value => config.EndWidth = value);
 
-            UIFactory.SetLayoutElement(startWidthTitle.gameObject, minHeight: 25, flexibleWidth: 9999);
+            CreateColorSetting(
+                "StartColor",
+                "Start Line Color",
+                "Start color in hex format of the hitbox outline",
+                config.StartColor,
+                config.DefaultStartColor,
+                color => config.StartColor = color);
 
-            InputFieldRef startLineWidthInput = UIFactory.CreateInputField(startLineWidthBg, "StartLineWidth", "Start width of line");
-            startLineWidthInput.Text = config.StartWidth.ToString();
-            UIFactory.SetLayoutElement(startLineWidthInput.Component.gameObject, flexibleWidth: 9999, minHeight: 25);
-
-            Text startLineWidthDescription = UIFactory.CreateLabel(startLineWidthBg, $"DescriptionStartInput", $"Defines the starting width of the LineRenderer used for this hitbox\nDefault: {config.DefaultStartWidth}", color: UIConstants.configDescriptionColor);
-            UIFactory.SetLayoutElement(startLineWidthDescription.gameObject, flexibleWidth: 1);
-
-            GameObject startLineWidthButtonsBg = UIFactory.CreateHorizontalGroup(startLineWidthBg, "StartWidthButtonsBG", false, true, true, true, 0, default);
-            ButtonRef applyStartLineWidth = UIFactory.CreateButton(startLineWidthButtonsBg, $"ApplyStartLineWidth", "Apply", UIConstants.greenButtonColor);
-            applyStartLineWidth.OnClick += () =>
-            {
-                if (!float.TryParse(startLineWidthInput.Text, out float value))
-                {
-                    config.StartWidth = config.DefaultStartWidth;
-                    startLineWidthInput.Text = config.DefaultStartWidth.ToString();
-                }
-                config.StartWidth = value;
-            };
-            UIFactory.SetLayoutElement(applyStartLineWidth.Component.gameObject, 100, 25, 100, 25, 100, 25);
-
-            ButtonRef resetStartLineWidth = UIFactory.CreateButton(startLineWidthButtonsBg, $"ResetStartLineWidth", "Reset", UIConstants.redButtonColor);
-            resetStartLineWidth.OnClick += () =>
-            {
-                config.StartWidth = config.DefaultStartWidth;
-                startLineWidthInput.Text = config.DefaultStartWidth.ToString();
-            };
-            UIFactory.SetLayoutElement(resetStartLineWidth.Component.gameObject, 100, 25, 100, 25, 100, 25);
-            #endregion
-
-            #region end line width
-            GameObject endLineWidthBg = CreateConfigBlockBG("EndWidthBG");
-
-            Text endWidthTitle = UIFactory.CreateLabel(endLineWidthBg, $"EndWidthTitle{hitboxType.Name}", $"End Line Width");
-            UIFactory.SetLayoutElement(endWidthTitle.gameObject, minHeight: 25, flexibleWidth: 9999);
-
-            InputFieldRef endLineWidthInput = UIFactory.CreateInputField(endLineWidthBg, "EndLineWidth", "End width of line");
-            endLineWidthInput.Text = config.EndWidth.ToString();
-            UIFactory.SetLayoutElement(endLineWidthInput.Component.gameObject, flexibleWidth: 9999, minHeight: 25);
-
-            Text endLineWidthDescription = UIFactory.CreateLabel(endLineWidthBg, $"DescriptionEndInput", $"Defines the ending width of the LineRenderer used for this hitbox\nDefault: {config.DefaultEndWidth}", color: UIConstants.configDescriptionColor);
-            UIFactory.SetLayoutElement(endLineWidthDescription.gameObject, flexibleWidth: 1);
-
-            GameObject endLineWidthButtonsBg = UIFactory.CreateHorizontalGroup(endLineWidthBg, "EndWidthButtonsBG", false, true, true, true, 0, default);
-            ButtonRef applyEndLineWidth = UIFactory.CreateButton(endLineWidthButtonsBg, $"ApplyEndLineWidth", "Apply", UIConstants.greenButtonColor);
-            applyEndLineWidth.OnClick += () =>
-            {
-                if (!float.TryParse(endLineWidthInput.Text, out float value))
-                {
-                    config.EndWidth = config.DefaultEndWidth;
-                    endLineWidthInput.Text = config.DefaultEndWidth.ToString();
-                }
-                config.EndWidth = value;
-            };
-            UIFactory.SetLayoutElement(applyEndLineWidth.Component.gameObject, 100, 25, 100, 25, 100, 25);
-
-            ButtonRef resetEndLineWidth = UIFactory.CreateButton(endLineWidthButtonsBg, $"ResetEndLineWidth", "Reset", UIConstants.redButtonColor);
-            resetEndLineWidth.OnClick += () =>
-            {
-                config.EndWidth = config.DefaultEndWidth;
-                endLineWidthInput.Text = config.DefaultEndWidth.ToString();
-            };
-            UIFactory.SetLayoutElement(resetEndLineWidth.Component.gameObject, 100, 25, 100, 25, 100, 25);
-            #endregion
-
-            #region start line color
-            GameObject startColorBg = CreateConfigBlockBG("StartColorBG");
-
-            Text startColorTitle = UIFactory.CreateLabel(startColorBg, $"StartColorTitle{hitboxType.Name}", $"Start Line Color");
-            UIFactory.SetLayoutElement(startColorTitle.gameObject, minHeight: 25, flexibleWidth: 9999);
-
-            GameObject imageStartColorBg = UIFactory.CreateHorizontalGroup(startColorBg, "StartColorImageBG", false, false, false, false, 0, default, UIConstants.configBackgroundColor);
-            // I don't know why, but simple startColorBg doesn't work, but imageStartColorBg does
-            Image startColorImage = UIFactory.CreateUIObject("StartColorImage", imageStartColorBg, new Vector2(100, 25)).AddComponent<Image>();
-            UIFactory.SetLayoutElement(startColorImage.gameObject, flexibleWidth: 1);
-
-            InputFieldRef startColorInput = UIFactory.CreateInputField(startColorBg, "StartColorInput", config.StartColor.ToRGBHex());
-            startColorInput.Text = config.StartColor.ToRGBHex();
-            UIFactory.SetLayoutElement(startColorInput.Component.gameObject, flexibleWidth: 1);
-
-            Text startColorDescription = UIFactory.CreateLabel(startColorBg, "DescriptionStartColor", "Start color in hex format of the hitbox outline", color: UIConstants.configDescriptionColor);
-            UIFactory.SetLayoutElement(startColorDescription.gameObject, flexibleWidth: 1);
-
-            startColorImage.color = config.StartColor;
-
-            GameObject startColorButtonsBg = UIFactory.CreateHorizontalGroup(startColorBg, "StartColorButtonsBG", false, true, true, true, 0, default);
-            ButtonRef applyStartColor = UIFactory.CreateButton(startColorButtonsBg, $"StartColorApply", "Apply", UIConstants.greenButtonColor);
-            UIFactory.SetLayoutElement(applyStartColor.Component.gameObject, 100, 25, 100, 25, 100, 25);
-            applyStartColor.OnClick += () =>
-            {
-                string hex = startColorInput.Text;
-
-                if (!hex.StartsWith("#"))
-                    hex = "#" + hex;
-
-                if (ColorUtility.TryParseHtmlString(hex, out Color color))
-                {
-                    startColorImage.color = color;
-                    config.StartColor = color;
-                }
-                else
-                {
-                    startColorImage.color = config.DefaultStartColor;
-                    config.StartColor = config.DefaultStartColor;
-                    startColorInput.Text = config.DefaultStartColor.ToRGBHex();
-                }
-            };
-
-            ButtonRef resetStartColor = UIFactory.CreateButton(startColorButtonsBg, $"StartColorReset", "Reset", UIConstants.redButtonColor);
-            UIFactory.SetLayoutElement(resetStartColor.Component.gameObject, 100, 25, 100, 25, 100, 25);
-            resetStartColor.OnClick += () =>
-            {
-                startColorImage.color = config.DefaultStartColor;
-                config.StartColor = config.DefaultStartColor;
-                startColorInput.Text = config.DefaultStartColor.ToRGBHex();
-            };
-            #endregion
-
-            #region end line color
-            GameObject endColorBg = CreateConfigBlockBG("EndColorBG");
-
-            Text endColorTitle = UIFactory.CreateLabel(endColorBg, $"EndColorTitle{hitboxType.Name}", $"End Line Color");
-            UIFactory.SetLayoutElement(endColorTitle.gameObject, minHeight: 25, flexibleWidth: 9999);
-
-            GameObject imageEndColorBg = UIFactory.CreateHorizontalGroup(endColorBg, "EndColorImageBG", false, false, false, false, 0, default, UIConstants.configBackgroundColor);
-            Image endColorImage = UIFactory.CreateUIObject("EndColorImage", imageEndColorBg, new Vector2(100, 25)).AddComponent<Image>();
-            UIFactory.SetLayoutElement(endColorImage.gameObject, flexibleWidth: 1);
-
-            InputFieldRef endColorInput = UIFactory.CreateInputField(endColorBg, "EndColorInput", config.EndColor.ToRGBHex());
-            endColorInput.Text = config.EndColor.ToRGBHex();
-            UIFactory.SetLayoutElement(endColorInput.Component.gameObject, flexibleWidth: 1);
-
-            Text endColorDescription = UIFactory.CreateLabel(endColorBg, "DescriptionEndColor", "End color in hex format of the hitbox outline", color: UIConstants.configDescriptionColor);
-            UIFactory.SetLayoutElement(endColorDescription.gameObject, flexibleWidth: 1);
-
-            endColorImage.color = config.EndColor;
-
-            GameObject endColorButtonsBg = UIFactory.CreateHorizontalGroup(endColorBg, "EndColorButtonsBG", false, true, true, true, 0, default);
-
-            ButtonRef applyEndColor = UIFactory.CreateButton(endColorButtonsBg, "EndColorApply", "Apply", UIConstants.greenButtonColor);
-            UIFactory.SetLayoutElement(applyEndColor.Component.gameObject, 100, 25, 100, 25, 100, 25);
-            applyEndColor.OnClick += () =>
-            {
-                string hex = startColorInput.Text;
-
-                if (!hex.StartsWith("#"))
-                    hex = "#" + hex;
-
-                if (ColorUtility.TryParseHtmlString(hex, out Color color))
-                {
-                    endColorImage.color = color;
-                    config.EndColor = color;
-                }
-                else
-                {
-                    endColorImage.color = config.DefaultEndColor;
-                    config.EndColor = config.DefaultEndColor;
-                    endColorInput.Text = config.DefaultEndColor.ToRGBHex();
-                }
-            };
-
-            ButtonRef resetEndColor = UIFactory.CreateButton(endColorButtonsBg, "EndColorReset", "Reset", UIConstants.redButtonColor);
-            UIFactory.SetLayoutElement(resetEndColor.Component.gameObject, 100, 25, 100, 25, 100, 25);
-            resetEndColor.OnClick += () =>
-            {
-                endColorImage.color = config.DefaultEndColor;
-                config.EndColor = config.DefaultEndColor;
-                endColorInput.Text = config.DefaultEndColor.ToRGBHex();
-            };
-            #endregion
+            CreateColorSetting(
+                "EndColor",
+                "End Line Color",
+                "End color in hex format of the hitbox outline",
+                config.EndColor,
+                config.DefaultEndColor,
+                color => config.EndColor = color);
         }
 
         protected GameObject CreateConfigBlockBG(string name)
@@ -288,6 +152,144 @@ namespace HitboxViewer.UI
                 throw new ArgumentNullException("Config bg is null or destroyed!");
 
             return UIFactory.CreateVerticalGroup(configBg, name, false, true, true, true, UIConstants.BLOCK_SPACING, default, UIConstants.configBackgroundColor);
+        }
+
+        protected InputFieldRef CreateFloatSetting(string idPrefix, string title, string description, float currentValue, float defaultValue, Action<float> onApply)
+        {
+            GameObject bg = CreateConfigBlockBG($"{idPrefix}BG");
+
+            Text titleLabel = UIFactory.CreateLabel(bg, $"{idPrefix}Title", title, TextAnchor.MiddleLeft, UIConstants.textPrimaryColor);
+            titleLabel.fontStyle = FontStyle.Bold;
+            UIFactory.SetLayoutElement(titleLabel.gameObject, minHeight: 25, minWidth: 110, flexibleWidth: 999);
+
+            InputFieldRef input = UIFactory.CreateInputField(bg, $"{idPrefix}Input", title);
+            input.Text = currentValue.ToString();
+            UIFactory.SetLayoutElement(input.Component.gameObject, flexibleWidth: 9999, minHeight: 25);
+
+            Text desc = UIFactory.CreateLabel(bg, $"{idPrefix}Description", $"{description}\nDefault: {defaultValue}", color: UIConstants.configDescriptionColor);
+            UIFactory.SetLayoutElement(desc.gameObject, flexibleWidth: 1);
+
+            GameObject buttonsBg = UIFactory.CreateHorizontalGroup(bg, $"{idPrefix}ButtonsBG", false, true, true, true, UIConstants.SPACING, default);
+
+            ButtonRef apply = UIFactory.CreateButton(buttonsBg, $"{idPrefix}Apply", "Apply", UIConstants.greenButtonColor);
+            RuntimeHelper.SetColorBlock(apply.Component, UIConstants.greenButtonColor, UIConstants.greenButtonHoverColor, UIConstants.greenButtonPressedColor);
+            apply.OnClick += () =>
+            {
+                if (!float.TryParse(input.Text, out float value))
+                {
+                    value = defaultValue;
+                    input.Text = defaultValue.ToString();
+                }
+                onApply(value);
+            };
+            UIFactory.SetLayoutElement(apply.Component.gameObject, 100, 25, 100, 25, 100, 25);
+
+            ButtonRef reset = UIFactory.CreateButton(buttonsBg, $"{idPrefix}Reset", "Reset", UIConstants.redButtonColor);
+            RuntimeHelper.SetColorBlock(reset.Component, UIConstants.redButtonColor, UIConstants.redButtonHoverColor, UIConstants.redButtonPressedColor);
+            reset.OnClick += () =>
+            {
+                input.Text = defaultValue.ToString();
+                onApply(defaultValue);
+            };
+            UIFactory.SetLayoutElement(reset.Component.gameObject, 100, 25, 100, 25, 100, 25);
+
+            return input;
+        }
+
+        protected InputFieldRef CreateColorSetting(string idPrefix, string title, string description, Color currentValue, Color defaultValue, Action<Color> onApply)
+        {
+            GameObject bg = CreateConfigBlockBG($"{idPrefix}BG");
+
+            Text titleLabel = UIFactory.CreateLabel(bg, $"{idPrefix}Title", title, TextAnchor.MiddleLeft, UIConstants.textPrimaryColor);
+            titleLabel.fontStyle = FontStyle.Bold;
+            UIFactory.SetLayoutElement(titleLabel.gameObject, minHeight: 25, flexibleWidth: 9999);
+
+            GameObject imageBg = UIFactory.CreateHorizontalGroup(bg, $"{idPrefix}ImageBG", false, false, false, false, 0, default, UIConstants.configBackgroundColor);
+            Image preview = UIFactory.CreateUIObject($"{idPrefix}Image", imageBg, new Vector2(100, 25)).AddComponent<Image>();
+            UIFactory.SetLayoutElement(preview.gameObject, flexibleWidth: 1);
+            preview.color = currentValue;
+
+            InputFieldRef input = UIFactory.CreateInputField(bg, $"{idPrefix}Input", currentValue.ToRGBHex());
+            input.Text = currentValue.ToRGBHex();
+            UIFactory.SetLayoutElement(input.Component.gameObject, flexibleWidth: 1);
+
+            Text desc = UIFactory.CreateLabel(bg, $"{idPrefix}Description", description, color: UIConstants.configDescriptionColor);
+            UIFactory.SetLayoutElement(desc.gameObject, flexibleWidth: 1);
+
+            GameObject buttonsBg = UIFactory.CreateHorizontalGroup(bg, $"{idPrefix}ButtonsBG", false, true, true, true, UIConstants.SPACING, default);
+
+            ButtonRef apply = UIFactory.CreateButton(buttonsBg, $"{idPrefix}Apply", "Apply", UIConstants.greenButtonColor);
+            RuntimeHelper.SetColorBlock(apply.Component, UIConstants.greenButtonColor, UIConstants.greenButtonHoverColor, UIConstants.greenButtonPressedColor);
+            UIFactory.SetLayoutElement(apply.Component.gameObject, 100, 25, 100, 25, 100, 25);
+            apply.OnClick += () =>
+            {
+                string hex = input.Text;
+
+                if (!hex.StartsWith("#"))
+                    hex = "#" + hex;
+
+                if (ColorUtility.TryParseHtmlString(hex, out Color color))
+                {
+                    preview.color = color;
+                    onApply(color);
+                }
+                else
+                {
+                    preview.color = defaultValue;
+                    onApply(defaultValue);
+                    input.Text = defaultValue.ToRGBHex();
+                }
+            };
+
+            ButtonRef reset = UIFactory.CreateButton(buttonsBg, $"{idPrefix}Reset", "Reset", UIConstants.redButtonColor);
+            RuntimeHelper.SetColorBlock(reset.Component, UIConstants.redButtonColor, UIConstants.redButtonHoverColor, UIConstants.redButtonPressedColor);
+            UIFactory.SetLayoutElement(reset.Component.gameObject, 100, 25, 100, 25, 100, 25);
+            reset.OnClick += () =>
+            {
+                preview.color = defaultValue;
+                onApply(defaultValue);
+                input.Text = defaultValue.ToRGBHex();
+            };
+
+            return input;
+        }
+
+        protected Dropdown CreateDropdownSetting(string idPrefix, string title, string description, IEnumerable<string> options, int currentIndex, int defaultIndex, Action<int> onApply)
+        {
+            GameObject bg = CreateConfigBlockBG($"{idPrefix}BG");
+
+            Text titleLabel = UIFactory.CreateLabel(bg, $"{idPrefix}Title", title, TextAnchor.MiddleLeft, UIConstants.textPrimaryColor);
+            titleLabel.fontStyle = FontStyle.Bold;
+            UIFactory.SetLayoutElement(titleLabel.gameObject, minHeight: 25, minWidth: 110, flexibleWidth: 999);
+
+            GameObject dropObj = UIFactory.CreateDropdown(bg, $"{idPrefix}Dropdown", out Dropdown dropdown, title, 14, (x) => { });
+            UIFactory.SetLayoutElement(dropObj, minHeight: 25, minWidth: 110, flexibleWidth: 999);
+
+            foreach (string option in options)
+                dropdown.options.Add(new Dropdown.OptionData(option));
+
+            dropdown.value = currentIndex;
+
+            Text desc = UIFactory.CreateLabel(bg, $"{idPrefix}Description", description, color: UIConstants.configDescriptionColor);
+            UIFactory.SetLayoutElement(desc.gameObject, flexibleWidth: 1);
+
+            GameObject buttonsBg = UIFactory.CreateHorizontalGroup(bg, $"{idPrefix}ButtonsBG", false, true, true, true, UIConstants.SPACING, default);
+
+            ButtonRef apply = UIFactory.CreateButton(buttonsBg, $"{idPrefix}Apply", "Apply", UIConstants.greenButtonColor);
+            RuntimeHelper.SetColorBlock(apply.Component, UIConstants.greenButtonColor, UIConstants.greenButtonHoverColor, UIConstants.greenButtonPressedColor);
+            apply.OnClick += () => onApply(dropdown.value);
+            UIFactory.SetLayoutElement(apply.Component.gameObject, 100, 25, 100, 25, 100, 25);
+
+            ButtonRef reset = UIFactory.CreateButton(buttonsBg, $"{idPrefix}Reset", "Reset", UIConstants.redButtonColor);
+            RuntimeHelper.SetColorBlock(reset.Component, UIConstants.redButtonColor, UIConstants.redButtonHoverColor, UIConstants.redButtonPressedColor);
+            reset.OnClick += () =>
+            {
+                dropdown.value = defaultIndex;
+                onApply(defaultIndex);
+            };
+            UIFactory.SetLayoutElement(reset.Component.gameObject, 100, 25, 100, 25, 100, 25);
+
+            return dropdown;
         }
     }
 }
