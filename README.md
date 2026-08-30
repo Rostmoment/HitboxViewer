@@ -107,3 +107,21 @@ Available Flags:
 6. Launch game
 7. Done
 
+## Third-Party Software & Licenses
+
+HitboxViewer is licensed under the [MIT License](LICENSE).
+
+HitboxViewer uses the following third-party software:
+
+* **[UniverseLib](https://github.com/sinai-dev/UniverseLib)** - licensed under the **GNU Lesser General Public License v2.1 (LGPL-2.1)**. The required `UniverseLib` assembly is included with HitboxViewer releases.
+* **[BepInEx 5](https://github.com/BepInEx/BepInEx)** - licensed under the **GNU Lesser General Public License v2.1 (LGPL-2.1)**. BepInEx is **not included** with HitboxViewer releases and must be installed separately by the user.
+
+The third-party libraries listed above remain under their respective licenses and are separate from the HitboxViewer source code.
+
+A copy of the LGPL-2.1 license is included with HitboxViewer releases.
+
+For more information, see:
+
+* [UniverseLib](https://github.com/sinai-dev/UniverseLib)
+* [BepInEx](https://github.com/BepInEx/BepInEx)
+* [GNU LGPL v2.1](https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html)
